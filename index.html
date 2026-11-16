@@ -127,9 +127,8 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;touch-acti
   transform:translateY(80px);
 }
 /* cover title + Start: same motion as M1 (fade 900/800ms, 80px rise over 750ms, button 950ms after title) */
-:root{--cv-t:.4s;--cv-b:1.35s}
 .view-cover.go .cover-title{
-  animation:cover-fade .9s linear var(--cv-t) both,cover-rise .75s cubic-bezier(.25,.46,.45,.94) var(--cv-t) both;
+  animation:cover-fade var(--cv-title-d) ease-in-out 0s both,cover-rise-t var(--cv-title-d) ease-in-out 0s both;
 }
 .btn-start{
   align-self:flex-start;
@@ -149,10 +148,10 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;touch-acti
   cursor:pointer;
   transition:background .18s,box-shadow .15s;
   opacity:0;
-  transform:translateY(80px);
+  
 }
 .view-cover.go .btn-start{
-  animation:cover-fade .8s linear var(--cv-b) both,cover-rise .75s cubic-bezier(.25,.46,.45,.94) var(--cv-b) both;
+  animation:cover-fade var(--cv-btn-fade) ease-in-out var(--cv-btn-delay) both;
 }
 @media(hover:hover){.btn-start:hover{background:var(--navy);}}
 .btn-start:focus-visible{background:var(--navy);}
@@ -173,35 +172,25 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;touch-acti
 }
 
 
-/* Cover scale: same artwork + geometry as the activity scale, with an intro "settle" animation (US pan ends lower, as in the original Hype cover) */
-:root{--cv-tilt:-9deg;--cv-s:.2s;--cv-w:1.0s}
+/* Cover scale: original Hype artwork + timeline (M4 "Cover page" -> "Scale move").
+   Original: title 0-1s, scale fades 0.2-1.2s, Start fades 1-2s, then the scale rocks (beam +/-10deg, pans +/-~28px) on an 8s loop from 2s. */
+:root{--cv-title-d:1s;--cv-scale-delay:.2s;--cv-scale-fade:1s;--cv-btn-delay:1s;--cv-btn-fade:1s;--cv-rock-delay:2s;--cv-rock-dur:8s;--cv-loops:infinite}
 .cover-illustration{overflow:visible;}
-.cv-scale{position:relative;width:100%;max-width:440px;aspect-ratio:530/430;opacity:0;}
-.cv-shadow{position:absolute;bottom:3%;left:50%;transform:translateX(-50%);width:90%;height:11%;background:#F5F4EF;border-radius:50%;z-index:1;}
-.cv-base{position:absolute;bottom:7%;left:50%;transform:translateX(-50%);width:58%;height:auto;z-index:4;}
-.cv-beam{position:absolute;top:59.5%;left:50%;width:60%;height:7.7%;transform:translate(-50%,-50%) rotate(var(--cv-tilt));transform-origin:50% 50%;z-index:3;}
-.cv-arm{width:100%;height:100%;object-fit:contain;display:block;}
-.cv-basket{position:absolute;top:-175%;width:62%;transform-origin:50% 72%;transform:rotate(calc(var(--cv-tilt) * -1));z-index:5;}
-.cv-basket-usa{left:-34%}.cv-basket-china{right:-34%}
-.cv-basket img{width:100%;height:auto;display:block;}
-.view-cover.go .cv-scale{animation:cv-in .7s ease var(--cv-s) both;}
-.view-cover.go .cv-beam{animation:cv-beam 2.4s ease-in-out var(--cv-w) both;}
-.view-cover.go .cv-basket{animation:cv-basket 2.4s ease-in-out var(--cv-w) both;}
-@keyframes cv-in{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:none}}
-@keyframes cv-beam{
-  0%{transform:translate(-50%,-50%) rotate(0deg)}
-  22%{transform:translate(-50%,-50%) rotate(12deg)}
-  46%{transform:translate(-50%,-50%) rotate(-13deg)}
-  66%{transform:translate(-50%,-50%) rotate(6deg)}
-  84%{transform:translate(-50%,-50%) rotate(-11deg)}
-  100%{transform:translate(-50%,-50%) rotate(-9deg)}}
-@keyframes cv-basket{
-  0%{transform:rotate(0deg)}
-  22%{transform:rotate(-12deg)}
-  46%{transform:rotate(13deg)}
-  66%{transform:rotate(-6deg)}
-  84%{transform:rotate(11deg)}
-  100%{transform:rotate(9deg)}}
+.cv-scale{position:relative;width:100%;max-width:540px;aspect-ratio:539.8/403;opacity:0;}
+.cv-scale img,.cv-grp,.cv-shadow{position:absolute;display:block;}
+.cv-shadow{left:0;top:79.65%;width:97.63%;height:20.35%;background:#F5F4EF;border-radius:50%;z-index:1;}
+.cv-beam{z-index:2;}
+.cv-usa{z-index:3;}.cv-china{z-index:4;}
+.cv-base{z-index:5;}
+.view-cover.go .cv-scale{animation:cover-fade var(--cv-scale-fade) ease-in-out var(--cv-scale-delay) both;}
+.view-cover.go .cv-beam{animation:cv-rock var(--cv-rock-dur) ease-in-out var(--cv-rock-delay) var(--cv-loops) backwards;}
+.view-cover.go .cv-usa{animation:cv-usa var(--cv-rock-dur) ease-in-out var(--cv-rock-delay) var(--cv-loops) backwards;}
+.view-cover.go .cv-china{animation:cv-china var(--cv-rock-dur) ease-in-out var(--cv-rock-delay) var(--cv-loops) backwards;}
+.view-cover.hidden .cv-beam,.view-cover.hidden .cv-grp{animation-play-state:paused;}
+@keyframes cv-rock{0%,100%{transform:rotate(0)}12.5%{transform:rotate(10deg)}37.5%{transform:rotate(-10deg)}62.5%{transform:rotate(10deg)}87.5%{transform:rotate(-10deg)}}
+@keyframes cv-usa{0%,100%{transform:translateY(0)}12.5%{transform:translateY(-11.23%)}37.5%{transform:translateY(10.07%)}62.5%{transform:translateY(-10.46%)}87.5%{transform:translateY(10.46%)}}
+@keyframes cv-china{0%,100%{transform:translateY(0)}12.5%{transform:translateY(11.28%)}37.5%{transform:translateY(-11.28%)}62.5%{transform:translateY(10.11%)}87.5%{transform:translateY(-12.05%)}}
+@keyframes cover-rise-t{from{transform:translateY(110px)}to{transform:translateY(0)}}
 
 @keyframes cover-fade{from{opacity:0}to{opacity:1}}
 @keyframes cover-rise{from{transform:translateY(80px)}to{transform:translateY(0)}}
@@ -502,7 +491,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;touch-acti
 
 /* Stage: selection board (left) + balance scale (right). 1px = 1 design unit at 1112x560; --u scales it with the frame */
 .stage-view{position:relative;flex:1 1 auto;min-height:0;width:100%;background:#fff;overflow:hidden;container-type:size;
-  display:grid;grid-template-columns:55fr 45fr;align-items:center;column-gap:clamp(6px,1.5cqw,20px);padding:4px clamp(12px,2cqw,32px) 10px;}
+  display:grid;grid-template-columns:50fr 50fr;align-items:center;column-gap:clamp(6px,1.5cqw,20px);padding:4px clamp(12px,2cqw,32px) 10px;}
 .stage-view>*{--u:min(.0899cqw,.1786cqh);}
 .selection-board{display:grid;grid-template-columns:repeat(6,1fr);row-gap:calc(26*var(--u));column-gap:calc(4*var(--u));align-content:center;}
 .cat-item[data-cat="ai"]{grid-column:1/3;grid-row:1}
@@ -530,7 +519,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;touch-acti
 
 /* Balance scale (geometry from the approved rebuild; every length is a % of the assembly so it scales) */
 .scale-stage-wrapper{display:flex;align-items:center;justify-content:center;min-width:0;}
-.scale-assembly{position:relative;width:min(100%,calc(510*var(--u)));aspect-ratio:530/430;}
+.scale-assembly{position:relative;width:min(100%,calc(600*var(--u)));aspect-ratio:530/430;}
 .scale-grey-shadow{position:absolute;bottom:3%;left:50%;transform:translateX(-50%);width:90%;height:11%;background:#F5F4EF;border-radius:50%;z-index:1;}
 .scale-base-img{position:absolute;bottom:7%;left:50%;transform:translateX(-50%);width:58%;height:auto;z-index:4;pointer-events:none;}
 .scale-beam-wrapper{position:absolute;top:59.5%;left:50%;width:60%;height:7.7%;transform:translate(-50%,-50%) rotate(0deg);transform-origin:50% 50%;transition:transform .85s cubic-bezier(.34,1.3,.64,1);z-index:3;}
@@ -614,8 +603,7 @@ html.tablet .cat-title{min-height:3.75em;}
   html{scroll-behavior:auto;}
   .view-cover.go .cover-title,.view-cover.go .btn-start{animation:none !important;opacity:1 !important;transform:none !important;}
   .cv-scale{opacity:1 !important;}
-  .view-cover.go .cv-scale,.view-cover.go .cv-beam,.view-cover.go .cv-basket{animation:none !important;}
-  .view-cover.go .cv-scale{transform:none !important;}
+  .view-cover.go .cv-scale,.view-cover.go .cv-beam,.view-cover.go .cv-grp{animation:none !important;}
   .scale-beam-wrapper,.basket-usa-group,.basket-china-group,.pan-dropped-icon,.dark-overlay,.biblio-overlay{transition:none !important;}
 }
 </style>
@@ -636,12 +624,18 @@ html.tablet .cat-title{min-height:3.75em;}
       <div class="cover-illustration" aria-hidden="true">
         <div class="cv-scale">
           <div class="cv-shadow"></div>
-          <img src="Resources/PastedVector-49.svg" alt="" class="cv-base">
-          <div class="cv-beam">
-            <img src="Resources/PastedVector-50.svg" alt="" class="cv-arm">
-            <div class="cv-basket cv-basket-usa"><img src="Resources/PastedVector-59.svg" alt=""></div>
-            <div class="cv-basket cv-basket-china"><img src="Resources/PastedVector-17.svg" alt=""></div>
+          <img class="cv-beam" src="Resources/PastedVector-38.svg" alt="" style="left:18.90%;top:55.33%;width:59.76%;height:8.31%">
+          <div class="cv-grp cv-usa" style="left:.19%;top:0;width:39.57%;height:64.07%">
+            <img src="Resources/PastedVector-47.svg" alt="" style="left:41.67%;top:0;width:39.61%;height:47.41%;z-index:1">
+            <img src="Resources/PastedVector-45.svg" alt="" style="left:0;top:28.27%;width:100%;height:36.99%;z-index:2">
+            <img src="Resources/PastedVector-44.svg" alt="" style="left:0;top:61.97%;width:96.54%;height:38.03%;z-index:3">
           </div>
+          <div class="cv-grp cv-china" style="left:59.47%;top:.25%;width:40.53%;height:63.82%">
+            <img src="Resources/PastedVector-48.svg" alt="" style="left:42.5%;top:.78%;width:38.62%;height:47.82%;z-index:1">
+            <img src="Resources/PastedVector-46.svg" alt="" style="left:2.29%;top:31.1%;width:97.71%;height:34.41%;z-index:2">
+            <img src="Resources/PastedVector-44.svg" alt="" style="left:0;top:61.82%;width:94.24%;height:38.18%;z-index:3">
+          </div>
+          <img class="cv-base" src="Resources/PastedVector-42.svg" alt="" style="left:18.71%;top:46.15%;width:60.12%;height:46.87%">
         </div>
       </div>
     </section>
