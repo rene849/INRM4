@@ -172,6 +172,37 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;touch-acti
   display:block;
 }
 
+
+/* Cover scale: same artwork + geometry as the activity scale, with an intro "settle" animation (US pan ends lower, as in the original Hype cover) */
+:root{--cv-tilt:-9deg;--cv-s:.2s;--cv-w:1.0s}
+.cover-illustration{overflow:visible;}
+.cv-scale{position:relative;width:100%;max-width:440px;aspect-ratio:530/430;opacity:0;}
+.cv-shadow{position:absolute;bottom:3%;left:50%;transform:translateX(-50%);width:90%;height:11%;background:#F5F4EF;border-radius:50%;z-index:1;}
+.cv-base{position:absolute;bottom:7%;left:50%;transform:translateX(-50%);width:58%;height:auto;z-index:4;}
+.cv-beam{position:absolute;top:59.5%;left:50%;width:60%;height:7.7%;transform:translate(-50%,-50%) rotate(var(--cv-tilt));transform-origin:50% 50%;z-index:3;}
+.cv-arm{width:100%;height:100%;object-fit:contain;display:block;}
+.cv-basket{position:absolute;top:-175%;width:62%;transform-origin:50% 72%;transform:rotate(calc(var(--cv-tilt) * -1));z-index:5;}
+.cv-basket-usa{left:-34%}.cv-basket-china{right:-34%}
+.cv-basket img{width:100%;height:auto;display:block;}
+.view-cover.go .cv-scale{animation:cv-in .7s ease var(--cv-s) both;}
+.view-cover.go .cv-beam{animation:cv-beam 2.4s ease-in-out var(--cv-w) both;}
+.view-cover.go .cv-basket{animation:cv-basket 2.4s ease-in-out var(--cv-w) both;}
+@keyframes cv-in{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:none}}
+@keyframes cv-beam{
+  0%{transform:translate(-50%,-50%) rotate(0deg)}
+  22%{transform:translate(-50%,-50%) rotate(12deg)}
+  46%{transform:translate(-50%,-50%) rotate(-13deg)}
+  66%{transform:translate(-50%,-50%) rotate(6deg)}
+  84%{transform:translate(-50%,-50%) rotate(-11deg)}
+  100%{transform:translate(-50%,-50%) rotate(-9deg)}}
+@keyframes cv-basket{
+  0%{transform:rotate(0deg)}
+  22%{transform:rotate(-12deg)}
+  46%{transform:rotate(13deg)}
+  66%{transform:rotate(-6deg)}
+  84%{transform:rotate(11deg)}
+  100%{transform:rotate(9deg)}}
+
 @keyframes cover-fade{from{opacity:0}to{opacity:1}}
 @keyframes cover-rise{from{transform:translateY(80px)}to{transform:translateY(0)}}
 
@@ -540,7 +571,7 @@ html.mobile .view-cover{position:relative;inset:auto;min-height:min(520px,var(--
 html.mobile .view-cover.hidden{display:none;}
 html.mobile .cover-content{align-items:center;}
 html.mobile .btn-start{align-self:center;}
-html.mobile .cover-illustration{width:100%;max-width:280px;}
+html.mobile .cover-illustration{width:100%;max-width:300px;}
 html.mobile .interactive-container.cover-on>.app-header,html.mobile .interactive-container.cover-on>.stage-view{display:none;}
 html.mobile .stage-view{display:flex;flex-direction:column;align-items:stretch;container-type:normal;overflow:visible;padding:14px 16px 28px;gap:18px;}
 html.mobile .stage-view>*{--u:1px;}
@@ -582,6 +613,9 @@ html.tablet .cat-title{min-height:3.75em;}
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto;}
   .view-cover.go .cover-title,.view-cover.go .btn-start{animation:none !important;opacity:1 !important;transform:none !important;}
+  .cv-scale{opacity:1 !important;}
+  .view-cover.go .cv-scale,.view-cover.go .cv-beam,.view-cover.go .cv-basket{animation:none !important;}
+  .view-cover.go .cv-scale{transform:none !important;}
   .scale-beam-wrapper,.basket-usa-group,.basket-china-group,.pan-dropped-icon,.dark-overlay,.biblio-overlay{transition:none !important;}
 }
 </style>
@@ -599,74 +633,17 @@ html.tablet .cat-title{min-height:3.75em;}
         <h1 class="cover-title" id="cov-title">Who carries<br>more weight?</h1>
         <button class="btn-start" id="btn-start-cover" type="button" aria-label="Start Interactive">Start</button>
       </div>
-      <div class="cover-illustration" aria-hidden="true"><svg viewBox="0 0 540 420" aria-hidden="true" focusable="false" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <ellipse cx="270" cy="385" rx="230" ry="26" fill="#F4F3EE"/>
-          <g transform="rotate(-8.5, 270, 230)">
-            <path d="M 68 230 L 472 230" stroke="#141F52" stroke-width="14" stroke-linecap="round"/>
-            <path d="M 72 227 L 468 227" stroke="#1F2E7A" stroke-width="6" stroke-linecap="round"/>
-            <g transform="translate(68, 230) rotate(8.5)">
-              <path d="M -22 0 L 22 0 L 16 32 L -16 32 Z" fill="#141F52"/>
-              <circle cx="0" cy="28" r="16" fill="#141F52"/>
-              <circle cx="0" cy="28" r="9" fill="#1F2E7A"/>
-              <circle cx="0" cy="28" r="4.5" fill="#141F52"/>
-              <path d="M -90 -2 C -70 38 -35 44 0 44 C 35 44 70 38 90 -2 Z" fill="#141F52"/>
-              <path d="M -88 0 C -68 34 -34 40 0 40 C 34 40 68 34 88 0 Z" fill="#1F2E7A"/>
-              <ellipse cx="0" cy="0" rx="90" ry="12" fill="#2C3E8C"/>
-              <ellipse cx="0" cy="0" rx="84" ry="8" fill="#141F52"/>
-              <path d="M -80 -2 C -72 -42 -52 -78 -35 -100 C -22 -115 -10 -118 0 -95 C 15 -118 30 -105 48 -70 C 65 -40 76 -15 80 -2 Z" fill="#ECEBE4"/>
-              <path d="M -22 -75 Q -5 -60 12 -72" stroke="#DFDDD2" stroke-width="3" stroke-linecap="round" fill="none"/>
-              <path d="M -45 -40 Q -25 -25 5 -36" stroke="#DFDDD2" stroke-width="3.5" stroke-linecap="round" fill="none"/>
-              <path d="M 18 -45 Q 40 -35 55 -20" stroke="#DFDDD2" stroke-width="3" stroke-linecap="round" fill="none"/>
-              <g transform="translate(-1, -172)">
-                <line x1="0" y1="0" x2="0" y2="72" stroke="#111111" stroke-width="3.5" stroke-linecap="round"/>
-                <path d="M 0 0 C 12 -4 24 4 36 0 C 48 -4 60 4 72 0 L 72 44 C 60 48 48 40 36 44 C 24 48 12 40 0 44 Z" fill="#E3120B"/>
-                <path d="M 0 7 C 12 3 24 11 36 7 C 48 3 60 11 72 7 L 72 14 C 60 18 48 10 36 14 C 24 18 12 10 0 14 Z" fill="#FFFFFF"/>
-                <path d="M 0 21 C 12 17 24 25 36 21 C 48 17 60 25 72 21 L 72 28 C 60 32 48 24 36 28 C 24 32 12 24 0 28 Z" fill="#FFFFFF"/>
-                <path d="M 0 35 C 12 31 24 39 36 35 C 48 31 60 39 72 35 L 72 42 C 60 46 48 38 36 42 C 24 46 12 38 0 42 Z" fill="#FFFFFF"/>
-                <path d="M 0 0 C 10 -3 20 3 32 0 L 32 24 C 20 27 10 21 0 24 Z" fill="#141F52"/>
-                <circle cx="6" cy="6" r="1.5" fill="#FFFFFF"/><circle cx="16" cy="5" r="1.5" fill="#FFFFFF"/><circle cx="26" cy="5" r="1.5" fill="#FFFFFF"/>
-                <circle cx="11" cy="11" r="1.5" fill="#FFFFFF"/><circle cx="21" cy="11" r="1.5" fill="#FFFFFF"/><circle cx="6" cy="16" r="1.5" fill="#FFFFFF"/>
-                <circle cx="16" cy="16" r="1.5" fill="#FFFFFF"/><circle cx="26" cy="16" r="1.5" fill="#FFFFFF"/>
-              </g>
-            </g>
-            <g transform="translate(472, 230) rotate(8.5)">
-              <path d="M -22 0 L 22 0 L 16 32 L -16 32 Z" fill="#141F52"/>
-              <circle cx="0" cy="28" r="16" fill="#141F52"/>
-              <circle cx="0" cy="28" r="9" fill="#1F2E7A"/>
-              <circle cx="0" cy="28" r="4.5" fill="#141F52"/>
-              <path d="M -90 -2 C -70 38 -35 44 0 44 C 35 44 70 38 90 -2 Z" fill="#141F52"/>
-              <path d="M -88 0 C -68 34 -34 40 0 40 C 34 40 68 34 88 0 Z" fill="#1F2E7A"/>
-              <ellipse cx="0" cy="0" rx="90" ry="12" fill="#2C3E8C"/>
-              <ellipse cx="0" cy="0" rx="84" ry="8" fill="#141F52"/>
-              <path d="M -80 -2 C -70 -35 -56 -68 -38 -92 C -24 -112 -12 -118 0 -98 C 14 -115 32 -105 46 -75 C 64 -40 75 -15 80 -2 Z" fill="#ECEBE4"/>
-              <path d="M -25 -70 Q -8 -58 12 -68" stroke="#DFDDD2" stroke-width="3" stroke-linecap="round" fill="none"/>
-              <path d="M -48 -36 Q -22 -22 8 -34" stroke="#DFDDD2" stroke-width="3.5" stroke-linecap="round" fill="none"/>
-              <path d="M 22 -42 Q 42 -32 58 -18" stroke="#DFDDD2" stroke-width="3" stroke-linecap="round" fill="none"/>
-              <g transform="translate(0, -172)">
-                <line x1="0" y1="0" x2="0" y2="72" stroke="#111111" stroke-width="3.5" stroke-linecap="round"/>
-                <path d="M 0 0 C 12 -4 24 4 36 0 C 48 -4 60 4 72 0 L 72 44 C 60 48 48 40 36 44 C 24 48 12 40 0 44 Z" fill="#DE2910"/>
-                <path d="M 72 0 L 72 44 L 62 46 L 62 2 Z" fill="#B31A05" opacity="0.4"/>
-                <polygon points="12,8 14,14 20,14 15,18 17,24 12,20 7,24 9,18 4,14 10,14" fill="#FFDE00"/>
-                <polygon points="23,4 24,7 27,7 25,9 26,12 23,10 21,12 22,9 19,7 22,7" fill="#FFDE00" transform="scale(0.7) translate(8, 0)"/>
-                <polygon points="27,9 28,12 31,12 29,14 30,17 27,15 25,17 26,14 23,12 26,12" fill="#FFDE00" transform="scale(0.7) translate(11, 4)"/>
-                <polygon points="27,16 28,19 31,19 29,21 30,24 27,22 25,24 26,21 23,19 26,19" fill="#FFDE00" transform="scale(0.7) translate(11, 10)"/>
-                <polygon points="23,22 24,25 27,25 25,27 26,30 23,28 21,30 22,27 19,25 22,25" fill="#FFDE00" transform="scale(0.7) translate(8, 14)"/>
-              </g>
-            </g>
-          </g>
-          <g>
-            <path d="M 252 195 C 252 180 288 180 288 195 L 296 350 L 244 350 Z" fill="#141F52"/>
-            <path d="M 254 200 L 286 200 L 292 350 L 248 350 Z" fill="#1F2E7A"/>
-            <path d="M 186 350 L 354 350 L 368 385 L 172 385 Z" fill="#141F52"/>
-            <path d="M 194 353 L 346 353 L 358 382 L 182 382 Z" fill="#1E2F7D"/>
-            <rect x="168" y="380" width="204" height="14" rx="3" fill="#141F52"/>
-            <rect x="176" y="386" width="18" height="8" rx="2" fill="#1E2F7D"/>
-            <rect x="346" y="386" width="18" height="8" rx="2" fill="#1E2F7D"/>
-            <circle cx="270" cy="230" r="18" fill="#141F52"/>
-            <circle cx="270" cy="230" r="12" fill="#1F2E7A"/>
-            <circle cx="270" cy="230" r="6" fill="#141F52"/>
-          </g>
-        </svg></div>
+      <div class="cover-illustration" aria-hidden="true">
+        <div class="cv-scale">
+          <div class="cv-shadow"></div>
+          <img src="Resources/PastedVector-49.svg" alt="" class="cv-base">
+          <div class="cv-beam">
+            <img src="Resources/PastedVector-50.svg" alt="" class="cv-arm">
+            <div class="cv-basket cv-basket-usa"><img src="Resources/PastedVector-59.svg" alt=""></div>
+            <div class="cv-basket cv-basket-china"><img src="Resources/PastedVector-17.svg" alt=""></div>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- APPBAR -->
