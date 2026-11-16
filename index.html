@@ -98,7 +98,8 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;touch-acti
   display:flex;
   align-items:center;
   justify-content:space-between;
-  padding:clamp(24px,4vw,64px) clamp(28px,6vw,96px);
+  --cv-pad:clamp(28px,6vw,96px);
+  padding:clamp(24px,4vw,64px) var(--cv-pad);
   z-index:500;
   transition:opacity .35s ease,visibility .35s ease;
 }
@@ -176,7 +177,9 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;touch-acti
    Original: title 0-1s, scale fades 0.2-1.2s, Start fades 1-2s, then the scale rocks (beam +/-10deg, pans +/-~28px) on an 8s loop from 2s. */
 :root{--cv-title-d:1s;--cv-scale-delay:.2s;--cv-scale-fade:1s;--cv-btn-delay:1s;--cv-btn-fade:1s;--cv-rock-delay:2s;--cv-rock-dur:8s;--cv-loops:infinite}
 .cover-illustration{overflow:visible;}
-.cv-scale{position:relative;width:100%;max-width:540px;aspect-ratio:539.8/403;opacity:0;}
+.view-cover{container-type:inline-size;}
+.cover-illustration{width:auto;flex:none;}
+.cv-scale{position:relative;width:calc(43.3cqw + .866 * var(--cv-pad));aspect-ratio:539.8/403;opacity:0;}
 .cv-scale img,.cv-grp,.cv-shadow{position:absolute;display:block;}
 .cv-shadow{left:0;top:79.65%;width:97.63%;height:20.35%;background:#F5F4EF;border-radius:50%;z-index:1;}
 .cv-beam{z-index:2;}
@@ -550,6 +553,47 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;touch-acti
 .dialog-card .close-card-btn{top:14px;right:14px;}
 .completion-card .modal-copy{margin-top:0;}
 
+/* Intro pop-up: no badge in M4, so the 70px badge allowance is removed and padding is even all round */
+#intro-modal .center-modal{
+  --im-pad:clamp(28px,4.2vw,44px);
+  padding:var(--im-pad) clamp(22px,5vw,52px);
+  max-width:min(720px,100%);
+}
+#intro-modal .center-modal .modal-copy{
+  font-size:16px;              /* matches M2 */
+  line-height:1.6;
+  max-width:36em;
+  margin:0 auto 1em;
+}
+#intro-modal .center-modal .modal-copy+.modal-copy{margin-top:0;}
+#intro-modal .center-modal .modal-copy:last-of-type{margin-bottom:calc(var(--im-pad) * .8);}
+#intro-modal .center-modal .action-btn{display:flex;margin:0 auto;}
+
+/* ===== Activity slide polish ===== */
+/* 1. Text: 16px minimum (matches M2 body text) */
+:root{--ok-line:#3c6b30;--no-line:#9c3b36;}
+.cat-title{font-size:max(16px,calc(16*var(--u)));}
+.radio-pill{font-size:max(16px,calc(16*var(--u)));min-height:32px;}
+/* 3. Columns wide enough that "Quantum computing and communications" stays on two lines, so every radio row lines up */
+.cat-item{width:100%;max-width:calc(214*var(--u) + 24px);min-width:150px;}
+/* 5. Stronger keyboard focus */
+.radio-pill:focus-visible{outline:3px solid var(--navy-deep);outline-offset:2px;border-color:var(--navy);background:var(--tint);}
+.radio-pill.locked:focus-visible{background:var(--tint);}
+.radio-pill.correct:focus-visible{background:var(--ok-bg);}
+.radio-pill.incorrect:focus-visible{background:var(--no-bg);}
+/* 6. Darker state borders (3:1 or better against the white page) */
+.radio-pill.correct{border-color:var(--ok-line);}
+.radio-pill.incorrect{border-color:var(--no-line);}
+/* 2. Dropped icons sit ON the pan, in front of it, instead of hiding behind it */
+.pan-dropped-icon{z-index:4;width:30%;}
+#pan-icon-ai{bottom:94%;left:8%}
+#pan-icon-cars{bottom:94%;right:8%}
+#pan-icon-semiconductors{bottom:130%;left:35%;z-index:5}
+#pan-icon-fiveG{bottom:94%;left:8%}
+#pan-icon-quantum{bottom:94%;right:8%}
+/* 4. Scale lifted so its visual centre lines up with the selection board */
+.scale-stage-wrapper{transform:translateY(calc(-44*var(--u)));}
+
 /* ========================================================= */
 /* MOBILE (<=690px, single column, same DOM)                 */
 /* ========================================================= */
@@ -561,19 +605,20 @@ html.mobile .view-cover.hidden{display:none;}
 html.mobile .cover-content{align-items:center;}
 html.mobile .btn-start{align-self:center;}
 html.mobile .cover-illustration{width:100%;max-width:300px;}
+html.mobile .cv-scale{width:100%;}
 html.mobile .interactive-container.cover-on>.app-header,html.mobile .interactive-container.cover-on>.stage-view{display:none;}
 html.mobile .stage-view{display:flex;flex-direction:column;align-items:stretch;container-type:normal;overflow:visible;padding:14px 16px 28px;gap:18px;}
 html.mobile .stage-view>*{--u:1px;}
-html.mobile .scale-stage-wrapper{order:-1;}
+html.mobile .scale-stage-wrapper{order:-1;transform:none;}
 html.mobile .scale-assembly{width:min(100%,300px);}
 html.mobile .selection-board{display:flex;flex-direction:column;gap:12px;}
 html.mobile .cat-item{flex-direction:row;align-items:center;text-align:left;width:100%;min-width:0;padding:10px 12px;gap:12px;background:#f9f9f9;border:1px solid #e5e5e5;border-radius:6px;}
 html.mobile .cat-badge{flex:none;width:56px;height:56px;margin:0;}
 html.mobile .cat-title{flex:1;justify-content:flex-start;min-height:0;margin:0;font-size:16px;}
 html.mobile .cat-radios{width:auto;align-items:stretch;gap:8px;}
-html.mobile .radio-pill{font-size:15px;min-height:36px;background:#fff;border-color:#ccc;}
-html.mobile .radio-pill.correct{background:var(--ok-bg);border-color:#8da480;}
-html.mobile .radio-pill.incorrect{background:var(--no-bg);border-color:#bf807b;}
+html.mobile .radio-pill{font-size:16px;min-height:40px;background:#fff;border-color:#ccc;}
+html.mobile .radio-pill.correct{background:var(--ok-bg);border-color:var(--ok-line);}
+html.mobile .radio-pill.incorrect{background:var(--no-bg);border-color:var(--no-line);}
 html.mobile .dark-overlay,html.mobile .biblio-overlay{align-items:flex-start;padding:72px 12px 12px;}
 html.mobile .biblio-overlay{padding-top:12px;}
 html.mobile .dialog-card{max-height:none;padding:60px 18px 20px;}
@@ -586,7 +631,7 @@ html.mobile .dialog-divider{margin:0 0 14px;}
 html.mobile #card-body{font-size:15px;}
 html.mobile .biblio-card{height:auto;padding:20px 16px 20px 18px;}
 html.mobile .completion-card{padding:44px 20px 28px;}
-html.mobile .center-modal{padding:36px 20px 28px;}
+html.mobile .center-modal{padding:28px 20px;}
 html.tablet .cat-title{min-height:3.75em;}
 
 @media (forced-colors:active){
