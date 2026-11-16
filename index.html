@@ -512,12 +512,13 @@ html.cv-skip .cover-title,html.cv-skip .btn-start{animation:none !important;opac
 .cat-badge img{width:100%;height:100%;object-fit:contain;display:block;}
 .cat-title{font-size:max(14px,calc(16*var(--u)));font-weight:700;line-height:1.25;min-height:2.5em;display:flex;align-items:center;justify-content:center;margin-bottom:calc(6*var(--u));}
 .cat-radios{display:flex;flex-direction:column;align-items:center;gap:4px;width:100%;}
-.radio-pill{position:relative;display:flex;align-items:center;gap:7px;font-size:max(14px,calc(16*var(--u)));font-weight:500;padding:3px 10px;min-width:96px;min-height:30px;border-radius:4px;border:1px solid transparent;color:var(--ink);transition:background-color .2s,border-color .2s;}
+.radio-pill{position:relative;display:flex;align-items:center;justify-content:flex-start;gap:8px;font-size:max(14px,calc(16*var(--u)));font-weight:500;padding:3px 10px;width:118px;min-height:32px;border-radius:4px;border:1px solid transparent;color:var(--ink);transition:background-color .2s,border-color .2s;}
 .radio-circle{width:17px;height:17px;border-radius:50%;border:1.5px solid var(--ink);background:#fff;display:flex;align-items:center;justify-content:center;flex:none;}
 .radio-circle-dot{width:8px;height:8px;border-radius:50%;background:var(--ink);opacity:0;}
+.rp-label{flex:none;text-align:left;}
 @media(hover:hover){.radio-pill:not(.locked):hover{border-color:var(--blue);}.radio-pill:not(.locked):hover .radio-circle{border-color:var(--blue);}}
 .radio-pill:not(.locked):focus-visible{border-color:var(--navy);background:var(--tint);}
-.rp-mark{display:inline-flex;align-items:center;justify-content:center;margin-left:auto;padding-left:6px;flex:none;}
+.rp-mark{display:inline-flex;align-items:center;justify-content:center;margin-left:auto;width:18px;height:18px;flex:none;}
 .rp-mark svg{width:18px;height:18px;display:block;}
 .radio-pill.locked{cursor:default;}
 .radio-pill.correct{background:var(--ok-bg);border-color:#8da480;font-weight:700;color:var(--ok-ink);}
@@ -533,8 +534,8 @@ html.cv-skip .cover-title,html.cv-skip .btn-start{animation:none !important;opac
 .scale-base-img{position:absolute;bottom:7%;left:50%;transform:translateX(-50%);width:58%;height:auto;z-index:4;pointer-events:none;}
 .scale-beam-wrapper{position:absolute;top:59.5%;left:50%;width:60%;height:7.7%;transform:translate(-50%,-50%) rotate(0deg);transform-origin:50% 50%;transition:transform .85s cubic-bezier(.34,1.3,.64,1);z-index:3;}
 .scale-arm-img{width:100%;height:100%;object-fit:contain;display:block;}
-.basket-usa-group,.basket-china-group{position:absolute;top:-175%;width:62%;transform-origin:50% 72%;transition:transform .85s cubic-bezier(.34,1.3,.64,1);z-index:5;}
-.basket-usa-group{left:-34%}.basket-china-group{right:-34%}
+.basket-usa-group,.basket-china-group{position:absolute;top:-212%;width:62%;transform-origin:50% 74%;transition:transform .85s cubic-bezier(.34,1.3,.64,1);z-index:5;}
+.basket-usa-group{left:-31%}.basket-china-group{right:-31%}
 .basket-img{width:100%;height:auto;display:block;position:relative;z-index:3;}
 .pan-dropped-icon{position:absolute;width:32%;height:auto;opacity:0;transform:translateY(-20px) scale(.8);transition:opacity .45s ease,transform .55s cubic-bezier(.175,.885,.32,1.275);z-index:2;pointer-events:none;}
 .pan-dropped-icon.active{opacity:1;transform:none;}
@@ -590,13 +591,13 @@ html.cv-skip .cover-title,html.cv-skip .btn-start{animation:none !important;opac
 /* 6. Darker state borders (3:1 or better against the white page) */
 .radio-pill.correct{border-color:var(--ok-line);}
 .radio-pill.incorrect{border-color:var(--no-line);}
-/* 2. Dropped icons sit INSIDE the weighing pan container (behind .basket-img z-index:3, matching original Hype scale) */
-.pan-dropped-icon{z-index:2;width:32%;transform:translateY(-28px) scale(.85);}
-#pan-icon-ai{bottom:66%;left:14%}
-#pan-icon-cars{bottom:66%;right:14%}
-#pan-icon-semiconductors{bottom:96%;left:34%;z-index:1}
-#pan-icon-fiveG{bottom:66%;left:14%}
-#pan-icon-quantum{bottom:66%;right:14%}
+/* 2. Dropped icons sit INSIDE the weighing pan container (behind .basket-img z-index:3, sized to match original Hype scale) */
+.pan-dropped-icon{z-index:2;width:44%;transform:translateY(-28px) scale(.85);transition:opacity .45s ease,transform .55s cubic-bezier(.175,.885,.32,1.275),left .45s ease,bottom .45s ease,width .45s ease;}
+#pan-icon-ai{bottom:58%;left:28%}
+#pan-icon-cars{bottom:58%;right:auto;left:28%}
+#pan-icon-semiconductors{bottom:92%;left:31%;z-index:1}
+#pan-icon-fiveG{bottom:58%;left:28%}
+#pan-icon-quantum{bottom:58%;right:auto;left:28%}
 /* 4. Scale lifted so its visual centre lines up with the selection board */
 .scale-stage-wrapper{transform:translateY(calc(-44*var(--u)));}
 
@@ -737,6 +738,7 @@ html.mobile .cat-radios{
 }
 html.mobile .cat-radios .radio-pill{
   flex:1 1 0;
+  width:auto;
   min-width:0;
   min-height:44px;
   justify-content:flex-start;
@@ -866,10 +868,10 @@ html.mobile .cat-radios .radio-pill{flex:1 1 0;min-width:0;min-height:44px}
 /* ===== Feedback layer: one layout for every category (correct or incorrect) ===== */
 .dialog-card{--flag:72px;width:min(860px,92%);max-height:none;padding:66px clamp(22px,5vw,52px) 22px;}
 html.mobile .dialog-card{--flag:52px;width:min(780px,92%);padding:60px 18px 20px;}
-.dialog-header-area{display:grid;grid-template-columns:var(--flag) minmax(0,1fr);align-items:center;min-height:var(--flag);margin:0 0 8px;}
-.flag-emblem{position:static;width:var(--flag);height:var(--flag);margin-left:-2px;}
-.dialog-card h2{padding:0 clamp(16px,3vw,32px);text-wrap:balance;}
-.dialog-divider{margin:0 0 14px calc(var(--flag) - 2px);}
+.dialog-header-area{position:relative;display:flex;align-items:center;justify-content:center;min-height:var(--flag);margin:0 0 8px;}
+.flag-emblem{position:absolute;left:0;top:0;width:var(--flag);height:var(--flag);}
+.dialog-card h2{width:100%;text-align:center;padding:0 calc(var(--flag) + 8px);text-wrap:balance;}
+.dialog-divider{margin:0 0 12px calc(var(--flag) + 4px);}
 #card-body{flex:none;overflow:visible;line-height:1.6;padding-right:0;margin-bottom:16px;}
 html.mobile .dialog-header-area{display:flex;gap:12px;min-height:0;}
 html.mobile .dialog-card h2{padding:0;}
@@ -881,14 +883,14 @@ html.mobile .dark-overlay .dialog-card{margin:0 auto;}
 
 /* ===== New storyboard layout: feedback card on the left over the selection board, scale stays visible, close (X) only ===== */
 .dialog-footer{display:none;}
-html:not(.mobile) #content-modal{top:60px;background:transparent;pointer-events:none;overflow:visible;justify-content:flex-start;align-items:flex-start;padding:64px 0 18px var(--pad);}
-html:not(.mobile) #content-modal .dialog-card{pointer-events:auto;--flag:76px;width:min(490px,46%);max-width:calc(100% - var(--pad));margin:0;padding:52px clamp(20px,2.4cqw,28px) 24px;}
-html:not(.mobile) #content-modal .dialog-header-area{margin-bottom:8px;}
-html:not(.mobile) #content-modal .dialog-divider{margin-bottom:14px;}
-html:not(.mobile) #content-modal .modal-cat-badge{width:104px;height:104px;top:-52px;}
-/* type matches M2's card: title 23px bold, text 15px / 1.6 (Moodle's own body text is 15px) */
-.dialog-card h2{font-size:clamp(20px,2.1cqw,23px);}
-#card-body{font-size:15px;line-height:1.6;margin-bottom:0;}
+html:not(.mobile) #content-modal{top:60px;background:transparent;pointer-events:none;overflow:visible;justify-content:flex-start;align-items:flex-start;padding:56px 0 14px var(--pad);}
+html:not(.mobile) #content-modal .dialog-card{pointer-events:auto;--flag:70px;width:min(516px,48%);max-width:calc(100% - var(--pad));margin:0;padding:46px clamp(20px,2.2cqw,26px) 20px;}
+html:not(.mobile) #content-modal .dialog-header-area{margin-bottom:6px;}
+html:not(.mobile) #content-modal .dialog-divider{margin-bottom:12px;}
+html:not(.mobile) #content-modal .modal-cat-badge{width:98px;height:98px;top:-49px;}
+/* type matches M2's card while fitting all 5 categories cleanly inside the fixed frame height */
+.dialog-card h2{font-size:clamp(19px,2cqw,22px);}
+#card-body{font-size:14.5px;line-height:1.54;margin-bottom:0;}
 html.mobile .dialog-card{--flag:60px;}
 html.mobile .flag-emblem{width:var(--flag);height:var(--flag);}
 html.mobile .dialog-card h2{font-size:20px;}
@@ -901,7 +903,7 @@ html:not(.mobile) .fb-open .selection-board{opacity:0;visibility:hidden;}
 .completion-panel[hidden]{display:none;}
 .completion-panel p{font-size:16px;line-height:1.5;color:var(--ink);}
 .scale-stage-wrapper{transition:transform .5s ease;}
-html:not(.mobile) .complete .scale-stage-wrapper{transform:translateY(calc(-66*var(--u))) scale(.86);}
+html:not(.mobile) .complete .scale-stage-wrapper{transform:translateY(calc(-54*var(--u)));}
 html.mobile .completion-panel{position:static;width:auto;order:3;}
 @media (prefers-reduced-motion:reduce){.selection-board,.sub-title,.appbar-inner::after,.scale-stage-wrapper,.pan-dropped-icon{transition:none;}}
 </style>
@@ -1223,11 +1225,10 @@ html.mobile .completion-panel{position:static;width:auto;order:3;}
       }
       if (m === contentModal) {
         var headerH = headerEl ? headerEl.offsetHeight : 60;
-        var badgeOver = 52;
-        var max = tallestCard(card), need = headerH + badgeOver + max + 28;
-        if (need > container.offsetHeight) container.style.minHeight = need + 'px';
-        var stageAvail = container.offsetHeight - headerH - badgeOver;
-        card.style.marginTop = Math.max(8, Math.round((stageAvail - max) / 2)) + 'px';
+        var badgeOver = 49;
+        var max = tallestCard(card);
+        var stageAvail = container.offsetHeight - headerH - badgeOver - 12;
+        card.style.marginTop = Math.max(0, Math.round((stageAvail - max) / 2)) + 'px';
       }
     }
     addEventListener('resize', function () { var o = openModalEl(); if (o) setTimeout(function () { fitModal(o); }, 150); });
@@ -1263,11 +1264,13 @@ html.mobile .completion-panel{position:static;width:auto;order:3;}
     function layoutPans() {
       ['usa', 'china'].forEach(function (side) {
         var items = Object.keys(answered).filter(function (k) { return DATA[k].leader === side; });
-        var slots = items.length === 1 ? [[34, 66]] : items.length === 2 ? [[14, 66], [54, 66]] : [[14, 66], [54, 66], [34, 96]];
+        var wPct = items.length === 1 ? 44 : items.length === 2 ? 40 : 38;
+        var slots = items.length === 1 ? [[28, 58]] : items.length === 2 ? [[8, 60], [52, 60]] : [[9, 60], [53, 60], [31, 92]];
         items.forEach(function (k, i) {
           var el = $('pan-icon-' + k); if (!el) return;
           var fresh = !el.classList.contains('active');
           if (fresh) el.style.transition = 'none';
+          el.style.width = wPct + '%';
           el.style.right = 'auto'; el.style.left = slots[i][0] + '%'; el.style.bottom = slots[i][1] + '%'; el.style.zIndex = i === 2 ? 1 : 2;
           if (fresh) { void el.offsetWidth; el.style.transition = ''; }
         });
@@ -1416,7 +1419,7 @@ html.mobile .completion-panel{position:static;width:auto;order:3;}
         p.className = 'radio-pill'; p.disabled = false; p.removeAttribute('aria-disabled');
         p.querySelector('.rp-mark').textContent = ''; p.querySelector('.rp-res').textContent = '';
       });
-      document.querySelectorAll('.pan-dropped-icon').forEach(function (i) { i.classList.remove('active'); i.style.left = i.style.right = i.style.bottom = i.style.zIndex = ''; });
+      document.querySelectorAll('.pan-dropped-icon').forEach(function (i) { i.classList.remove('active'); i.style.width = i.style.left = i.style.right = i.style.bottom = i.style.zIndex = ''; });
       $('completion-panel').hidden = true; container.classList.remove('complete');
       updateScale();
       syncMobileSequence();
