@@ -686,18 +686,30 @@ html.mobile .dark-overlay .dialog-card{margin:0 auto;}
 
 /* ===== New storyboard layout: feedback card on the left over the selection board, scale stays visible, close (X) only ===== */
 .dialog-footer{display:none;}
-html:not(.mobile) #content-modal{background:transparent;pointer-events:none;overflow:visible;justify-content:flex-start;align-items:center;padding:56px 0 0 2%;}
-html:not(.mobile) #content-modal .dialog-card{pointer-events:auto;--flag:64px;width:max(48%,455px);max-width:calc(100% - 2%);margin:auto 0;padding:54px clamp(20px,2.4cqw,28px) 18px;}
-html:not(.mobile) #content-modal .dialog-header-area{margin-bottom:6px;}
-html:not(.mobile) #content-modal .dialog-divider{margin-bottom:10px;}
+html:not(.mobile) #content-modal{background:transparent;pointer-events:none;overflow:visible;justify-content:flex-start;align-items:flex-start;padding:56px 0 0 2%;}
+html:not(.mobile) #content-modal .dialog-card{pointer-events:auto;--flag:84px;width:max(48%,455px);max-width:calc(100% - 2%);margin:0;padding:54px clamp(20px,2.4cqw,28px) 26px;}
+html:not(.mobile) #content-modal .dialog-header-area{margin-bottom:8px;}
+html:not(.mobile) #content-modal .dialog-divider{margin-bottom:14px;}
 html:not(.mobile) #content-modal .modal-cat-badge{width:112px;height:112px;top:-56px;}
-html:not(.mobile) #content-modal .dialog-card h2{font-size:clamp(20px,2.4cqw,24px);}
-html:not(.mobile) #content-modal #card-body{font-size:15px;line-height:1.5;margin-bottom:0;}
+/* type matches M2's card: title 23px bold, text 15px / 1.6 (Moodle's own body text is 15px) */
+.dialog-card h2{font-size:clamp(20px,2.1cqw,23px);}
+#card-body{font-size:15px;line-height:1.6;margin-bottom:0;}
+html.mobile .dialog-card{--flag:60px;}
+html.mobile .flag-emblem{width:var(--flag);height:var(--flag);}
+html.mobile .dialog-card h2{font-size:20px;}
+html.mobile #card-body{font-size:15px;}
 html:not(.mobile) .fb-open .selection-board{opacity:0;visibility:hidden;}
-html:not(.mobile) .fb-open .sub-title{opacity:0;}
-.selection-board,.sub-title{transition:opacity .25s ease;}
-html.mobile #card-body{margin-bottom:0;}
-@media (prefers-reduced-motion:reduce){.selection-board,.sub-title{transition:none;}}
+html:not(.mobile) .fb-open .sub-title,.fb-open .appbar-inner::after{opacity:0;}
+.selection-board,.sub-title,.appbar-inner::after{transition:opacity .25s ease;}
+.pan-dropped-icon{transition:opacity .45s ease,transform .55s cubic-bezier(.175,.885,.32,1.275),left .45s ease,bottom .45s ease;}
+/* End slide: message + "View bibliography" under the scale, board stays visible on the left */
+.completion-panel{position:absolute;bottom:12px;left:50%;width:48%;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;z-index:6;}
+.completion-panel[hidden]{display:none;}
+.completion-panel p{font-size:16px;line-height:1.5;color:var(--ink);}
+.scale-stage-wrapper{transition:transform .5s ease;}
+html:not(.mobile) .complete .scale-stage-wrapper{transform:translateY(calc(-66*var(--u))) scale(.86);}
+html.mobile .completion-panel{position:static;width:auto;order:3;}
+@media (prefers-reduced-motion:reduce){.selection-board,.sub-title,.appbar-inner::after,.scale-stage-wrapper,.pan-dropped-icon{transition:none;}}
 </style>
 
 </head>
@@ -796,6 +808,10 @@ html.mobile #card-body{margin-bottom:0;}
         </div>
       </section>
 
+      <section class="completion-panel" id="completion-panel" aria-label="Completed" hidden>
+        <p>You have completed this interactive infographic.</p>
+        <button type="button" class="action-btn btn-outline" id="completion-biblio-btn">View bibliography</button>
+      </section>
       <div class="scale-stage-wrapper" id="scale-wrap" role="img" aria-label="Balance scale. USA pan: empty. China pan: empty.">
         <div class="scale-assembly" aria-hidden="true">
           <div class="scale-grey-shadow"></div>
@@ -843,16 +859,6 @@ html.mobile #card-body{margin-bottom:0;}
     </div>
 
     <!-- COMPLETION -->
-    <div class="dark-overlay" id="completion-modal" role="dialog" aria-modal="true" aria-label="Completed">
-      <div class="center-modal completion-card">
-        <p class="modal-copy">You have completed this interactive infographic.<br>What would you like to do next?</p>
-        <div class="completion-buttons">
-          <button class="action-btn" id="completion-exit-btn" type="button">Exit</button>
-          <button class="action-btn btn-outline" id="completion-biblio-btn" type="button">View bibliography</button>
-        </div>
-        <button class="icon-btn close-card-btn" id="close-completion-btn" type="button" aria-label="Close completion message"><svg viewBox="0 0 32.83 32.83" aria-hidden="true" focusable="false"><path class="ring" d="M16.41,32.33A15.92,15.92,0,1,0,.5,16.41,15.92,15.92,0,0,0,16.41,32.33"/><path class="xglyph" d="M22.02,10.8L10.81,22.02M10.81,10.8L22.02,22.02"/></svg></button>
-      </div>
-    </div>
 
     <!-- BIBLIOGRAPHY -->
     <div class="biblio-overlay" id="biblio-overlay" role="dialog" aria-modal="true" aria-labelledby="bib-heading">
@@ -919,8 +925,8 @@ html.mobile #card-body{margin-bottom:0;}
 
     var $ = function (id) { return document.getElementById(id); };
     var container = $('interactive-app'), coverView = $('cover-view');
-    var introModal = $('intro-modal'), contentModal = $('content-modal'), completionModal = $('completion-modal'), biblioOverlay = $('biblio-overlay');
-    var MODALS = [biblioOverlay, completionModal, contentModal, introModal];
+    var introModal = $('intro-modal'), contentModal = $('content-modal'), biblioOverlay = $('biblio-overlay');
+    var MODALS = [biblioOverlay, contentModal, introModal];
     var headerEl = document.querySelector('.app-header'), stageEl = $('stage');
 
     function announce(txt) {
@@ -947,31 +953,35 @@ html.mobile #card-body{margin-bottom:0;}
       if (focusEl) focusEl.focus({ preventScroll: true });
       signalTop();
     }
-    /* Desktop/tablet: every feedback card takes the height of the tallest one, so badge, flag, heading and close button
-       sit in exactly the same place for all five categories, and the card is centred top-to-bottom in the frame */
-    function equalizeCard() {
-      var card = contentModal.querySelector('.dialog-card'), t = $('card-title'), b = $('card-body');
-      var keepT = t.textContent, keepB = b.textContent, max = 0;
-      card.style.minHeight = '';
+    /* Desktop/tablet: the card hugs its own text, but its top edge is fixed at the position that centres the TALLEST card,
+       so badge, flag, heading and close button sit in the same place for all five categories */
+    function tallestCard(card) {
+      var t = $('card-title'), b = $('card-body'), keepT = t.textContent, keepB = b.textContent, max = 0;
       ORDER.forEach(function (k) { t.textContent = DATA[k].title; b.textContent = DATA[k].body; max = Math.max(max, card.offsetHeight); });
       t.textContent = keepT; b.textContent = keepB;
-      card.style.minHeight = max + 'px';
+      return max;
     }
     function fitModal(m) {                               /* make the frame tall enough for the pop-up, so its text never needs an inner scrollbar */
       var card = m.querySelector('.dialog-card,.center-modal,.biblio-card');
       var mob = document.documentElement.classList.contains('mobile');
-      container.style.minHeight = '';
+      container.style.minHeight = baseMin();
       if (!card) return;
+      if (m === contentModal) card.style.marginTop = '';
       if (mob) { container.style.minHeight = (card.offsetHeight + 100) + 'px'; return; }
       if (m === contentModal) {                          /* badge overhang (56px) + a 12px margin above and below */
-        equalizeCard();
-        var need = card.offsetHeight + 56 + 24;
+        var max = tallestCard(card), need = max + 56 + 24;
         if (need > container.offsetHeight) container.style.minHeight = need + 'px';
+        card.style.marginTop = Math.max(12, Math.round((container.offsetHeight - 56 - max) / 2)) + 'px';
       }
     }
     addEventListener('resize', function () { var o = openModalEl(); if (o) setTimeout(function () { fitModal(o); }, 150); });
+    /* small frames: once the end slide is showing, keep the frame tall enough for the message under the scale */
+    function baseMin() {
+      var cp = $('completion-panel');
+      return (cp && !cp.hidden && !document.documentElement.classList.contains('mobile')) ? '580px' : '';
+    }
     function closeModal(m, restore) {
-      m.classList.remove('active'); syncInert(); container.style.minHeight = '';
+      m.classList.remove('active'); syncInert(); container.style.minHeight = baseMin();
       if (restore !== false && lastOpener && document.contains(lastOpener) && !lastOpener.closest('[inert]')) lastOpener.focus({ preventScroll: true });
     }
     function focusNextCategory() {
@@ -995,6 +1005,33 @@ html.mobile #card-body{margin-bottom:0;}
       $('scale-wrap').setAttribute('aria-label', 'Balance scale. USA pan: ' + names('usa') + '. China pan: ' + names('china') + '.');
     }
 
+    /* Icons in each pan are arranged by how many are in it: one centred, two side by side, three as a pyramid */
+    function layoutPans() {
+      ['usa', 'china'].forEach(function (side) {
+        var items = Object.keys(answered).filter(function (k) { return DATA[k].leader === side; });
+        var slots = items.length === 1 ? [[35, 94]] : items.length === 2 ? [[8, 94], [62, 94]] : [[8, 94], [62, 94], [35, 130]];
+        items.forEach(function (k, i) {
+          var el = $('pan-icon-' + k); if (!el) return;
+          var fresh = !el.classList.contains('active');
+          if (fresh) el.style.transition = 'none';
+          el.style.right = 'auto'; el.style.left = slots[i][0] + '%'; el.style.bottom = slots[i][1] + '%'; el.style.zIndex = i === 2 ? 5 : 4;
+          if (fresh) { void el.offsetWidth; el.style.transition = ''; }
+        });
+      });
+    }
+    /* End slide: the message and "View bibliography" sit under the scale (no pop-up) */
+    function placeCompletion() {
+      var p = $('completion-panel'), w = $('scale-wrap');
+      if (document.documentElement.classList.contains('mobile')) { p.style.left = p.style.width = ''; return; }
+      p.style.left = w.offsetLeft + 'px'; p.style.width = w.offsetWidth + 'px';
+    }
+    function showCompletion() {
+      var p = $('completion-panel'); p.hidden = false; container.classList.add('complete'); container.style.minHeight = baseMin(); placeCompletion();
+      announce('You have completed this interactive infographic.');
+      setTimeout(function () { $('completion-biblio-btn').focus({ preventScroll: true }); }, 60);
+    }
+    addEventListener('resize', function () { if (!$('completion-panel').hidden) placeCompletion(); });
+
     /* ---------- answering ---------- */
     function choose(cat, choice, btn) {
       if (answered[cat] || modalTimer || openModalEl()) return;
@@ -1008,7 +1045,7 @@ html.mobile #card-body{margin-bottom:0;}
           p.querySelector('.rp-res').textContent = ok ? ' \u2013 correct' : ' \u2013 incorrect';
         }
       });
-      var icon = $('pan-icon-' + cat); if (icon) icon.classList.add('active');
+      var icon = $('pan-icon-' + cat); layoutPans(); if (icon) icon.classList.add('active');
       updateScale();
       var res = (ok ? 'Correct. ' : 'Not quite. ') + d.title + ': ' + who + ' is in the lead.';
       announce(res);
@@ -1031,8 +1068,7 @@ html.mobile #card-body{margin-bottom:0;}
       closeModal(contentModal, false);
       if (Object.keys(answered).length === ORDER.length) {
         setTimeout(function () {
-          openModal(completionModal, $('completion-exit-btn'));
-          announce('You have completed this interactive infographic.');
+          showCompletion();
         }, 500);
       } else focusNextCategory();
     }
@@ -1058,7 +1094,8 @@ html.mobile #card-body{margin-bottom:0;}
         p.className = 'radio-pill'; p.removeAttribute('aria-disabled');
         p.querySelector('.rp-mark').textContent = ''; p.querySelector('.rp-res').textContent = '';
       });
-      document.querySelectorAll('.pan-dropped-icon').forEach(function (i) { i.classList.remove('active'); });
+      document.querySelectorAll('.pan-dropped-icon').forEach(function (i) { i.classList.remove('active'); i.style.left = i.style.right = i.style.bottom = i.style.zIndex = ''; });
+      $('completion-panel').hidden = true; container.classList.remove('complete');
       updateScale();
       MODALS.forEach(function (m) { m.classList.remove('active'); }); container.style.minHeight = '';
       coverView.classList.remove('hidden'); syncInert(); triggerCoverAnimation();
@@ -1075,13 +1112,9 @@ html.mobile #card-body{margin-bottom:0;}
 
     $('btn-reset').addEventListener('click', openInstructions);
     $('btn-exit').addEventListener('click', resetToCover);
-    $('completion-exit-btn').addEventListener('click', resetToCover);
     $('btn-biblio').addEventListener('click', function () { openBiblio(this); });
     $('close-biblio-btn').addEventListener('click', function () { closeModal(biblioOverlay); });
-    $('close-completion-btn').addEventListener('click', function () { closeModal(completionModal, false); focusNextCategory(); });
-    $('completion-biblio-btn').addEventListener('click', function () {
-      closeModal(completionModal, false); openBiblio($('btn-biblio'));
-    });
+    $('completion-biblio-btn').addEventListener('click', function () { openBiblio(this); });
 
     [contentModal, biblioOverlay].forEach(function (ov) {
       ov.addEventListener('click', function (e) {
@@ -1093,7 +1126,6 @@ html.mobile #card-body{margin-bottom:0;}
       var m = openModalEl(); if (!m) return;
       if (e.key === 'Escape') {
         if (m === biblioOverlay) $('close-biblio-btn').click();
-        else if (m === completionModal) $('close-completion-btn').click();
         else if (m === contentModal) closeFeedback();
         else $('intro-continue-btn').click();
         return;
