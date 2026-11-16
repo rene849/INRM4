@@ -683,6 +683,21 @@ html.mobile .dialog-divider{margin:0 0 14px;}
 /* Every feedback card hangs from the same top edge, so badge, flag and heading sit in the same place for all five categories */
 .dark-overlay .dialog-card{margin:0 auto auto;}
 html.mobile .dark-overlay .dialog-card{margin:0 auto;}
+
+/* ===== New storyboard layout: feedback card on the left over the selection board, scale stays visible, close (X) only ===== */
+.dialog-footer{display:none;}
+html:not(.mobile) #content-modal{background:transparent;pointer-events:none;overflow:visible;justify-content:flex-start;align-items:center;padding:56px 0 0 2%;}
+html:not(.mobile) #content-modal .dialog-card{pointer-events:auto;--flag:64px;width:max(48%,455px);max-width:calc(100% - 2%);margin:auto 0;padding:54px clamp(20px,2.4cqw,28px) 18px;}
+html:not(.mobile) #content-modal .dialog-header-area{margin-bottom:6px;}
+html:not(.mobile) #content-modal .dialog-divider{margin-bottom:10px;}
+html:not(.mobile) #content-modal .modal-cat-badge{width:112px;height:112px;top:-56px;}
+html:not(.mobile) #content-modal .dialog-card h2{font-size:clamp(20px,2.4cqw,24px);}
+html:not(.mobile) #content-modal #card-body{font-size:15px;line-height:1.5;margin-bottom:0;}
+html:not(.mobile) .fb-open .selection-board{opacity:0;visibility:hidden;}
+html:not(.mobile) .fb-open .sub-title{opacity:0;}
+.selection-board,.sub-title{transition:opacity .25s ease;}
+html.mobile #card-body{margin-bottom:0;}
+@media (prefers-reduced-motion:reduce){.selection-board,.sub-title{transition:none;}}
 </style>
 
 </head>
@@ -823,7 +838,6 @@ html.mobile .dark-overlay .dialog-card{margin:0 auto;}
         <hr class="dialog-divider" aria-hidden="true">
         <p class="sr-only" id="card-result"></p>
         <p id="card-body"></p>
-        <div class="dialog-footer"><button class="action-btn" id="continue-dialog-btn" type="button">Continue</button></div>
         <button class="icon-btn close-card-btn" id="close-dialog-btn" type="button" aria-label="Close and continue"><svg viewBox="0 0 32.83 32.83" aria-hidden="true" focusable="false"><path class="ring" d="M16.41,32.33A15.92,15.92,0,1,0,.5,16.41,15.92,15.92,0,0,0,16.41,32.33"/><path class="xglyph" d="M22.02,10.8L10.81,22.02M10.81,10.8L22.02,22.02"/></svg></button>
       </div>
     </div>
@@ -922,6 +936,7 @@ html.mobile .dark-overlay .dialog-card{margin:0 auto;}
       coverView.toggleAttribute('inert', anyOpen);
       [headerEl, stageEl].forEach(function (el) { el.toggleAttribute('inert', coverOpen || anyOpen); });
       container.classList.toggle('cover-on', coverOpen);
+      container.classList.toggle('fb-open', contentModal.classList.contains('active'));
     }
     function triggerCoverAnimation() {
       coverView.classList.remove('go'); void coverView.offsetWidth; document.documentElement.classList.remove('cv-skip'); coverView.classList.add('go');
@@ -932,14 +947,25 @@ html.mobile .dark-overlay .dialog-card{margin:0 auto;}
       if (focusEl) focusEl.focus({ preventScroll: true });
       signalTop();
     }
+    /* Desktop/tablet: every feedback card takes the height of the tallest one, so badge, flag, heading and close button
+       sit in exactly the same place for all five categories, and the card is centred top-to-bottom in the frame */
+    function equalizeCard() {
+      var card = contentModal.querySelector('.dialog-card'), t = $('card-title'), b = $('card-body');
+      var keepT = t.textContent, keepB = b.textContent, max = 0;
+      card.style.minHeight = '';
+      ORDER.forEach(function (k) { t.textContent = DATA[k].title; b.textContent = DATA[k].body; max = Math.max(max, card.offsetHeight); });
+      t.textContent = keepT; b.textContent = keepB;
+      card.style.minHeight = max + 'px';
+    }
     function fitModal(m) {                               /* make the frame tall enough for the pop-up, so its text never needs an inner scrollbar */
       var card = m.querySelector('.dialog-card,.center-modal,.biblio-card');
       var mob = document.documentElement.classList.contains('mobile');
       container.style.minHeight = '';
       if (!card) return;
       if (mob) { container.style.minHeight = (card.offsetHeight + 100) + 'px'; return; }
-      if (m === contentModal) {                          /* desktop/tablet: feedback card + 72px top (badge) + 16px bottom */
-        var need = card.offsetHeight + 88;
+      if (m === contentModal) {                          /* badge overhang (56px) + a 12px margin above and below */
+        equalizeCard();
+        var need = card.offsetHeight + 56 + 24;
         if (need > container.offsetHeight) container.style.minHeight = need + 'px';
       }
     }
@@ -1016,7 +1042,6 @@ html.mobile .dark-overlay .dialog-card{margin:0 auto;}
         p.addEventListener('click', function () { choose(item.dataset.cat, p.dataset.choice, p); });
       });
     });
-    $('continue-dialog-btn').addEventListener('click', closeFeedback);
     $('close-dialog-btn').addEventListener('click', closeFeedback);
 
     /* ---------- navigation ---------- */
