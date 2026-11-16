@@ -527,15 +527,15 @@ html.cv-skip .cover-title,html.cv-skip .btn-start{animation:none !important;opac
 .radio-pill.correct .radio-circle-dot,.radio-pill.incorrect .radio-circle-dot{opacity:1;background:currentColor;}
 @media (pointer:coarse){.radio-pill::after{content:"";position:absolute;inset:-6px -4px;}}
 
-/* Balance scale (geometry from the approved rebuild; every length is a % of the assembly so it scales) */
-.scale-stage-wrapper{display:flex;align-items:center;justify-content:center;min-width:0;}
-.scale-assembly{position:relative;width:min(100%,calc(600*var(--u)));aspect-ratio:530/430;}
+/* Balance scale (centered in the 2nd half of the stage, sized proportionally across all widths) */
+.scale-stage-wrapper{grid-column:2;display:flex;align-items:center;justify-content:center;width:100%;height:100%;min-width:0;}
+.scale-assembly{position:relative;width:min(82%,calc(540*var(--u)));aspect-ratio:530/430;margin:0 auto;}
 .scale-grey-shadow{position:absolute;bottom:3%;left:50%;transform:translateX(-50%);width:90%;height:11%;background:#F5F4EF;border-radius:50%;z-index:1;}
 .scale-base-img{position:absolute;bottom:7%;left:50%;transform:translateX(-50%);width:58%;height:auto;z-index:4;pointer-events:none;}
 .scale-beam-wrapper{position:absolute;top:59.5%;left:50%;width:60%;height:7.7%;transform:translate(-50%,-50%) rotate(0deg);transform-origin:50% 50%;transition:transform .85s cubic-bezier(.34,1.3,.64,1);z-index:3;}
 .scale-arm-img{width:100%;height:100%;object-fit:contain;display:block;}
 .basket-usa-group,.basket-china-group{position:absolute;top:-212%;width:62%;transform-origin:50% 74%;transition:transform .85s cubic-bezier(.34,1.3,.64,1);z-index:5;}
-.basket-usa-group{left:-31%}.basket-china-group{right:-31%}
+.basket-usa-group{left:-27%}.basket-china-group{right:-27%}
 .basket-img{width:100%;height:auto;display:block;position:relative;z-index:3;}
 .pan-dropped-icon{position:absolute;width:32%;height:auto;opacity:0;transform:translateY(-20px) scale(.8);transition:opacity .45s ease,transform .55s cubic-bezier(.175,.885,.32,1.275);z-index:2;pointer-events:none;}
 .pan-dropped-icon.active{opacity:1;transform:none;}
@@ -599,7 +599,7 @@ html.cv-skip .cover-title,html.cv-skip .btn-start{animation:none !important;opac
 #pan-icon-fiveG{bottom:58%;left:28%}
 #pan-icon-quantum{bottom:58%;right:auto;left:28%}
 /* 4. Scale lifted so its visual centre lines up with the selection board */
-.scale-stage-wrapper{transform:translateY(calc(-44*var(--u)));}
+.scale-stage-wrapper{transform:translateY(calc(-24*var(--u)));}
 
 /* Desktop hides mobile-only elements */
 .mobile-only-btn,.m-instructions,.m-feedback-view,.m-comp-exit,.m-bib-top-btn{display:none;}
@@ -890,7 +890,15 @@ html:not(.mobile) #content-modal .dialog-divider{margin-bottom:12px;}
 html:not(.mobile) #content-modal .modal-cat-badge{width:98px;height:98px;top:-49px;}
 /* type matches M2's card while fitting all 5 categories cleanly inside the fixed frame height */
 .dialog-card h2{font-size:clamp(19px,2cqw,22px);}
-#card-body{font-size:14.5px;line-height:1.54;margin-bottom:0;}
+#card-body{font-size:15px;line-height:1.58;margin-bottom:0;}
+#card-body.is-clamped{overflow:hidden;-webkit-mask-image:linear-gradient(#000 calc(100% - 2.8em),transparent);mask-image:linear-gradient(#000 calc(100% - 2.8em),transparent);}
+.card-more{display:inline-flex;align-items:center;align-self:flex-start;gap:10px;margin-top:12px;padding:0 18px;min-height:44px;background:#fff;border:1.5px solid var(--blue);border-radius:4px;color:var(--blue);font:inherit;font-size:15px;font-weight:700;cursor:pointer;transition:background .1s,border-color .1s;}
+.card-more[hidden]{display:none !important;}
+@media(hover:hover){.card-more:hover{background:#e6eaee;}}
+.card-more:focus-visible{background:#e6eaee;}
+.card-more:active{background:#fff;border-color:var(--teal);border-width:2px;padding:0 17.5px;}
+.card-more svg{width:12px;height:8px;transition:transform .15s;}
+.card-more[aria-expanded="true"] svg{transform:rotate(180deg);}
 html.mobile .dialog-card{--flag:60px;}
 html.mobile .flag-emblem{width:var(--flag);height:var(--flag);}
 html.mobile .dialog-card h2{font-size:20px;}
@@ -1070,6 +1078,7 @@ html.mobile .completion-panel{position:static;width:auto;order:3;}
         <hr class="dialog-divider" aria-hidden="true">
         <p class="sr-only" id="card-result"></p>
         <p id="card-body"></p>
+        <button type="button" class="card-more" id="cardMore" aria-expanded="false" aria-controls="card-body" hidden><span id="cardMoreLabel">Read more</span><svg viewBox="0 0 12 8" aria-hidden="true" focusable="false"><path d="M1 1.5l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
         <button class="icon-btn close-card-btn" id="close-dialog-btn" type="button" aria-label="Close and continue"><svg viewBox="0 0 32.83 32.83" aria-hidden="true" focusable="false"><path class="ring" d="M16.41,32.33A15.92,15.92,0,1,0,.5,16.41,15.92,15.92,0,0,0,16.41,32.33"/><path class="xglyph" d="M22.02,10.8L10.81,22.02M10.81,10.8L22.02,22.02"/></svg></button>
       </div>
     </div>
@@ -1139,7 +1148,7 @@ html.mobile .completion-panel{position:static;width:auto;order:3;}
 
     var DATA = techData, ORDER = ['ai', 'fiveG', 'quantum', 'cars', 'semiconductors'];
     var answered = {}, loads = { usa: 0, china: 0 }, modalTimer = null, lastOpener = null;
-    var mobileFeedbackCat = null;
+    var mobileFeedbackCat = null, cardExpanded = false;
 
     var $ = function (id) { return document.getElementById(id); };
     var container = $('interactive-app'), coverView = $('cover-view');
@@ -1207,18 +1216,21 @@ html.mobile .completion-panel{position:static;width:auto;order:3;}
       if (focusEl) focusEl.focus({ preventScroll: true });
       signalTop();
     }
-    function tallestCard(card) {
-      var t = $('card-title'), b = $('card-body'), keepT = t.textContent, keepB = b.textContent, max = 0;
-      ORDER.forEach(function (k) { t.textContent = DATA[k].title; b.textContent = DATA[k].body; max = Math.max(max, card.offsetHeight); });
-      t.textContent = keepT; b.textContent = keepB;
-      return max;
+    function clearCardMore() {
+      var b = $('card-body'), btn = $('cardMore');
+      if (b) { b.style.maxHeight = ''; b.classList.remove('is-clamped'); }
+      if (btn) { btn.hidden = true; btn.setAttribute('aria-expanded', 'false'); }
     }
     function fitModal(m) {
       var card = m.querySelector('.dialog-card,.center-modal,.biblio-card');
       var mob = isMobile();
+      container.style.height = '';
       container.style.minHeight = baseMin();
       if (!card) return;
-      if (m === contentModal) card.style.marginTop = '';
+      if (m === contentModal) {
+        card.style.marginTop = '';
+        clearCardMore();
+      }
       if (mob) {
         if (m !== biblioOverlay) container.style.minHeight = (card.offsetHeight + 100) + 'px';
         return;
@@ -1226,9 +1238,34 @@ html.mobile .completion-panel{position:static;width:auto;order:3;}
       if (m === contentModal) {
         var headerH = headerEl ? headerEl.offsetHeight : 60;
         var badgeOver = 49;
-        var max = tallestCard(card);
-        var stageAvail = container.offsetHeight - headerH - badgeOver - 12;
-        card.style.marginTop = Math.max(0, Math.round((stageAvail - max) / 2)) + 'px';
+        var padBottom = 16;
+        var baseH = container.offsetHeight;
+        var maxCardH = baseH - headerH - badgeOver - padBottom;
+        var btn = $('cardMore'), lab = $('cardMoreLabel'), b = $('card-body'), t = $('card-title');
+
+        if (cardExpanded && btn) {
+          btn.hidden = false;
+          btn.setAttribute('aria-expanded', 'true');
+          if (lab) lab.textContent = 'Show less';
+          btn.setAttribute('aria-label', 'Show less: ' + t.textContent);
+          card.style.marginTop = '0px';
+          var neededH = headerH + badgeOver + card.offsetHeight + padBottom;
+          if (neededH > baseH) container.style.height = neededH + 'px';
+        } else if (card.offsetHeight > maxCardH + 0.5 && btn) {
+          btn.hidden = false;
+          btn.setAttribute('aria-expanded', 'false');
+          if (lab) lab.textContent = 'Read more';
+          btn.setAttribute('aria-label', 'Read more: ' + t.textContent);
+          var fixed = card.offsetHeight - b.offsetHeight;
+          var avail = Math.max(96, maxCardH - fixed);
+          var lh = parseFloat(getComputedStyle(b).lineHeight) || 23.7;
+          var lines = Math.max(3, Math.floor(avail / lh));
+          b.style.maxHeight = Math.round(lines * lh) + 'px';
+          b.classList.add('is-clamped');
+          card.style.marginTop = Math.max(0, Math.round((maxCardH - card.offsetHeight) / 2)) + 'px';
+        } else {
+          card.style.marginTop = Math.max(0, Math.round((maxCardH - card.offsetHeight) / 2)) + 'px';
+        }
       }
     }
     addEventListener('resize', function () { var o = openModalEl(); if (o) setTimeout(function () { fitModal(o); }, 150); });
@@ -1354,6 +1391,7 @@ html.mobile .completion-panel{position:static;width:auto;order:3;}
           showMobileFeedback(cat, res);
           return;
         }
+        cardExpanded = false;
         $('card-title').textContent = d.title;
         $('card-result').textContent = res;
         $('card-body').textContent = d.body;
@@ -1379,6 +1417,8 @@ html.mobile .completion-panel{position:static;width:auto;order:3;}
         }
         return;
       }
+      cardExpanded = false;
+      container.style.height = '';
       closeModal(contentModal, false);
       if (Object.keys(answered).length === ORDER.length) {
         setTimeout(function () {
@@ -1391,6 +1431,11 @@ html.mobile .completion-panel{position:static;width:auto;order:3;}
       item.querySelectorAll('.radio-pill').forEach(function (p) {
         p.addEventListener('click', function () { choose(item.dataset.cat, p.dataset.choice, p); });
       });
+    });
+    $('cardMore').addEventListener('click', function () {
+      cardExpanded = !cardExpanded;
+      if (window.ceSettle) window.ceSettle();
+      fitModal(contentModal);
     });
     $('close-dialog-btn').addEventListener('click', closeFeedback);
     $('m-fb-next-btn').addEventListener('click', closeFeedback);
