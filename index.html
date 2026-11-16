@@ -512,12 +512,13 @@ html.cv-skip .cover-title,html.cv-skip .btn-start{animation:none !important;opac
 .cat-badge img{width:100%;height:100%;object-fit:contain;display:block;}
 .cat-title{font-size:max(14px,calc(16*var(--u)));font-weight:700;line-height:1.25;min-height:2.5em;display:flex;align-items:center;justify-content:center;margin-bottom:calc(6*var(--u));}
 .cat-radios{display:flex;flex-direction:column;align-items:center;gap:4px;width:100%;}
-.radio-pill{position:relative;display:flex;align-items:center;gap:7px;font-size:max(14px,calc(16*var(--u)));font-weight:500;padding:3px 10px;min-width:96px;min-height:30px;border-radius:3px;border:1px solid transparent;color:var(--ink);transition:background-color .2s,border-color .2s;}
+.radio-pill{position:relative;display:flex;align-items:center;gap:7px;font-size:max(14px,calc(16*var(--u)));font-weight:500;padding:3px 10px;min-width:96px;min-height:30px;border-radius:4px;border:1px solid transparent;color:var(--ink);transition:background-color .2s,border-color .2s;}
 .radio-circle{width:17px;height:17px;border-radius:50%;border:1.5px solid var(--ink);background:#fff;display:flex;align-items:center;justify-content:center;flex:none;}
 .radio-circle-dot{width:8px;height:8px;border-radius:50%;background:var(--ink);opacity:0;}
 @media(hover:hover){.radio-pill:not(.locked):hover{border-color:var(--blue);}.radio-pill:not(.locked):hover .radio-circle{border-color:var(--blue);}}
 .radio-pill:not(.locked):focus-visible{border-color:var(--navy);background:var(--tint);}
-.rp-mark{font-weight:800;margin-left:auto;padding-left:4px;}
+.rp-mark{display:inline-flex;align-items:center;justify-content:center;margin-left:auto;padding-left:6px;flex:none;}
+.rp-mark svg{width:18px;height:18px;display:block;}
 .radio-pill.locked{cursor:default;}
 .radio-pill.correct{background:var(--ok-bg);border-color:#8da480;font-weight:700;color:var(--ok-ink);}
 .radio-pill.incorrect{background:var(--no-bg);border-color:#bf807b;font-weight:700;color:var(--no-ink);}
@@ -589,13 +590,13 @@ html.cv-skip .cover-title,html.cv-skip .btn-start{animation:none !important;opac
 /* 6. Darker state borders (3:1 or better against the white page) */
 .radio-pill.correct{border-color:var(--ok-line);}
 .radio-pill.incorrect{border-color:var(--no-line);}
-/* 2. Dropped icons sit ON the pan, in front of it, instead of hiding behind it */
-.pan-dropped-icon{z-index:4;width:30%;}
-#pan-icon-ai{bottom:94%;left:8%}
-#pan-icon-cars{bottom:94%;right:8%}
-#pan-icon-semiconductors{bottom:130%;left:35%;z-index:5}
-#pan-icon-fiveG{bottom:94%;left:8%}
-#pan-icon-quantum{bottom:94%;right:8%}
+/* 2. Dropped icons sit INSIDE the weighing pan container (behind .basket-img z-index:3, matching original Hype scale) */
+.pan-dropped-icon{z-index:2;width:32%;transform:translateY(-28px) scale(.85);}
+#pan-icon-ai{bottom:66%;left:14%}
+#pan-icon-cars{bottom:66%;right:14%}
+#pan-icon-semiconductors{bottom:96%;left:34%;z-index:1}
+#pan-icon-fiveG{bottom:66%;left:14%}
+#pan-icon-quantum{bottom:66%;right:14%}
 /* 4. Scale lifted so its visual centre lines up with the selection board */
 .scale-stage-wrapper{transform:translateY(calc(-44*var(--u)));}
 
@@ -880,11 +881,11 @@ html.mobile .dark-overlay .dialog-card{margin:0 auto;}
 
 /* ===== New storyboard layout: feedback card on the left over the selection board, scale stays visible, close (X) only ===== */
 .dialog-footer{display:none;}
-html:not(.mobile) #content-modal{background:transparent;pointer-events:none;overflow:visible;justify-content:flex-start;align-items:flex-start;padding:56px 0 0 2%;}
-html:not(.mobile) #content-modal .dialog-card{pointer-events:auto;--flag:84px;width:max(48%,455px);max-width:calc(100% - 2%);margin:0;padding:54px clamp(20px,2.4cqw,28px) 26px;}
+html:not(.mobile) #content-modal{top:60px;background:transparent;pointer-events:none;overflow:visible;justify-content:flex-start;align-items:flex-start;padding:64px 0 18px var(--pad);}
+html:not(.mobile) #content-modal .dialog-card{pointer-events:auto;--flag:76px;width:min(490px,46%);max-width:calc(100% - var(--pad));margin:0;padding:52px clamp(20px,2.4cqw,28px) 24px;}
 html:not(.mobile) #content-modal .dialog-header-area{margin-bottom:8px;}
 html:not(.mobile) #content-modal .dialog-divider{margin-bottom:14px;}
-html:not(.mobile) #content-modal .modal-cat-badge{width:112px;height:112px;top:-56px;}
+html:not(.mobile) #content-modal .modal-cat-badge{width:104px;height:104px;top:-52px;}
 /* type matches M2's card: title 23px bold, text 15px / 1.6 (Moodle's own body text is 15px) */
 .dialog-card h2{font-size:clamp(20px,2.1cqw,23px);}
 #card-body{font-size:15px;line-height:1.6;margin-bottom:0;}
@@ -893,7 +894,6 @@ html.mobile .flag-emblem{width:var(--flag);height:var(--flag);}
 html.mobile .dialog-card h2{font-size:20px;}
 html.mobile #card-body{font-size:15px;}
 html:not(.mobile) .fb-open .selection-board{opacity:0;visibility:hidden;}
-html:not(.mobile) .fb-open .sub-title,.fb-open .appbar-inner::after{opacity:0;}
 .selection-board,.sub-title,.appbar-inner::after{transition:opacity .25s ease;}
 .pan-dropped-icon{transition:opacity .45s ease,transform .55s cubic-bezier(.175,.885,.32,1.275),left .45s ease,bottom .45s ease;}
 /* End slide: message + "View bibliography" under the scale, board stays visible on the left */
@@ -1222,9 +1222,12 @@ html.mobile .completion-panel{position:static;width:auto;order:3;}
         return;
       }
       if (m === contentModal) {
-        var max = tallestCard(card), need = max + 56 + 24;
+        var headerH = headerEl ? headerEl.offsetHeight : 60;
+        var badgeOver = 52;
+        var max = tallestCard(card), need = headerH + badgeOver + max + 28;
         if (need > container.offsetHeight) container.style.minHeight = need + 'px';
-        card.style.marginTop = Math.max(12, Math.round((container.offsetHeight - 56 - max) / 2)) + 'px';
+        var stageAvail = container.offsetHeight - headerH - badgeOver;
+        card.style.marginTop = Math.max(8, Math.round((stageAvail - max) / 2)) + 'px';
       }
     }
     addEventListener('resize', function () { var o = openModalEl(); if (o) setTimeout(function () { fitModal(o); }, 150); });
@@ -1260,12 +1263,12 @@ html.mobile .completion-panel{position:static;width:auto;order:3;}
     function layoutPans() {
       ['usa', 'china'].forEach(function (side) {
         var items = Object.keys(answered).filter(function (k) { return DATA[k].leader === side; });
-        var slots = items.length === 1 ? [[35, 94]] : items.length === 2 ? [[8, 94], [62, 94]] : [[8, 94], [62, 94], [35, 130]];
+        var slots = items.length === 1 ? [[34, 66]] : items.length === 2 ? [[14, 66], [54, 66]] : [[14, 66], [54, 66], [34, 96]];
         items.forEach(function (k, i) {
           var el = $('pan-icon-' + k); if (!el) return;
           var fresh = !el.classList.contains('active');
           if (fresh) el.style.transition = 'none';
-          el.style.right = 'auto'; el.style.left = slots[i][0] + '%'; el.style.bottom = slots[i][1] + '%'; el.style.zIndex = i === 2 ? 5 : 4;
+          el.style.right = 'auto'; el.style.left = slots[i][0] + '%'; el.style.bottom = slots[i][1] + '%'; el.style.zIndex = i === 2 ? 1 : 2;
           if (fresh) { void el.offsetWidth; el.style.transition = ''; }
         });
       });
@@ -1331,7 +1334,9 @@ html.mobile .completion-panel{position:static;width:auto;order:3;}
         p.classList.add('locked'); p.setAttribute('aria-disabled', 'true');
         if (p.dataset.choice === choice) {
           p.classList.add(ok ? 'correct' : 'incorrect');
-          p.querySelector('.rp-mark').textContent = ok ? '✓' : '✗';
+          p.querySelector('.rp-mark').innerHTML = ok
+            ? '<svg viewBox="0 0 20 20" aria-hidden="true" focusable="false"><circle cx="10" cy="10" r="8.25" fill="none" stroke="currentColor" stroke-width="1.8"/><polyline points="6.3 10.3 8.9 12.9 13.9 7.6" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+            : '<svg viewBox="0 0 20 20" aria-hidden="true" focusable="false"><circle cx="10" cy="10" r="8.25" fill="none" stroke="currentColor" stroke-width="1.8"/><line x1="7.2" y1="7.2" x2="12.8" y2="12.8" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/><line x1="12.8" y1="7.2" x2="7.2" y2="12.8" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>';
           p.querySelector('.rp-res').textContent = ok ? ' – correct' : ' – incorrect';
         }
       });
