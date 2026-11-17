@@ -499,7 +499,7 @@ html.cv-skip .cover-title,html.cv-skip .btn-start{animation:none !important;opac
 
 /* Stage: selection board (left) + balance scale (right). 1px = 1 design unit at 1112x560; --u scales it with the frame */
 .stage-view{position:relative;flex:1 1 auto;min-height:0;width:100%;background:#fff;overflow:hidden;container-type:size;
-  display:grid;grid-template-columns:58fr 42fr;align-items:center;column-gap:clamp(24px,4cqw,56px);padding:4px clamp(12px,2cqw,32px) 10px;}
+  display:grid;grid-template-columns:58fr 42fr;align-items:center;column-gap:clamp(14px,3.2cqw,48px);padding:4px clamp(12px,2cqw,32px) 10px;}
 .stage-view>*{--u:min(.0899cqw,.1786cqh);}
 .selection-board{display:grid;grid-template-columns:repeat(6,1fr);row-gap:calc(26*var(--u));column-gap:calc(4*var(--u));align-content:center;}
 .cat-item[data-cat="ai"]{grid-column:1/3;grid-row:1}
@@ -512,7 +512,7 @@ html.cv-skip .cover-title,html.cv-skip .btn-start{animation:none !important;opac
 .cat-badge img{width:100%;height:100%;object-fit:contain;display:block;}
 .cat-title{font-size:max(14px,calc(16*var(--u)));font-weight:700;line-height:1.25;min-height:2.5em;display:flex;align-items:center;justify-content:center;margin-bottom:calc(6*var(--u));}
 .cat-radios{display:flex;flex-direction:column;align-items:center;gap:4px;width:100%;}
-.radio-pill{position:relative;display:flex;align-items:center;justify-content:flex-start;gap:8px;font-size:max(14px,calc(16*var(--u)));font-weight:500;padding:3px 6px 3px 36px;width:144px;min-height:32px;border-radius:4px;border:1px solid transparent;color:var(--ink);transition:background-color .2s,border-color .2s;}
+.radio-pill{position:relative;display:flex;align-items:center;justify-content:flex-start;gap:7px;font-size:max(14px,calc(16*var(--u)));font-weight:500;padding:3px 8px 3px 12px;width:min(122px,100%);min-height:32px;border-radius:4px;border:1px solid transparent;color:var(--ink);transition:background-color .2s,border-color .2s;}
 .radio-circle{width:17px;height:17px;border-radius:50%;border:1.5px solid var(--ink);background:#fff;display:flex;align-items:center;justify-content:center;flex:none;}
 .radio-circle-dot{width:8px;height:8px;border-radius:50%;background:var(--ink);opacity:0;}
 .rp-label{flex:none;text-align:left;}
@@ -598,8 +598,8 @@ html.cv-skip .cover-title,html.cv-skip .btn-start{animation:none !important;opac
 #pan-icon-semiconductors{bottom:92%;left:31%;z-index:1}
 #pan-icon-fiveG{bottom:58%;left:28%}
 #pan-icon-quantum{bottom:58%;right:auto;left:28%}
-/* 4. Scale lifted so its visual centre lines up with the selection board */
-.scale-stage-wrapper{transform:translateY(calc(-44*var(--u)));transform:translateY(round(to-zero,calc(-44*var(--u)),1px));}
+/* 4. Scale sits in a fixed vertical position across selection, feedback, and completion */
+.scale-stage-wrapper{transform:translateY(-24px);}
 
 /* Desktop hides mobile-only elements */
 .mobile-only-btn,.m-instructions,.m-feedback-view,.m-comp-exit,.m-bib-top-btn{display:none;}
@@ -867,7 +867,7 @@ html.mobile .cat-radios{flex:0 0 100%;width:100%;flex-direction:row;gap:8px}
 html.mobile .cat-radios .radio-pill{flex:1 1 0;min-width:0;min-height:44px}
 
 /* mid-width desktop (Moodle with the course drawer open): the longest category name wraps to 3 lines, so every row reserves 3 lines and the USA/China buttons stay level */
-@media (min-width:760px) and (max-width:1149px){ .cat-title{min-height:3.75em} }
+@media (min-width:861px) and (max-width:1149px){ .cat-title{min-height:3.75em} }
 
 /* ===== Feedback layer: one layout for every category (correct or incorrect) ===== */
 .dialog-card{--flag:72px;width:min(860px,92%);max-height:none;padding:66px clamp(22px,5vw,52px) 22px;}
@@ -900,8 +900,8 @@ html.mobile .flag-emblem{width:var(--flag);height:var(--flag);}
 html.mobile .dialog-card h2{font-size:20px;}
 html.mobile #card-body{font-size:15px;}
 html:not(.mobile) .fb-open .selection-board{opacity:0;visibility:hidden;}
-/* while a feedback card is open the picker is hidden, so the scale settles to the middle of the stage and the card centres on it */
-html:not(.mobile) .fb-open .scale-stage-wrapper{transform:none;}
+/* Keep scale locked in the exact same spot during feedback */
+html:not(.mobile) .fb-open .scale-stage-wrapper{transform:translateY(-24px);}
 /* Category picker in a light panel (as in the original Hype layout), desktop only */
 @container (min-width:1100px) and (min-height:455px){
   html:not(.mobile) .selection-board{border:1px solid #D9D9D9;padding:calc(10*var(--u)) calc(14*var(--u));row-gap:calc(14*var(--u));background:#fff;}
@@ -920,17 +920,43 @@ html:not(.mobile) .stage-view{padding-left:var(--pad);padding-right:var(--pad);}
 .selection-board,.sub-title,.appbar-inner::after{transition:opacity .25s ease;}
 .pan-dropped-icon{transition:opacity .45s ease,transform .55s cubic-bezier(.175,.885,.32,1.275),left .45s ease,bottom .45s ease;}
 /* End slide: message + "View bibliography" under the scale, board stays visible on the left */
-.completion-panel{position:absolute;bottom:12px;left:60%;width:38%;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;z-index:6;}
+.completion-panel{position:absolute;bottom:30px;left:60%;width:38%;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;z-index:6;}
 .completion-panel[hidden]{display:none;}
 .completion-panel p{font-size:16px;line-height:1.5;color:var(--ink);}
 .scale-stage-wrapper{transition:transform .5s ease;}
-html:not(.mobile) .complete .scale-stage-wrapper{transform:translateY(calc(-54*var(--u)));transform:translateY(round(to-zero,calc(-54*var(--u)),1px));}
+html:not(.mobile) .complete .scale-stage-wrapper{transform:translateY(-24px);}
 html.mobile .completion-panel{position:static;width:auto;order:3;}
 @media (prefers-reduced-motion:reduce){.selection-board,.sub-title,.appbar-inner::after,.scale-stage-wrapper,.pan-dropped-icon{transition:none;}}
-/* Picker spacing: equal-width items; outer padding is derived so the gap from the box edge to the first/last item equals the gap between items */
-html:not(.mobile) .selection-board{--w:max(120px,calc(160*var(--u)));padding-inline:max(8px,calc(100%/8 - 3*var(--w)/8));}
-html:not(.mobile) .cat-item{width:min(var(--w),100%);max-width:none;min-width:0;}
+/* Picker spacing: equal-width columns with balanced outer & inner margins so pills never touch or overflow */
+html:not(.mobile) .selection-board{
+  column-gap:clamp(8px,1.4cqw,18px);
+  padding-inline:clamp(10px,1.8cqw,22px);
+}
+html:not(.mobile) .cat-item{width:100%;max-width:none;min-width:0;}
 html:not(.mobile) .cat-title{max-width:100%;text-wrap:balance;}
+
+/* Narrow desktop / tablet (both Moodle side menus open, 691px–880px): 2-2-1 grid so options never overlap & feedback stays roomy */
+@container (max-width:860px){
+  html:not(.mobile) .stage-view{grid-template-columns:55fr 45fr;column-gap:16px;}
+  html:not(.mobile) .selection-board{
+    grid-template-columns:repeat(4,1fr);
+    row-gap:10px;
+    column-gap:10px;
+    padding:12px 12px;
+  }
+  html:not(.mobile) .cat-item[data-cat="ai"]{grid-column:1/3;grid-row:1;}
+  html:not(.mobile) .cat-item[data-cat="fiveG"]{grid-column:3/5;grid-row:1;}
+  html:not(.mobile) .cat-item[data-cat="quantum"]{grid-column:1/3;grid-row:2;}
+  html:not(.mobile) .cat-item[data-cat="cars"]{grid-column:3/5;grid-row:2;}
+  html:not(.mobile) .cat-item[data-cat="semiconductors"]{grid-column:2/4;grid-row:3;}
+  html:not(.mobile) .cat-badge{width:64px;height:64px;min-width:64px;min-height:64px;margin-bottom:4px;}
+  html:not(.mobile) .cat-title{font-size:14.5px;min-height:2.5em;margin-bottom:4px;}
+  html:not(.mobile) .cat-radios{flex-direction:row;justify-content:center;gap:6px;}
+  html:not(.mobile) .radio-pill{width:auto;min-width:0;flex:1 1 0;max-width:104px;font-size:14.5px;padding:3px 6px 3px 8px;gap:5px;}
+  html:not(.mobile) #content-modal .dialog-card{width:min(540px,56%);padding:54px 18px 20px;--flag:56px;}
+  html:not(.mobile) #content-modal .modal-cat-badge{width:84px;height:84px;top:-42px;}
+  html:not(.mobile) #content-modal #card-body{font-size:14.5px;line-height:1.5;}
+}
 /* ---- Phone: no multiple choice. One tap target per row; the slide shows who leads and the icon drops onto its pan ---- */
 .m-open,.m-tick{display:none;}
 html.mobile .cat-item{position:relative;}
