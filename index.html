@@ -269,11 +269,13 @@ html.cv-skip .cover-title,html.cv-skip .btn-start{animation:none !important;opac
   transition:none;
   position:relative;
 }
+.icon-btn::after{content:"";position:absolute;inset:-6px;}
 .icon-btn svg{
   width:100%;
   height:100%;
   display:block;
   overflow:visible;
+  pointer-events:none;
 }
 .icon-btn .ring{
   fill:var(--ring-fill);
@@ -583,8 +585,8 @@ html.cv-skip .cover-title,html.cv-skip .btn-start{animation:none !important;opac
 .radio-pill{font-size:max(16px,calc(16*var(--u)));min-height:32px;}
 /* 3. Columns wide enough that "Quantum computing and communications" stays on two lines, so every radio row lines up */
 .cat-item{width:100%;max-width:calc(214*var(--u) + 24px);min-width:150px;}
-/* 5. Stronger keyboard focus */
-.radio-pill:focus-visible{outline:3px solid var(--navy-deep);outline-offset:2px;border-color:var(--navy);background:var(--tint);}
+/* 5. Economist Red keyboard focus indicator (WCAG 2.2 AA >= 3:1 contrast) */
+.radio-pill:focus-visible{outline:3px solid var(--red);outline-offset:2px;border-color:var(--navy);background:var(--tint);}
 .radio-pill.locked:focus-visible{background:var(--tint);}
 .radio-pill.correct:focus-visible{background:var(--ok-bg);}
 .radio-pill.incorrect:focus-visible{background:var(--no-bg);}
@@ -718,7 +720,6 @@ html.mobile .cat-item{
   transition:opacity .25s ease;
 }
 html.mobile .cat-item:last-child{border-bottom:0;}
-html.mobile .cat-item.m-locked{opacity:.42;}
 html.mobile .cat-badge{flex:none;width:72px;height:72px;margin:0;pointer-events:none;}
 html.mobile .cat-title{
   flex:1 1 0;
@@ -737,7 +738,7 @@ html.mobile #intro-modal,
 html.mobile #content-modal{display:none !important;}
 
 /* Hide scale on the mobile selection list (scale appears on the feedback slide & completion) */
-html.mobile .stage-view:not(.m-showing-feedback):not(.m-showing-complete) > .scale-stage-wrapper{display:none;}
+html.mobile .stage-view:not(.m-showing-feedback) > .scale-stage-wrapper{display:none;}
 html.mobile .stage-view.m-showing-feedback .m-instructions,
 html.mobile .stage-view.m-showing-feedback .selection-board{display:none;}
 
@@ -789,33 +790,37 @@ html.mobile .m-fb-body.is-animating{animation:m-fb-fade .42s ease .12s both;}
 html.mobile .m-fb-actions{display:flex;justify-content:center;}
 html.mobile .m-fb-actions .action-btn{min-width:164px;}
 
-/* Mobile Completion State: dark navy backdrop + centered white card (matched to image_5383cc.png) */
-html.mobile .stage-view.m-showing-complete{
-  background:var(--navy);
-  padding:24px 16px 32px;
-  min-height:540px;
-  justify-content:center;
-}
-html.mobile .stage-view.m-showing-complete .m-instructions,
-html.mobile .stage-view.m-showing-complete .selection-board{display:none;}
+/* Mobile Completion Overlay (full-bleed dark navy backdrop + centered white card, matching M1/M2/M5) */
+html.mobile .completion-panel[hidden]{display:none !important;}
 html.mobile .completion-panel{
-  position:static;
+  position:absolute;
+  inset:0;
+  z-index:320;
   width:100%;
-  max-width:340px;
-  margin:0 auto;
+  max-width:none;
+  margin:0;
+  background:rgba(31,46,122,.94);
+  padding:24px 16px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:none;
+}
+html.mobile .m-comp-card{
+  width:100%;
+  max-width:400px;
   background:#fff;
-  padding:28px 20px 32px;
+  padding:32px 24px 36px;
   display:flex;
   flex-direction:column;
   align-items:center;
   gap:14px;
   text-align:center;
-  box-shadow:0 12px 32px rgba(0,0,0,.28);
+  box-shadow:0 16px 48px rgba(0,0,0,.3);
 }
-html.mobile .completion-panel[hidden]{display:none;}
 html.mobile .m-comp-scale-slot{width:100%;display:flex;justify-content:center;margin-bottom:4px;}
-html.mobile .completion-panel p{font-size:16px;line-height:1.55;color:var(--ink);margin:0 0 6px;}
-html.mobile .completion-panel .action-btn{width:100%;max-width:190px;}
+html.mobile .completion-panel p{font-size:16px;line-height:1.55;color:var(--ink);margin:0 0 6px;text-wrap:balance;}
+html.mobile .completion-panel .action-btn{width:100%;max-width:220px;}
 html.mobile .completion-panel #m-completion-exit-btn{order:2;}
 html.mobile .completion-panel #completion-biblio-btn{order:3;}
 .m-next-q,.m-only-lbl{display:none;}
@@ -824,29 +829,31 @@ html.mobile .m-only-lbl{display:inline;}
 html.mobile .d-only-lbl{display:none;}
 html.mobile .m-comp-exit{display:inline-flex;}
 
-/* Mobile Bibliography Overlay (full-card scrollable view with Back to top button, matching M1/M2/M5) */
+/* Mobile Bibliography Page (in-flow view below header with zero internal scroll & smooth Back to top, matching M2 & M5) */
+html.mobile .interactive-container.bib-open > .stage-view{display:none;}
 html.mobile .biblio-overlay{
-  position:fixed;
-  inset:0;
+  position:static;
+  inset:auto;
   border-radius:0;
   background:#fff;
   padding:0;
-  overflow-y:auto;
-  align-items:stretch;
+  opacity:1;
+  display:none;
 }
+html.mobile .biblio-overlay.active{display:block;}
 html.mobile .biblio-card{
   max-width:none;
   width:100%;
   height:auto;
-  min-height:100%;
+  min-height:0;
   box-shadow:none;
-  padding:68px 16px 28px;
+  padding:20px 16px 28px;
 }
-html.mobile .biblio-card .close-card-btn{top:14px;right:16px;}
+html.mobile .biblio-card .close-card-btn{display:none;}
 html.mobile .bib-head{padding:0 0 12px;}
 html.mobile .bib-head h2{font-size:20px;}
 html.mobile .bib-body{overflow:visible;padding:16px 0 0;}
-html.mobile .m-bib-top-btn{display:inline-flex;width:100%;margin-top:20px;}
+html.mobile .m-bib-top-btn{display:flex;width:100%;margin-top:24px;}
 
 html.mobile .dark-overlay{align-items:flex-start;padding:72px 12px 12px;}
 html.mobile .center-modal{padding:28px 20px;}
@@ -878,13 +885,13 @@ html.mobile .sub-title{white-space:normal;overflow:visible;text-overflow:clip;li
 /* mid-width desktop (Moodle with the course drawer open): the longest category name wraps to 3 lines, so every row reserves 3 lines and the USA/China buttons stay level */
 @media (min-width:881px) and (max-width:1149px){ .cat-title{min-height:3.75em} }
 
-/* ===== Feedback layer: one layout for every category (correct or incorrect) ===== */
-.dialog-card{--flag:72px;width:min(860px,92%);max-height:none;padding:66px clamp(22px,5vw,52px) 22px;}
+/* ===== Feedback layer: flag bottom aligned with horizontal divider line + balanced spacing above & below ===== */
+.dialog-card{--flag:68px;width:min(860px,92%);max-height:none;padding:66px clamp(22px,5vw,52px) 22px;}
 html.mobile .dialog-card{--flag:52px;width:min(780px,92%);padding:60px 18px 20px;}
-.dialog-header-area{position:relative;display:flex;align-items:center;justify-content:center;min-height:var(--flag);margin:0 0 8px;}
-.flag-emblem{position:absolute;left:0;top:50%;transform:translateY(-50%);width:var(--flag);height:var(--flag);}
-.dialog-card h2{width:100%;text-align:center;padding:0 calc(var(--flag) + 8px);text-wrap:balance;}
-.dialog-divider{margin:0 0 12px calc(var(--flag) + 4px);}
+.dialog-header-area{position:relative;display:flex;align-items:center;justify-content:center;min-height:62px;padding-bottom:12px;margin:0;}
+.flag-emblem{position:absolute;left:0;bottom:0;top:auto;transform:none;width:var(--flag);height:var(--flag);}
+.dialog-card h2{width:100%;text-align:center;padding:0 calc(var(--flag) + 12px);text-wrap:balance;}
+.dialog-divider{margin:0 0 18px calc(var(--flag) + 12px);}
 #card-body{flex:none;overflow:visible;line-height:1.6;padding-right:0;margin-bottom:16px;}
 html.mobile .dialog-header-area{display:flex;gap:12px;min-height:0;}
 html.mobile .dialog-card h2{padding:0;}
@@ -896,9 +903,9 @@ html.mobile .dark-overlay .dialog-card{margin:0 auto;}
 /* ===== Desktop feedback card on the left over the selection board, scale stays completely stationary on the right ===== */
 .dialog-footer{display:none;}
 html:not(.mobile) #content-modal{top:60px;background:transparent;pointer-events:none;overflow:visible;justify-content:flex-start;align-items:flex-start;padding:56px 0 14px var(--pad);}
-html:not(.mobile) #content-modal .dialog-card{pointer-events:auto;--flag:70px;width:min(550px,calc(53% - var(--pad)));max-width:calc(100% - var(--pad));margin:0;padding:56px clamp(20px,2.2cqw,28px) 24px;}
-html:not(.mobile) #content-modal .dialog-header-area{margin-bottom:10px;}
-html:not(.mobile) #content-modal .dialog-divider{margin-bottom:16px;}
+html:not(.mobile) #content-modal .dialog-card{pointer-events:auto;--flag:68px;width:min(550px,calc(53% - var(--pad)));max-width:calc(100% - var(--pad));margin:0;padding:58px clamp(20px,2.2cqw,28px) 26px;}
+html:not(.mobile) #content-modal .dialog-header-area{min-height:62px;padding-bottom:12px;margin-bottom:0;}
+html:not(.mobile) #content-modal .dialog-divider{margin:0 0 18px calc(var(--flag) + 12px);}
 html:not(.mobile) #content-modal .modal-cat-badge{width:98px;height:98px;top:-49px;}
 .dialog-card h2{font-size:clamp(19px,2cqw,22px);}
 #card-body{font-size:15px;line-height:1.55;margin-bottom:0;}
@@ -937,6 +944,7 @@ html:not(.mobile) .stage-view{padding-left:var(--pad);padding-right:var(--pad);}
 .completion-panel[hidden]{display:none;}
 .completion-panel p{font-size:16px;line-height:1.5;color:var(--ink);}
 .m-comp-scale-slot{display:none;}
+html:not(.mobile) .m-comp-card{display:contents;}
 @media (prefers-reduced-motion:reduce){.selection-board,.sub-title,.appbar-inner::after,.pan-dropped-icon{transition:none;}}
 
 /* Picker spacing: equal-width columns with balanced outer & inner margins */
@@ -966,17 +974,19 @@ html:not(.mobile) .cat-title{max-width:100%;text-wrap:balance;}
   html:not(.mobile) .cat-radios{flex-direction:column;align-items:center;gap:5px;}
   html:not(.mobile) .radio-pill{width:118px;min-width:0;min-height:30px;font-size:14px;padding:3px 8px 3px 12px;gap:8px;}
   html:not(.mobile) .scale-assembly{width:min(94%,calc(520*var(--u)));}
-  html:not(.mobile) #content-modal .dialog-card{width:calc(50% - var(--pad));padding:46px 16px 18px;--flag:48px;}
+  html:not(.mobile) #content-modal .dialog-card{width:calc(50% - var(--pad));padding:48px 16px 20px;--flag:50px;}
+  html:not(.mobile) #content-modal .dialog-header-area{min-height:46px;padding-bottom:10px;}
+  html:not(.mobile) #content-modal .dialog-divider{margin:0 0 14px calc(var(--flag) + 10px);}
   html:not(.mobile) #content-modal .modal-cat-badge{width:80px;height:80px;top:-40px;}
-  html:not(.mobile) #content-modal .dialog-card h2{font-size:18px;padding:0 calc(var(--flag) + 8px);}
+  html:not(.mobile) #content-modal .dialog-card h2{font-size:18px;padding:0 calc(var(--flag) + 10px);}
   html:not(.mobile) #content-modal #card-body{font-size:14.5px;line-height:1.5;}
 }
 /* ---- Phone: no multiple choice. One tap target per row; the slide shows who leads and the icon drops onto its pan ---- */
 .m-open,.m-tick{display:none;}
 html.mobile .cat-item{position:relative;}
 html.mobile .cat-radios{display:none;}
-html.mobile .m-open{display:block;position:absolute;inset:0;width:100%;height:100%;background:transparent;border:0;border-radius:0;cursor:pointer;z-index:10;pointer-events:auto;-webkit-tap-highlight-color:rgba(71,94,209,.12);}
-html.mobile .m-open:focus-visible{outline:3px solid var(--navy-deep);outline-offset:-4px;background:rgba(71,94,209,.08);}
+html.mobile .m-open{display:block;position:absolute;inset:0;width:100%;height:100%;background:transparent;border:0;border-radius:0;cursor:pointer;z-index:20;pointer-events:auto;-webkit-tap-highlight-color:rgba(71,94,209,.12);}
+html.mobile .m-open:focus-visible{outline:3px solid var(--red);outline-offset:-4px;background:rgba(71,94,209,.08);}
 html.mobile .cat-item.m-locked .m-open{cursor:default;}
 html.mobile .m-done .m-tick{display:block;order:3;flex:none;width:26px;height:26px;color:var(--ok-ink);}
 html.mobile .m-tick svg{width:100%;height:100%;display:block;}
@@ -1035,6 +1045,22 @@ html.mobile .m-tick svg{width:100%;height:100%;display:block;}
       </div>
     </header>
 
+    <!-- CATEGORY FEEDBACK -->
+    <div class="dark-overlay" id="content-modal" role="dialog" aria-modal="true" aria-labelledby="card-title">
+      <div class="dialog-card">
+        <div class="modal-cat-badge" id="modal-cat-badge" aria-hidden="true"></div>
+        <div class="dialog-header-area">
+          <div id="modal-flag-emblem" class="flag-emblem" role="img" aria-label=""></div>
+          <h2 id="card-title" tabindex="-1"></h2>
+        </div>
+        <hr class="dialog-divider" aria-hidden="true">
+        <p class="sr-only" id="card-result"></p>
+        <p id="card-body"></p>
+        <button type="button" class="card-more" id="cardMore" aria-expanded="false" aria-controls="card-body" hidden><span id="cardMoreLabel">Read more</span><svg viewBox="0 0 12 8" aria-hidden="true" focusable="false"><path d="M1 1.5l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <button class="icon-btn close-card-btn" id="close-dialog-btn" type="button" aria-label="Close and continue"><svg viewBox="0 0 32.83 32.83" aria-hidden="true" focusable="false"><path class="ring" d="M16.41,32.33A15.92,15.92,0,1,0,.5,16.41,15.92,15.92,0,0,0,16.41,32.33"/><path class="xglyph" d="M22.02,10.8L10.81,22.02M10.81,10.8L22.02,22.02"/></svg></button>
+      </div>
+    </div>
+
     <!-- STAGE -->
     <div class="stage-view" id="stage">
       <h1 class="sr-only">Who carries more weight?</h1>
@@ -1090,17 +1116,19 @@ html.mobile .m-tick svg{width:100%;height:100%;display:block;}
         </div>
       </section>
 
-      <section class="completion-panel" id="completion-panel" aria-label="Completed" hidden>
-        <div class="m-comp-scale-slot" id="m-comp-scale-slot"></div>
-        <p>You have completed this interactive infographic.<span class="m-next-q">What would you like to do next?</span></p>
-        <button type="button" class="action-btn btn-outline" id="completion-biblio-btn"><span class="d-only-lbl">View bibliography</span><span class="m-only-lbl">Bibliography</span></button>
-        <button type="button" class="action-btn m-comp-exit" id="m-completion-exit-btn">Exit</button>
+      <section class="completion-panel" id="completion-panel" role="dialog" aria-modal="true" aria-label="Completed" hidden>
+        <div class="m-comp-card">
+          <div class="m-comp-scale-slot" id="m-comp-scale-slot"></div>
+          <p>You have completed this interactive infographic.<span class="m-next-q">What would you like to do next?</span></p>
+          <button type="button" class="action-btn btn-outline" id="completion-biblio-btn"><span class="d-only-lbl">View bibliography</span><span class="m-only-lbl">Bibliography</span></button>
+          <button type="button" class="action-btn m-comp-exit" id="m-completion-exit-btn">Exit</button>
+        </div>
       </section>
 
       <!-- MOBILE INLINE FEEDBACK SLIDE (matched to original Hype mobile layout: heading, winning flag, live scale, text, Next button) -->
       <section class="m-feedback-view" id="m-feedback-view" aria-labelledby="m-fb-title" hidden>
         <h2 id="m-fb-title" tabindex="-1"></h2>
-        <div class="m-fb-flag" id="m-fb-flag" aria-hidden="true"></div>
+        <div class="m-fb-flag" id="m-fb-flag" role="img" aria-label=""></div>
         <div class="m-fb-scale-slot" id="m-fb-scale-slot"></div>
         <p class="sr-only" id="m-fb-result"></p>
         <p class="m-fb-body" id="m-fb-body"></p>
@@ -1136,22 +1164,6 @@ html.mobile .m-tick svg{width:100%;height:100%;display:block;}
         <p class="modal-copy">The US and China are going head-to-head in the realm of information technology: AI, 5G, quantum computing and communications, self-driving cars and semiconductors.</p>
         <p class="modal-copy">Take a guess as to who is in the lead in each of these categories.</p>
         <button class="action-btn" id="intro-continue-btn" type="button">Continue</button>
-      </div>
-    </div>
-
-    <!-- CATEGORY FEEDBACK -->
-    <div class="dark-overlay" id="content-modal" role="dialog" aria-modal="true" aria-labelledby="card-title">
-      <div class="dialog-card">
-        <div class="modal-cat-badge" id="modal-cat-badge" aria-hidden="true"></div>
-        <div class="dialog-header-area">
-          <div id="modal-flag-emblem" class="flag-emblem" aria-hidden="true"></div>
-          <h2 id="card-title" tabindex="-1"></h2>
-        </div>
-        <hr class="dialog-divider" aria-hidden="true">
-        <p class="sr-only" id="card-result"></p>
-        <p id="card-body"></p>
-        <button type="button" class="card-more" id="cardMore" aria-expanded="false" aria-controls="card-body" hidden><span id="cardMoreLabel">Read more</span><svg viewBox="0 0 12 8" aria-hidden="true" focusable="false"><path d="M1 1.5l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-        <button class="icon-btn close-card-btn" id="close-dialog-btn" type="button" aria-label="Close and continue"><svg viewBox="0 0 32.83 32.83" aria-hidden="true" focusable="false"><path class="ring" d="M16.41,32.33A15.92,15.92,0,1,0,.5,16.41,15.92,15.92,0,0,0,16.41,32.33"/><path class="xglyph" d="M22.02,10.8L10.81,22.02M10.81,10.8L22.02,22.02"/></svg></button>
       </div>
     </div>
 
@@ -1250,13 +1262,10 @@ html.mobile .m-tick svg{width:100%;height:100%;display:block;}
 
     function syncMobileSequence() {
       var mob = isMobile();
-      var firstUnansweredIdx = ORDER.findIndex(function (k) { return !answered[k]; });
-      ORDER.forEach(function (k, idx) {
+      ORDER.forEach(function (k) {
         var item = document.querySelector('.cat-item[data-cat="' + k + '"]');
         if (!item) return;
-        var lockedSeq = mob && !answered[k] && firstUnansweredIdx !== -1 && idx > firstUnansweredIdx;
-        item.classList.toggle('m-locked', lockedSeq);
-        item.classList.remove('m-done');
+        item.classList.remove('m-locked', 'm-done');
         item.querySelectorAll('.radio-pill').forEach(function (p) {
           p.disabled = false;
           if (!answered[k]) p.removeAttribute('aria-disabled');
@@ -1266,8 +1275,8 @@ html.mobile .m-tick svg{width:100%;height:100%;display:block;}
           var done = !!answered[k];
           item.removeAttribute('role'); item.removeAttribute('aria-labelledby');
           tt.setAttribute('aria-hidden', 'true'); if (q) q.setAttribute('aria-hidden', 'true');
-          if (lockedSeq) op.setAttribute('aria-disabled', 'true'); else op.removeAttribute('aria-disabled');
-          op.setAttribute('aria-label', DATA[k].title + (lockedSeq ? ' \u2013 locked until the category above has been viewed' : done ? ' \u2013 viewed, open again' : ' \u2013 see who is in the lead'));
+          op.removeAttribute('aria-disabled');
+          op.setAttribute('aria-label', DATA[k].title + (done ? ' \u2013 viewed, open again' : ' \u2013 see who is in the lead'));
         } else {
           item.setAttribute('role', 'group'); item.setAttribute('aria-labelledby', 't-' + k + ' q-' + k);
           tt.removeAttribute('aria-hidden'); if (q) q.removeAttribute('aria-hidden');
@@ -1279,13 +1288,18 @@ html.mobile .m-tick svg{width:100%;height:100%;display:block;}
     /* Background regions are inert while the cover or any pop-up is open (keyboard + screen reader stay inside the active layer) */
     function syncInert() {
       var coverOpen = !coverView.classList.contains('hidden'), anyOpen = !!openModalEl();
-      var om = openModalEl(), fbOnly = om === contentModal && !isMobile();   // feedback card sits beside the scale: top-bar buttons stay live
-      coverView.toggleAttribute('inert', anyOpen);
-      headerEl.toggleAttribute('inert', coverOpen || (anyOpen && !fbOnly));
-      stageEl.toggleAttribute('inert', coverOpen || anyOpen);
+      var om = openModalEl(), mob = isMobile();
+      var fbOnly = om === contentModal && !mob;
+      var mobBibOnly = om === biblioOverlay && mob;
+      var mobCompOpen = mob && !$('completion-panel').hidden;
+      coverView.toggleAttribute('inert', anyOpen || mobCompOpen);
+      headerEl.toggleAttribute('inert', coverOpen || mobCompOpen || (anyOpen && !fbOnly && !mobBibOnly));
+      stageEl.toggleAttribute('inert', coverOpen || anyOpen || mobCompOpen);
       contentModal.setAttribute('aria-modal', fbOnly ? 'false' : 'true');
+      biblioOverlay.setAttribute('aria-modal', mobBibOnly ? 'false' : 'true');
       container.classList.toggle('cover-on', coverOpen);
       container.classList.toggle('fb-open', contentModal.classList.contains('active'));
+      container.classList.toggle('bib-open', biblioOverlay.classList.contains('active'));
       updateMobileBackBtn();
     }
     function triggerCoverAnimation() {
@@ -1449,6 +1463,7 @@ html.mobile .m-tick svg{width:100%;height:100%;display:block;}
       var fbFlag = $('m-fb-flag');
       fbFlag.classList.remove('is-animating');
       fbBody.classList.remove('is-animating');
+      fbFlag.setAttribute('aria-label', d.leader === 'usa' ? 'The USA is in the lead' : 'China is in the lead');
       fbFlag.innerHTML = d.leader === 'usa'
         ? '<img src="Resources/PastedVector-51.svg" class="flag-usa" alt="">'
         : '<img src="Resources/PastedVector-61.svg" class="flag-china" alt="">';
@@ -1495,15 +1510,17 @@ html.mobile .m-tick svg{width:100%;height:100%;display:block;}
       hideMobileFeedback();
       var p = $('completion-panel'); p.hidden = false;
       container.classList.add('complete');
+      syncInert();
       if (isMobile()) {
         stageEl.classList.add('m-showing-complete');
         $('m-comp-scale-slot').appendChild($('scale-wrap'));
+        container.style.minHeight = '580px';
         updateMobileBackBtn();
         signalTop();
-      } else if ($('scale-wrap').parentNode !== stageEl) {
-        stageEl.appendChild($('scale-wrap'));
+      } else {
+        if ($('scale-wrap').parentNode !== stageEl) stageEl.appendChild($('scale-wrap'));
+        container.style.minHeight = baseMin();
       }
-      container.style.minHeight = baseMin();
       placeCompletion();
       announce('You have completed this interactive infographic.');
       setTimeout(function () { (isMobile() ? $('m-completion-exit-btn') : $('completion-biblio-btn')).focus({ preventScroll: true }); }, 60);
@@ -1552,7 +1569,9 @@ html.mobile .m-tick svg{width:100%;height:100%;display:block;}
         $('card-result').textContent = res;
         $('card-body').textContent = d.body;
         $('modal-cat-badge').innerHTML = '<img src="' + d.icon + '" alt="">';
-        $('modal-flag-emblem').innerHTML = d.leader === 'usa'
+        var flagEl = $('modal-flag-emblem');
+        flagEl.setAttribute('aria-label', d.leader === 'usa' ? 'The USA is in the lead' : 'China is in the lead');
+        flagEl.innerHTML = d.leader === 'usa'
           ? '<img src="Resources/PastedVector-51.svg" class="flag-usa" alt="">'
           : '<img src="Resources/PastedVector-61.svg" class="flag-china" alt="">';
         openModal(contentModal, $('card-title'), btn);
@@ -1630,11 +1649,13 @@ html.mobile .m-tick svg{width:100%;height:100%;display:block;}
         p.querySelector('.rp-mark').textContent = ''; p.querySelector('.rp-res').textContent = '';
       });
       document.querySelectorAll('.pan-dropped-icon').forEach(function (i) { i.classList.remove('active'); i.style.width = i.style.left = i.style.right = i.style.bottom = i.style.zIndex = ''; });
+      cardExpanded = false;
       $('completion-panel').hidden = true; container.classList.remove('complete');
       if ($('scale-wrap').parentNode !== stageEl) stageEl.appendChild($('scale-wrap'));
       updateScale();
       syncMobileSequence();
-      MODALS.forEach(function (m) { m.classList.remove('active'); }); container.style.minHeight = '';
+      MODALS.forEach(function (m) { m.classList.remove('active'); });
+      container.style.height = ''; container.style.minHeight = '';
       coverView.classList.remove('hidden'); syncInert(); triggerCoverAnimation();
       var t = $('cov-title'); t.setAttribute('tabindex', '-1'); t.focus({ preventScroll: true });
       signalTop();
@@ -1642,6 +1663,8 @@ html.mobile .m-tick svg{width:100%;height:100%;display:block;}
 
     function openInstructions() {
       clearTimeout(modalTimer); modalTimer = null;
+      cardExpanded = false;
+      container.style.height = ''; container.style.minHeight = '';
       MODALS.forEach(function (m) { m.classList.remove('active'); });
       coverView.classList.add('hidden');
       if (isMobile()) {
@@ -1650,6 +1673,7 @@ html.mobile .m-tick svg{width:100%;height:100%;display:block;}
         stageEl.classList.remove('m-showing-complete');
         $('completion-panel').hidden = true;
         container.classList.remove('complete');
+        if ($('scale-wrap').parentNode !== stageEl) stageEl.appendChild($('scale-wrap'));
         syncInert();
         signalTop();
         var instr = $('m-instructions');
@@ -1665,6 +1689,7 @@ html.mobile .m-tick svg{width:100%;height:100%;display:block;}
       if (!isMobile()) return;
       if (biblioOverlay.classList.contains('active')) {
         closeModal(biblioOverlay);
+        if (!$('completion-panel').hidden) container.style.minHeight = '580px';
         return;
       }
       var prev = mobileHistory.pop();
@@ -1708,12 +1733,23 @@ html.mobile .m-tick svg{width:100%;height:100%;display:block;}
         if (Object.keys(answered).length === ORDER.length) showCompletion();
       }
       openBiblio(this);
+      if (isMobile()) {
+        container.style.minHeight = '';
+        signalTop();
+      }
     });
     $('close-biblio-btn').addEventListener('click', function () { closeModal(biblioOverlay); });
-    $('completion-biblio-btn').addEventListener('click', function () { openBiblio(this); });
+    $('completion-biblio-btn').addEventListener('click', function () {
+      openBiblio(this);
+      if (isMobile()) {
+        container.style.minHeight = '';
+        signalTop();
+      }
+    });
     $('m-bib-top-btn').addEventListener('click', function () {
-      biblioOverlay.scrollTop = 0;
+      var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       signalTop();
+      try { container.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' }); } catch (e) {}
       $('bib-heading').focus({ preventScroll: true });
     });
 
