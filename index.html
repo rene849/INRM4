@@ -655,10 +655,10 @@ html.mobile .appbar-inner::after{left:16px;right:16px;}
 html.mobile .header-buttons{
   order:1;
   width:100%;
-  justify-content:space-between;
+  justify-content:flex-start;
+  gap:10px;
   padding-bottom:14px;
 }
-html.mobile .mobile-only-btn{display:block;}
 html.mobile .icon-btn:disabled{
   --ring:#C6CEEC;
   --glyph:#C6CEEC;
@@ -770,8 +770,8 @@ html.mobile .m-feedback-view h2{
   text-align:left;
 }
 html.mobile .m-fb-flag{
-  width:112px;
-  height:112px;
+  width:92px;
+  height:92px;
   border-radius:50%;
   overflow:hidden;
   margin:0 auto 14px;
@@ -784,7 +784,7 @@ html.mobile .m-fb-flag img.flag-usa{transform:scale(1.22);}
 html.mobile .m-fb-flag img.flag-china{transform:scale(.7);}
 html.mobile .m-fb-scale-slot{display:flex;justify-content:center;margin:0 0 18px;}
 html.mobile .scale-stage-wrapper{transform:none;width:100%;}
-html.mobile .scale-assembly{width:min(100%,300px);}
+html.mobile .scale-assembly{width:min(100%,250px);}
 html.mobile .m-fb-body{
   font-size:15px;
   line-height:1.65;
@@ -806,6 +806,10 @@ html.mobile .completion-panel{
   gap:12px;
 }
 html.mobile .completion-panel .action-btn{width:100%;max-width:260px;}
+html.mobile .completion-panel #m-completion-exit-btn{order:1;}
+html.mobile .completion-panel #completion-biblio-btn{order:2;}
+.m-next-q{display:none;}
+html.mobile .m-next-q{display:inline;}
 html.mobile .m-comp-exit{display:inline-flex;}
 
 /* Mobile Bibliography Overlay (full-card scrollable view with Back to top button, matching M1/M2/M5) */
@@ -962,9 +966,6 @@ html.mobile .completion-panel{position:static;width:auto;order:3;}
       <div class="appbar-inner">
         <div class="brand-section"><span class="sub-title">Who carries more weight?</span></div>
         <nav class="header-buttons" aria-label="Interactive Navigation">
-          <button class="icon-btn mobile-only-btn" id="btn-back" type="button" aria-label="Back to previous" disabled>
-            <svg viewBox="0 0 33 33" aria-hidden="true" focusable="false"><path class="ring" d="M16.5,32.5a16,16,0,1,0-16-16,16,16,0,0,0,16,16"/><polyline class="xglyph" points="18.5 11.2 13.2 16.5 18.5 21.8" stroke-linecap="butt" stroke-linejoin="miter"/></svg>
-          </button>
           <button class="icon-btn" id="btn-reset" type="button" aria-label="Home: view instructions">
             <svg viewBox="0 0 33 33" aria-hidden="true" focusable="false"><path class="ring" d="M16.5,32.5a16,16,0,1,0-16-16,16,16,0,0,0,16,16"/><polygon class="glyph" points="14.92 22.43 14.92 17.68 18.08 17.68 18.08 22.43 22.04 22.43 22.04 16.1 24.41 16.1 16.5 8.98 8.59 16.1 10.96 16.1 10.96 22.43 14.92 22.43"/></svg>
           </button>
@@ -1029,7 +1030,7 @@ html.mobile .completion-panel{position:static;width:auto;order:3;}
       </section>
 
       <section class="completion-panel" id="completion-panel" aria-label="Completed" hidden>
-        <p>You have completed this interactive infographic.</p>
+        <p>You have completed this interactive infographic.<span class="m-next-q"> What would you like to do next?</span></p>
         <button type="button" class="action-btn btn-outline" id="completion-biblio-btn">View bibliography</button>
         <button type="button" class="action-btn m-comp-exit" id="m-completion-exit-btn">Exit</button>
       </section>
@@ -1191,20 +1192,6 @@ html.mobile .completion-panel{position:static;width:auto;order:3;}
           }
         });
       });
-      syncMobileBackBtn();
-    }
-
-    function syncMobileBackBtn() {
-      var backBtn = $('btn-back');
-      if (!backBtn) return;
-      var answeredKeys = ORDER.filter(function (k) { return !!answered[k]; });
-      var canGoBack = false;
-      if (mobileFeedbackCat) {
-        canGoBack = true;
-      } else if (answeredKeys.length > 0) {
-        canGoBack = true;
-      }
-      backBtn.disabled = !canGoBack;
     }
 
     /* Background regions are inert while the cover or any pop-up is open (keyboard + screen reader stay inside the active layer) */
@@ -1326,7 +1313,6 @@ html.mobile .completion-panel{position:static;width:auto;order:3;}
         ? '<img src="Resources/PastedVector-51.svg" class="flag-usa" alt="">'
         : '<img src="Resources/PastedVector-61.svg" class="flag-china" alt="">';
       $('m-fb-scale-slot').appendChild($('scale-wrap'));
-      syncMobileBackBtn();
       signalTop();
       $('m-fb-title').focus({ preventScroll: true });
     }
@@ -1354,7 +1340,6 @@ html.mobile .completion-panel{position:static;width:auto;order:3;}
       if (isMobile()) stageEl.classList.add('m-showing-complete');
       container.style.minHeight = baseMin();
       placeCompletion();
-      syncMobileBackBtn();
       announce('You have completed this interactive infographic.');
       setTimeout(function () { $('completion-biblio-btn').focus({ preventScroll: true }); }, 60);
     }
@@ -1480,32 +1465,8 @@ html.mobile .completion-panel{position:static;width:auto;order:3;}
       openModal(introModal, $('intro-continue-btn'), $('btn-reset'));
     }
 
-    function handleMobileBack() {
-      if (!isMobile()) return;
-      var answeredKeys = ORDER.filter(function (k) { return !!answered[k]; });
-      if (mobileFeedbackCat) {
-        var idx = ORDER.indexOf(mobileFeedbackCat);
-        if (idx > 0 && answered[ORDER[idx - 1]]) {
-          var prevKey = ORDER[idx - 1];
-          var d = DATA[prevKey], who = d.leader === 'usa' ? 'the USA' : 'China';
-          showMobileFeedback(prevKey, d.title + ': ' + who + ' is in the lead.');
-        } else {
-          hideMobileFeedback();
-          signalTop();
-          focusNextCategory();
-        }
-        return;
-      }
-      if (answeredKeys.length > 0) {
-        var lastKey = answeredKeys[answeredKeys.length - 1];
-        var d2 = DATA[lastKey], who2 = d2.leader === 'usa' ? 'the USA' : 'China';
-        showMobileFeedback(lastKey, d2.title + ': ' + who2 + ' is in the lead.');
-      }
-    }
-
     function openBiblio(opener) { openModal(biblioOverlay, $('bib-heading'), opener); }
 
-    $('btn-back').addEventListener('click', handleMobileBack);
     $('btn-reset').addEventListener('click', openInstructions);
     $('btn-exit').addEventListener('click', resetToCover);
     $('m-completion-exit-btn').addEventListener('click', resetToCover);
