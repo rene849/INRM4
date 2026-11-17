@@ -891,13 +891,13 @@ html.mobile .sub-title{white-space:normal;overflow:visible;text-overflow:clip;li
 /* mid-width desktop (Moodle with the course drawer open): the longest category name wraps to 3 lines, so every row reserves 3 lines and the USA/China buttons stay level */
 @media (min-width:881px) and (max-width:1149px){ .cat-title{min-height:3.75em} }
 
-/* ===== Feedback layer: flag bottom aligned with divider line + equal vertical spacing above & below ===== */
-.dialog-card{--flag:68px;width:min(860px,92%);max-height:none;padding:64px 28px 28px;}
+/* ===== Feedback layer: flag straddles divider line at bottom-left with equal balanced spacing above & below ===== */
+.dialog-card{--flag:76px;width:min(860px,92%);max-height:none;padding:66px 28px 28px;}
 html.mobile .dialog-card{--flag:52px;width:min(780px,92%);padding:60px 18px 20px;}
-.dialog-header-area{position:relative;display:flex;align-items:center;justify-content:center;min-height:68px;padding-bottom:14px;margin:0;}
-.flag-emblem{position:absolute;left:0;bottom:0;top:auto;width:var(--flag);height:var(--flag);}
+.dialog-header-area{position:relative;display:flex;align-items:center;justify-content:center;min-height:46px;padding-bottom:16px;margin:0;}
+.flag-emblem{position:absolute;left:0;bottom:-10px;top:auto;width:var(--flag);height:var(--flag);}
 .dialog-card h2{width:100%;text-align:center;padding:0 calc(var(--flag) + 14px);text-wrap:balance;}
-.dialog-divider{margin:0 0 16px calc(var(--flag) + 14px);}
+.dialog-divider{margin:0 0 18px calc(var(--flag) + 14px);}
 #card-body{flex:none;overflow:visible;line-height:1.6;padding-right:0;margin-bottom:16px;}
 html.mobile .dialog-header-area{display:flex;gap:12px;min-height:0;}
 html.mobile .dialog-card h2{padding:0;}
@@ -909,10 +909,10 @@ html.mobile .dark-overlay .dialog-card{margin:0 auto;}
 /* ===== Desktop feedback card on the left over the selection board, scale stays completely stationary on the right ===== */
 .dialog-footer{display:none;}
 html:not(.mobile) #content-modal{top:60px;background:transparent;pointer-events:none;overflow:visible;justify-content:flex-start;align-items:flex-start;padding:56px 0 14px var(--pad);}
-html:not(.mobile) #content-modal .dialog-card{pointer-events:auto;--flag:68px;width:min(550px,calc(53% - var(--pad)));max-width:calc(100% - var(--pad));margin:0;padding:64px 28px 28px;}
+html:not(.mobile) #content-modal .dialog-card{pointer-events:auto;--flag:76px;width:min(550px,calc(53% - var(--pad)));max-width:calc(100% - var(--pad));margin:0;padding:66px 28px 28px;}
 html:not(.mobile) #content-modal .dialog-card .close-card-btn{top:16px;right:28px;}
-html:not(.mobile) #content-modal .dialog-header-area{min-height:68px;padding-bottom:14px;margin-bottom:0;}
-html:not(.mobile) #content-modal .dialog-divider{margin:0 0 16px calc(var(--flag) + 14px);}
+html:not(.mobile) #content-modal .dialog-header-area{min-height:46px;padding-bottom:16px;margin-bottom:0;}
+html:not(.mobile) #content-modal .dialog-divider{margin:0 0 18px calc(var(--flag) + 14px);}
 html:not(.mobile) #content-modal .modal-cat-badge{width:96px;height:96px;top:-48px;}
 .dialog-card h2{font-size:clamp(19px,2cqw,22px);}
 #card-body{font-size:15px;line-height:1.55;margin-bottom:0;overflow-y:auto;}
@@ -947,7 +947,8 @@ html:not(.mobile) .stage-view{padding-left:var(--pad);padding-right:var(--pad);}
 .pan-dropped-icon{transition:opacity .45s ease,transform .55s cubic-bezier(.175,.885,.32,1.275),left .45s ease,bottom .45s ease;}
 
 /* Desktop end slide: message + "View bibliography" under the stationary scale */
-.completion-panel{position:absolute;bottom:24px;left:60%;width:38%;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;z-index:6;}
+@keyframes comp-fade-in{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+.completion-panel{position:absolute;bottom:24px;left:60%;width:38%;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;z-index:25;animation:comp-fade-in .3s ease both;}
 .completion-panel[hidden]{display:none;}
 .completion-panel p{font-size:16px;line-height:1.5;color:var(--ink);}
 .m-comp-scale-slot{display:none;}
@@ -981,9 +982,9 @@ html:not(.mobile) .cat-title{max-width:100%;text-wrap:balance;}
   html:not(.mobile) .cat-radios{flex-direction:column;align-items:center;gap:5px;}
   html:not(.mobile) .radio-pill{width:118px;min-width:0;min-height:30px;font-size:14px;padding:3px 8px 3px 12px;gap:8px;}
   html:not(.mobile) .scale-assembly{width:min(94%,calc(520*var(--u)));}
-  html:not(.mobile) #content-modal .dialog-card{width:calc(50% - var(--pad));padding:54px 18px 20px;--flag:52px;}
+  html:not(.mobile) #content-modal .dialog-card{width:calc(50% - var(--pad));padding:54px 18px 20px;--flag:56px;}
   html:not(.mobile) #content-modal .dialog-card .close-card-btn{top:12px;right:18px;}
-  html:not(.mobile) #content-modal .dialog-header-area{min-height:52px;padding-bottom:12px;}
+  html:not(.mobile) #content-modal .dialog-header-area{min-height:38px;padding-bottom:12px;}
   html:not(.mobile) #content-modal .dialog-divider{margin:0 0 14px calc(var(--flag) + 12px);}
   html:not(.mobile) #content-modal .modal-cat-badge{width:80px;height:80px;top:-40px;}
   html:not(.mobile) #content-modal .dialog-card h2{font-size:18px;padding:0 calc(var(--flag) + 12px);}
@@ -1241,7 +1242,7 @@ html.mobile .m-tick svg{width:100%;height:100%;display:block;}
 
     var DATA = techData, ORDER = ['ai', 'fiveG', 'quantum', 'cars', 'semiconductors'];
     var answered = {}, loads = { usa: 0, china: 0 }, modalTimer = null, lastOpener = null;
-    var mobileFeedbackCat = null, cardExpanded = false;
+    var mobileFeedbackCat = null, mobileHistory = [], cardExpanded = false;
 
     var $ = function (id) { return document.getElementById(id); };
     var container = $('interactive-app'), coverView = $('cover-view');
@@ -1310,7 +1311,7 @@ html.mobile .m-tick svg{width:100%;height:100%;display:block;}
         compEl.removeAttribute('aria-modal');
       }
       coverView.toggleAttribute('inert', anyOpen || mobCompOpen);
-      headerEl.toggleAttribute('inert', coverOpen || mobCompOpen || (anyOpen && !fbOnly && !mobBibOnly));
+      headerEl.toggleAttribute('inert', coverOpen || (anyOpen && !fbOnly && !mobBibOnly && !mobCompOpen));
       stageEl.toggleAttribute('inert', coverOpen || anyOpen || mobCompOpen);
       contentModal.setAttribute('aria-modal', fbOnly ? 'false' : 'true');
       biblioOverlay.setAttribute('aria-modal', mobBibOnly ? 'false' : 'true');
@@ -1616,9 +1617,7 @@ html.mobile .m-tick svg{width:100%;height:100%;display:block;}
       container.style.height = '';
       closeModal(contentModal, false);
       if (Object.keys(answered).length === ORDER.length) {
-        setTimeout(function () {
-          showCompletion();
-        }, 500);
+        showCompletion();
       } else focusNextCategory();
     }
 
