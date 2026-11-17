@@ -70,6 +70,8 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;touch-acti
 :focus-visible{outline:3px solid var(--red);outline-offset:3px;border-radius:2px;}
 [tabindex="-1"]:focus{outline:none;}
 .sr-only{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+.skip-link{position:absolute;left:-9999px;top:8px;z-index:600;background:var(--red);color:#fff;font-weight:700;font-size:14px;padding:10px 16px;border-radius:4px;text-decoration:none;}
+.skip-link:focus{left:12px;outline:3px solid var(--navy-deep);outline-offset:2px;}
 
 /* ── Desktop & Tablet Interactive Container (aligned to M1/M5 fluid height & 1120px frame) ── */
 .interactive-container{
@@ -513,7 +515,7 @@ html.cv-skip .cover-title,html.cv-skip .btn-start{animation:none !important;opac
 .cat-badge{width:calc(108*var(--u));height:calc(108*var(--u));min-width:56px;min-height:56px;margin-bottom:calc(6*var(--u));}
 .cat-badge img{width:100%;height:100%;object-fit:contain;display:block;}
 .cat-title{font-size:max(14px,calc(16*var(--u)));font-weight:700;line-height:1.25;min-height:2.5em;display:flex;align-items:center;justify-content:center;margin-bottom:calc(6*var(--u));}
-.cat-radios{display:flex;flex-direction:column;align-items:center;gap:4px;width:100%;}
+.cat-radios{display:flex;flex-direction:column;align-items:center;gap:6px;width:100%;}
 .radio-pill{position:relative;display:flex;align-items:center;justify-content:flex-start;gap:7px;font-size:max(14px,calc(16*var(--u)));font-weight:500;padding:3px 8px 3px 12px;width:min(122px,100%);min-height:32px;border-radius:4px;border:1px solid transparent;color:var(--ink);transition:background-color .2s,border-color .2s;}
 .radio-circle{width:17px;height:17px;border-radius:50%;border:1.5px solid var(--ink);background:#fff;display:flex;align-items:center;justify-content:center;flex:none;}
 .radio-circle-dot{width:8px;height:8px;border-radius:50%;background:var(--ink);opacity:0;}
@@ -720,6 +722,7 @@ html.mobile .cat-item{
   transition:opacity .25s ease;
 }
 html.mobile .cat-item:last-child{border-bottom:0;}
+html.mobile .cat-item.m-locked{opacity:.42;}
 html.mobile .cat-badge{flex:none;width:72px;height:72px;margin:0;pointer-events:none;}
 html.mobile .cat-title{
   flex:1 1 0;
@@ -790,16 +793,19 @@ html.mobile .m-fb-body.is-animating{animation:m-fb-fade .42s ease .12s both;}
 html.mobile .m-fb-actions{display:flex;justify-content:center;}
 html.mobile .m-fb-actions .action-btn{min-width:164px;}
 
-/* Mobile Completion Overlay (full-bleed dark navy backdrop + centered white card, matching M1/M2/M5) */
+/* Mobile Completion Overlay (dark navy backdrop below header + centered white card, matching original Hype video 00:42-00:45) */
 html.mobile .completion-panel[hidden]{display:none !important;}
 html.mobile .completion-panel{
   position:absolute;
-  inset:0;
+  top:var(--mob-hdr-h,106px);
+  left:0;
+  right:0;
+  bottom:0;
   z-index:320;
   width:100%;
   max-width:none;
   margin:0;
-  background:rgba(31,46,122,.94);
+  background:var(--navy);
   padding:24px 16px;
   display:flex;
   align-items:center;
@@ -885,13 +891,13 @@ html.mobile .sub-title{white-space:normal;overflow:visible;text-overflow:clip;li
 /* mid-width desktop (Moodle with the course drawer open): the longest category name wraps to 3 lines, so every row reserves 3 lines and the USA/China buttons stay level */
 @media (min-width:881px) and (max-width:1149px){ .cat-title{min-height:3.75em} }
 
-/* ===== Feedback layer: flag bottom aligned with horizontal divider line + balanced spacing above & below ===== */
-.dialog-card{--flag:68px;width:min(860px,92%);max-height:none;padding:66px clamp(22px,5vw,52px) 22px;}
+/* ===== Feedback layer: flag matches Storyboard & previous build (straddling divider line with balanced spacing) ===== */
+.dialog-card{--flag:76px;width:min(860px,92%);max-height:none;padding:66px clamp(22px,5vw,52px) 24px;}
 html.mobile .dialog-card{--flag:52px;width:min(780px,92%);padding:60px 18px 20px;}
-.dialog-header-area{position:relative;display:flex;align-items:center;justify-content:center;min-height:62px;padding-bottom:12px;margin:0;}
-.flag-emblem{position:absolute;left:0;bottom:0;top:auto;transform:none;width:var(--flag);height:var(--flag);}
-.dialog-card h2{width:100%;text-align:center;padding:0 calc(var(--flag) + 12px);text-wrap:balance;}
-.dialog-divider{margin:0 0 18px calc(var(--flag) + 12px);}
+.dialog-header-area{position:relative;display:flex;align-items:center;justify-content:center;min-height:60px;padding-bottom:14px;margin:0;}
+.flag-emblem{position:absolute;left:0;top:0;width:var(--flag);height:var(--flag);}
+.dialog-card h2{width:100%;text-align:center;padding:0 calc(var(--flag) + 14px);text-wrap:balance;}
+.dialog-divider{margin:0 0 16px calc(var(--flag) + 14px);}
 #card-body{flex:none;overflow:visible;line-height:1.6;padding-right:0;margin-bottom:16px;}
 html.mobile .dialog-header-area{display:flex;gap:12px;min-height:0;}
 html.mobile .dialog-card h2{padding:0;}
@@ -903,12 +909,12 @@ html.mobile .dark-overlay .dialog-card{margin:0 auto;}
 /* ===== Desktop feedback card on the left over the selection board, scale stays completely stationary on the right ===== */
 .dialog-footer{display:none;}
 html:not(.mobile) #content-modal{top:60px;background:transparent;pointer-events:none;overflow:visible;justify-content:flex-start;align-items:flex-start;padding:56px 0 14px var(--pad);}
-html:not(.mobile) #content-modal .dialog-card{pointer-events:auto;--flag:68px;width:min(550px,calc(53% - var(--pad)));max-width:calc(100% - var(--pad));margin:0;padding:58px clamp(20px,2.2cqw,28px) 26px;}
-html:not(.mobile) #content-modal .dialog-header-area{min-height:62px;padding-bottom:12px;margin-bottom:0;}
-html:not(.mobile) #content-modal .dialog-divider{margin:0 0 18px calc(var(--flag) + 12px);}
+html:not(.mobile) #content-modal .dialog-card{pointer-events:auto;--flag:76px;width:min(550px,calc(53% - var(--pad)));max-width:calc(100% - var(--pad));margin:0;padding:56px clamp(20px,2.2cqw,28px) 26px;}
+html:not(.mobile) #content-modal .dialog-header-area{min-height:60px;padding-bottom:14px;margin-bottom:0;}
+html:not(.mobile) #content-modal .dialog-divider{margin:0 0 16px calc(var(--flag) + 14px);}
 html:not(.mobile) #content-modal .modal-cat-badge{width:98px;height:98px;top:-49px;}
 .dialog-card h2{font-size:clamp(19px,2cqw,22px);}
-#card-body{font-size:15px;line-height:1.55;margin-bottom:0;}
+#card-body{font-size:15px;line-height:1.55;margin-bottom:0;overflow-y:auto;}
 #card-body.is-clamped{overflow:hidden;-webkit-mask-image:linear-gradient(#000 calc(100% - 2.6em),transparent);mask-image:linear-gradient(#000 calc(100% - 2.6em),transparent);}
 .card-more{display:inline-flex;align-items:center;align-self:flex-start;gap:10px;margin-top:10px;padding:0 16px;min-height:44px;background:#fff;border:1.5px solid var(--blue);border-radius:4px;color:var(--blue);font:inherit;font-size:14.5px;font-weight:700;cursor:pointer;transition:background .1s,border-color .1s;}
 .card-more[hidden]{display:none !important;}
@@ -974,11 +980,11 @@ html:not(.mobile) .cat-title{max-width:100%;text-wrap:balance;}
   html:not(.mobile) .cat-radios{flex-direction:column;align-items:center;gap:5px;}
   html:not(.mobile) .radio-pill{width:118px;min-width:0;min-height:30px;font-size:14px;padding:3px 8px 3px 12px;gap:8px;}
   html:not(.mobile) .scale-assembly{width:min(94%,calc(520*var(--u)));}
-  html:not(.mobile) #content-modal .dialog-card{width:calc(50% - var(--pad));padding:48px 16px 20px;--flag:50px;}
-  html:not(.mobile) #content-modal .dialog-header-area{min-height:46px;padding-bottom:10px;}
-  html:not(.mobile) #content-modal .dialog-divider{margin:0 0 14px calc(var(--flag) + 10px);}
+  html:not(.mobile) #content-modal .dialog-card{width:calc(50% - var(--pad));padding:46px 16px 20px;--flag:54px;}
+  html:not(.mobile) #content-modal .dialog-header-area{min-height:42px;padding-bottom:12px;}
+  html:not(.mobile) #content-modal .dialog-divider{margin:0 0 14px calc(var(--flag) + 12px);}
   html:not(.mobile) #content-modal .modal-cat-badge{width:80px;height:80px;top:-40px;}
-  html:not(.mobile) #content-modal .dialog-card h2{font-size:18px;padding:0 calc(var(--flag) + 10px);}
+  html:not(.mobile) #content-modal .dialog-card h2{font-size:18px;padding:0 calc(var(--flag) + 12px);}
   html:not(.mobile) #content-modal #card-body{font-size:14.5px;line-height:1.5;}
 }
 /* ---- Phone: no multiple choice. One tap target per row; the slide shows who leads and the icon drops onto its pan ---- */
@@ -995,6 +1001,7 @@ html.mobile .m-tick svg{width:100%;height:100%;display:block;}
 </head>
 <body>
 
+  <a href="#stage" class="skip-link">Skip to interactive content</a>
   <div id="srStatus" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
 
   <main class="interactive-container cover-on" id="interactive-app">
@@ -1074,8 +1081,8 @@ html.mobile .m-tick svg{width:100%;height:100%;display:block;}
           <div class="cat-badge" aria-hidden="true"><img src="Resources/PastedVector-52.svg" alt=""></div>
           <span class="cat-title" id="t-ai">AI</span><span class="sr-only" id="q-ai">– who is in the lead?</span>
           <div class="cat-radios">
-            <button type="button" class="radio-pill" data-choice="usa"><span class="radio-circle" aria-hidden="true"><span class="radio-circle-dot"></span></span><span class="rp-label">USA</span><span class="rp-mark" aria-hidden="true"></span><span class="sr-only rp-res"></span></button>
-            <button type="button" class="radio-pill" data-choice="china"><span class="radio-circle" aria-hidden="true"><span class="radio-circle-dot"></span></span><span class="rp-label">China</span><span class="rp-mark" aria-hidden="true"></span><span class="sr-only rp-res"></span></button>
+            <button type="button" class="radio-pill" data-choice="usa" aria-pressed="false"><span class="radio-circle" aria-hidden="true"><span class="radio-circle-dot"></span></span><span class="rp-label">USA</span><span class="rp-mark" aria-hidden="true"></span><span class="sr-only rp-res"></span></button>
+            <button type="button" class="radio-pill" data-choice="china" aria-pressed="false"><span class="radio-circle" aria-hidden="true"><span class="radio-circle-dot"></span></span><span class="rp-label">China</span><span class="rp-mark" aria-hidden="true"></span><span class="sr-only rp-res"></span></button>
           </div>
         </div>
         <div class="cat-item" data-cat="fiveG" role="group" aria-labelledby="t-fiveG q-fiveG">
@@ -1083,8 +1090,8 @@ html.mobile .m-tick svg{width:100%;height:100%;display:block;}
           <div class="cat-badge" aria-hidden="true"><img src="Resources/PastedVector-62.svg" alt=""></div>
           <span class="cat-title" id="t-fiveG">5G</span><span class="sr-only" id="q-fiveG">– who is in the lead?</span>
           <div class="cat-radios">
-            <button type="button" class="radio-pill" data-choice="usa"><span class="radio-circle" aria-hidden="true"><span class="radio-circle-dot"></span></span><span class="rp-label">USA</span><span class="rp-mark" aria-hidden="true"></span><span class="sr-only rp-res"></span></button>
-            <button type="button" class="radio-pill" data-choice="china"><span class="radio-circle" aria-hidden="true"><span class="radio-circle-dot"></span></span><span class="rp-label">China</span><span class="rp-mark" aria-hidden="true"></span><span class="sr-only rp-res"></span></button>
+            <button type="button" class="radio-pill" data-choice="usa" aria-pressed="false"><span class="radio-circle" aria-hidden="true"><span class="radio-circle-dot"></span></span><span class="rp-label">USA</span><span class="rp-mark" aria-hidden="true"></span><span class="sr-only rp-res"></span></button>
+            <button type="button" class="radio-pill" data-choice="china" aria-pressed="false"><span class="radio-circle" aria-hidden="true"><span class="radio-circle-dot"></span></span><span class="rp-label">China</span><span class="rp-mark" aria-hidden="true"></span><span class="sr-only rp-res"></span></button>
           </div>
         </div>
         <div class="cat-item" data-cat="quantum" role="group" aria-labelledby="t-quantum q-quantum">
@@ -1092,8 +1099,8 @@ html.mobile .m-tick svg{width:100%;height:100%;display:block;}
           <div class="cat-badge" aria-hidden="true"><img src="Resources/PastedVector-63.svg" alt=""></div>
           <span class="cat-title" id="t-quantum">Quantum computing and communications</span><span class="sr-only" id="q-quantum">– who is in the lead?</span>
           <div class="cat-radios">
-            <button type="button" class="radio-pill" data-choice="usa"><span class="radio-circle" aria-hidden="true"><span class="radio-circle-dot"></span></span><span class="rp-label">USA</span><span class="rp-mark" aria-hidden="true"></span><span class="sr-only rp-res"></span></button>
-            <button type="button" class="radio-pill" data-choice="china"><span class="radio-circle" aria-hidden="true"><span class="radio-circle-dot"></span></span><span class="rp-label">China</span><span class="rp-mark" aria-hidden="true"></span><span class="sr-only rp-res"></span></button>
+            <button type="button" class="radio-pill" data-choice="usa" aria-pressed="false"><span class="radio-circle" aria-hidden="true"><span class="radio-circle-dot"></span></span><span class="rp-label">USA</span><span class="rp-mark" aria-hidden="true"></span><span class="sr-only rp-res"></span></button>
+            <button type="button" class="radio-pill" data-choice="china" aria-pressed="false"><span class="radio-circle" aria-hidden="true"><span class="radio-circle-dot"></span></span><span class="rp-label">China</span><span class="rp-mark" aria-hidden="true"></span><span class="sr-only rp-res"></span></button>
           </div>
         </div>
         <div class="cat-item" data-cat="cars" role="group" aria-labelledby="t-cars q-cars">
@@ -1101,8 +1108,8 @@ html.mobile .m-tick svg{width:100%;height:100%;display:block;}
           <div class="cat-badge" aria-hidden="true"><img src="Resources/PastedVector-64.svg" alt=""></div>
           <span class="cat-title" id="t-cars">Self-driving cars</span><span class="sr-only" id="q-cars">– who is in the lead?</span>
           <div class="cat-radios">
-            <button type="button" class="radio-pill" data-choice="usa"><span class="radio-circle" aria-hidden="true"><span class="radio-circle-dot"></span></span><span class="rp-label">USA</span><span class="rp-mark" aria-hidden="true"></span><span class="sr-only rp-res"></span></button>
-            <button type="button" class="radio-pill" data-choice="china"><span class="radio-circle" aria-hidden="true"><span class="radio-circle-dot"></span></span><span class="rp-label">China</span><span class="rp-mark" aria-hidden="true"></span><span class="sr-only rp-res"></span></button>
+            <button type="button" class="radio-pill" data-choice="usa" aria-pressed="false"><span class="radio-circle" aria-hidden="true"><span class="radio-circle-dot"></span></span><span class="rp-label">USA</span><span class="rp-mark" aria-hidden="true"></span><span class="sr-only rp-res"></span></button>
+            <button type="button" class="radio-pill" data-choice="china" aria-pressed="false"><span class="radio-circle" aria-hidden="true"><span class="radio-circle-dot"></span></span><span class="rp-label">China</span><span class="rp-mark" aria-hidden="true"></span><span class="sr-only rp-res"></span></button>
           </div>
         </div>
         <div class="cat-item" data-cat="semiconductors" role="group" aria-labelledby="t-semiconductors q-semiconductors">
@@ -1110,18 +1117,9 @@ html.mobile .m-tick svg{width:100%;height:100%;display:block;}
           <div class="cat-badge" aria-hidden="true"><img src="Resources/PastedVector-65.svg" alt=""></div>
           <span class="cat-title" id="t-semiconductors">Semiconductors</span><span class="sr-only" id="q-semiconductors">– who is in the lead?</span>
           <div class="cat-radios">
-            <button type="button" class="radio-pill" data-choice="usa"><span class="radio-circle" aria-hidden="true"><span class="radio-circle-dot"></span></span><span class="rp-label">USA</span><span class="rp-mark" aria-hidden="true"></span><span class="sr-only rp-res"></span></button>
-            <button type="button" class="radio-pill" data-choice="china"><span class="radio-circle" aria-hidden="true"><span class="radio-circle-dot"></span></span><span class="rp-label">China</span><span class="rp-mark" aria-hidden="true"></span><span class="sr-only rp-res"></span></button>
+            <button type="button" class="radio-pill" data-choice="usa" aria-pressed="false"><span class="radio-circle" aria-hidden="true"><span class="radio-circle-dot"></span></span><span class="rp-label">USA</span><span class="rp-mark" aria-hidden="true"></span><span class="sr-only rp-res"></span></button>
+            <button type="button" class="radio-pill" data-choice="china" aria-pressed="false"><span class="radio-circle" aria-hidden="true"><span class="radio-circle-dot"></span></span><span class="rp-label">China</span><span class="rp-mark" aria-hidden="true"></span><span class="sr-only rp-res"></span></button>
           </div>
-        </div>
-      </section>
-
-      <section class="completion-panel" id="completion-panel" role="dialog" aria-modal="true" aria-label="Completed" hidden>
-        <div class="m-comp-card">
-          <div class="m-comp-scale-slot" id="m-comp-scale-slot"></div>
-          <p>You have completed this interactive infographic.<span class="m-next-q">What would you like to do next?</span></p>
-          <button type="button" class="action-btn btn-outline" id="completion-biblio-btn"><span class="d-only-lbl">View bibliography</span><span class="m-only-lbl">Bibliography</span></button>
-          <button type="button" class="action-btn m-comp-exit" id="m-completion-exit-btn">Exit</button>
         </div>
       </section>
 
@@ -1157,6 +1155,15 @@ html.mobile .m-tick svg{width:100%;height:100%;display:block;}
         </div>
       </div>
     </div>
+
+      <section class="completion-panel" id="completion-panel" role="dialog" aria-modal="true" aria-label="Completed" hidden>
+        <div class="m-comp-card">
+          <div class="m-comp-scale-slot" id="m-comp-scale-slot"></div>
+          <p>You have completed this interactive infographic.<span class="m-next-q">What would you like to do next?</span></p>
+          <button type="button" class="action-btn btn-outline" id="completion-biblio-btn"><span class="d-only-lbl">View bibliography</span><span class="m-only-lbl">Bibliography</span></button>
+          <button type="button" class="action-btn m-comp-exit" id="m-completion-exit-btn">Exit</button>
+        </div>
+      </section>
 
     <!-- INTRO -->
     <div class="dark-overlay" id="intro-modal" role="dialog" aria-modal="true" aria-label="Introduction">
@@ -1262,10 +1269,13 @@ html.mobile .m-tick svg{width:100%;height:100%;display:block;}
 
     function syncMobileSequence() {
       var mob = isMobile();
-      ORDER.forEach(function (k) {
+      var firstUnansweredIdx = ORDER.findIndex(function (k) { return !answered[k]; });
+      ORDER.forEach(function (k, idx) {
         var item = document.querySelector('.cat-item[data-cat="' + k + '"]');
         if (!item) return;
-        item.classList.remove('m-locked', 'm-done');
+        var lockedSeq = mob && !answered[k] && firstUnansweredIdx !== -1 && idx > firstUnansweredIdx;
+        item.classList.toggle('m-locked', lockedSeq);
+        item.classList.remove('m-done');
         item.querySelectorAll('.radio-pill').forEach(function (p) {
           p.disabled = false;
           if (!answered[k]) p.removeAttribute('aria-disabled');
@@ -1275,8 +1285,9 @@ html.mobile .m-tick svg{width:100%;height:100%;display:block;}
           var done = !!answered[k];
           item.removeAttribute('role'); item.removeAttribute('aria-labelledby');
           tt.setAttribute('aria-hidden', 'true'); if (q) q.setAttribute('aria-hidden', 'true');
-          op.removeAttribute('aria-disabled');
-          op.setAttribute('aria-label', DATA[k].title + (done ? ' \u2013 viewed, open again' : ' \u2013 see who is in the lead'));
+          if (lockedSeq) op.setAttribute('aria-disabled', 'true'); else op.removeAttribute('aria-disabled');
+          var prevTitle = idx > 0 ? DATA[ORDER[idx - 1]].title : '';
+          op.setAttribute('aria-label', DATA[k].title + (lockedSeq ? ' \u2013 locked until ' + prevTitle + ' has been viewed' : done ? ' \u2013 viewed, open again' : ' \u2013 see who is in the lead'));
         } else {
           item.setAttribute('role', 'group'); item.setAttribute('aria-labelledby', 't-' + k + ' q-' + k);
           tt.removeAttribute('aria-hidden'); if (q) q.removeAttribute('aria-hidden');
@@ -1512,9 +1523,11 @@ html.mobile .m-tick svg{width:100%;height:100%;display:block;}
       container.classList.add('complete');
       syncInert();
       if (isMobile()) {
+        var hdrH = headerEl ? Math.round(headerEl.offsetHeight) : 106;
+        container.style.setProperty('--mob-hdr-h', hdrH + 'px');
         stageEl.classList.add('m-showing-complete');
         $('m-comp-scale-slot').appendChild($('scale-wrap'));
-        container.style.minHeight = '580px';
+        container.style.minHeight = (hdrH + 540) + 'px';
         updateMobileBackBtn();
         signalTop();
       } else {
@@ -1545,6 +1558,7 @@ html.mobile .m-tick svg{width:100%;height:100%;display:block;}
       }
       document.querySelectorAll('.cat-item[data-cat="' + cat + '"] .radio-pill').forEach(function (p) {
         p.classList.add('locked'); p.setAttribute('aria-disabled', 'true');
+        p.setAttribute('aria-pressed', p.dataset.choice === choice ? 'true' : 'false');
         if (p.dataset.choice === choice) {
           p.classList.add(ok ? 'correct' : 'incorrect');
           p.querySelector('.rp-mark').innerHTML = ok
@@ -1646,6 +1660,7 @@ html.mobile .m-tick svg{width:100%;height:100%;display:block;}
       stageEl.classList.remove('m-showing-complete');
       document.querySelectorAll('.radio-pill').forEach(function (p) {
         p.className = 'radio-pill'; p.disabled = false; p.removeAttribute('aria-disabled');
+        p.setAttribute('aria-pressed', 'false');
         p.querySelector('.rp-mark').textContent = ''; p.querySelector('.rp-res').textContent = '';
       });
       document.querySelectorAll('.pan-dropped-icon').forEach(function (i) { i.classList.remove('active'); i.style.width = i.style.left = i.style.right = i.style.bottom = i.style.zIndex = ''; });
