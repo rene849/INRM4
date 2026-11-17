@@ -499,7 +499,7 @@ html.cv-skip .cover-title,html.cv-skip .btn-start{animation:none !important;opac
 
 /* Stage: selection board (left) + balance scale (right). 1px = 1 design unit at 1112x560; --u scales it with the frame */
 .stage-view{position:relative;flex:1 1 auto;min-height:0;width:100%;background:#fff;overflow:hidden;container-type:size;
-  display:grid;grid-template-columns:58fr 42fr;align-items:center;column-gap:clamp(24px,4cqw,56px);padding:4px clamp(12px,2cqw,32px) 10px;}
+  display:grid;grid-template-columns:56fr 44fr;align-items:center;column-gap:clamp(20px,3.2cqw,48px);padding:4px clamp(12px,2cqw,32px) 10px;}
 .stage-view>*{--u:min(.0899cqw,.1786cqh);}
 .selection-board{display:grid;grid-template-columns:repeat(6,1fr);row-gap:calc(26*var(--u));column-gap:calc(4*var(--u));align-content:center;}
 .cat-item[data-cat="ai"]{grid-column:1/3;grid-row:1}
@@ -512,7 +512,7 @@ html.cv-skip .cover-title,html.cv-skip .btn-start{animation:none !important;opac
 .cat-badge img{width:100%;height:100%;object-fit:contain;display:block;}
 .cat-title{font-size:max(14px,calc(16*var(--u)));font-weight:700;line-height:1.25;min-height:2.5em;display:flex;align-items:center;justify-content:center;margin-bottom:calc(6*var(--u));}
 .cat-radios{display:flex;flex-direction:column;align-items:center;gap:4px;width:100%;}
-.radio-pill{position:relative;display:flex;align-items:center;justify-content:flex-start;gap:8px;font-size:max(14px,calc(16*var(--u)));font-weight:500;padding:3px 6px 3px 36px;width:144px;min-height:32px;border-radius:4px;border:1px solid transparent;color:var(--ink);transition:background-color .2s,border-color .2s;}
+.radio-pill{position:relative;display:flex;align-items:center;justify-content:flex-start;gap:7px;font-size:max(14px,calc(16*var(--u)));font-weight:500;padding:3px 8px 3px 12px;width:min(122px,100%);min-height:32px;border-radius:4px;border:1px solid transparent;color:var(--ink);transition:background-color .2s,border-color .2s;}
 .radio-circle{width:17px;height:17px;border-radius:50%;border:1.5px solid var(--ink);background:#fff;display:flex;align-items:center;justify-content:center;flex:none;}
 .radio-circle-dot{width:8px;height:8px;border-radius:50%;background:var(--ink);opacity:0;}
 .rp-label{flex:none;text-align:left;}
@@ -591,16 +591,16 @@ html.cv-skip .cover-title,html.cv-skip .btn-start{animation:none !important;opac
 /* 6. Darker state borders (3:1 or better against the white page) */
 .radio-pill.correct{border-color:var(--ok-line);}
 .radio-pill.incorrect{border-color:var(--no-line);}
-/* 2. Dropped icons sit INSIDE the weighing pan container (behind .basket-img z-index:3, sized to match original Hype scale) */
-.pan-dropped-icon{z-index:2;width:38%;transform:translateY(-24px);transition:opacity .45s ease,transform .55s cubic-bezier(.175,.885,.32,1.275),left .45s ease,bottom .45s ease,width .45s ease;}
+/* 2. Dropped icons sit INSIDE the weighing pan container (behind .basket-img z-index:3, crisp vector sizing) */
+.pan-dropped-icon{z-index:2;width:54%;transform:translateY(-28px);transition:opacity .45s ease,transform .55s cubic-bezier(.175,.885,.32,1.275),left .45s ease,bottom .45s ease,width .45s ease;}
 .scale-assembly{will-change:transform;}
-#pan-icon-ai{bottom:58%;left:28%}
-#pan-icon-cars{bottom:58%;right:auto;left:28%}
-#pan-icon-semiconductors{bottom:92%;left:31%;z-index:1}
-#pan-icon-fiveG{bottom:58%;left:28%}
-#pan-icon-quantum{bottom:58%;right:auto;left:28%}
-/* 4. Scale lifted so its visual centre lines up with the selection board */
-.scale-stage-wrapper{transform:translateY(calc(-44*var(--u)));transform:translateY(round(to-zero,calc(-44*var(--u)),1px));}
+#pan-icon-ai{bottom:56%;left:23%}
+#pan-icon-cars{bottom:56%;right:auto;left:23%}
+#pan-icon-semiconductors{bottom:92%;left:27%;z-index:1}
+#pan-icon-fiveG{bottom:56%;left:23%}
+#pan-icon-quantum{bottom:56%;right:auto;left:23%}
+/* 4. Scale sits in a single fixed vertical position across selection, feedback, and completion */
+.scale-stage-wrapper{transform:translateY(-28px);}
 
 /* Desktop hides mobile-only elements */
 .mobile-only-btn,.m-instructions,.m-feedback-view,.m-comp-exit,.m-bib-top-btn{display:none;}
@@ -649,22 +649,15 @@ html.mobile .btn-start{
 html.mobile .interactive-container.cover-on>.app-header,
 html.mobile .interactive-container.cover-on>.stage-view{display:none;}
 
-/* Mobile Header with 4 icons: Back (<), Home, Bibliography, Close (X) (matched to image_ed8ee4.png) */
+/* Mobile Header with 3 icons (Home, Bibliography, Close) spaced across full width (matched to M1/M2/M5) */
 html.mobile .app-header{height:auto;min-height:60px;}
 html.mobile .appbar-inner{flex-direction:column;padding:14px 16px 0;}
 html.mobile .appbar-inner::after{left:16px;right:16px;}
 html.mobile .header-buttons{
   order:1;
   width:100%;
-  justify-content:flex-start;
-  gap:10px;
+  justify-content:space-between;
   padding-bottom:14px;
-}
-html.mobile .icon-btn:disabled{
-  --ring:#C6CEEC;
-  --glyph:#C6CEEC;
-  --ring-fill:transparent;
-  cursor:default;
 }
 html.mobile .brand-section{order:2;width:100%;}
 html.mobile .sub-title{
@@ -677,7 +670,7 @@ html.mobile .sub-title{
   padding-bottom:12px;
 }
 
-/* Mobile Selection Screen (matched to image_ed8ee4.png) */
+/* Mobile Selection Screen (clean category list without selection pills, ticks, or extra layers) */
 html.mobile .stage-view{
   display:flex;
   flex-direction:column;
@@ -699,27 +692,23 @@ html.mobile .m-instructions{
 }
 html.mobile .m-instructions p + p{margin-top:14px;}
 
-html.mobile .selection-board{display:flex;flex-direction:column;gap:0;}
+html.mobile .selection-board{display:flex;flex-direction:column;gap:0;border:0;padding:0;background:transparent;}
 html.mobile .cat-item{
   flex-direction:row;
-  flex-wrap:wrap;
+  flex-wrap:nowrap;
   align-items:center;
   text-align:left;
   width:100%;
   max-width:none;
   min-width:0;
   padding:16px 4px;
-  row-gap:12px;
   column-gap:16px;
   background:#fff;
   border:0;
   border-bottom:1px solid var(--rule);
   border-radius:0;
-  transition:opacity .25s ease;
 }
 html.mobile .cat-item:last-child{border-bottom:0;}
-html.mobile .cat-item.m-locked{opacity:.42;}
-html.mobile .cat-item.m-locked .radio-pill{cursor:default;pointer-events:none;}
 html.mobile .cat-badge{flex:none;width:72px;height:72px;margin:0;}
 html.mobile .cat-title{
   flex:1 1 0;
@@ -731,33 +720,25 @@ html.mobile .cat-title{
   font-size:17px;
   line-height:1.3;
 }
-html.mobile .cat-radios{
-  flex:0 0 100%;
-  width:100%;
-  flex-direction:row;
-  gap:10px;
-}
-html.mobile .cat-radios .radio-pill{
-  flex:1 1 0;
-  width:auto;
-  min-width:0;
-  min-height:44px;
-  justify-content:flex-start;
-  padding:6px 12px;
-  background:#fff;
-  border:1px solid #c5c9d6;
-  border-radius:4px;
-  font-size:16px;
-}
-html.mobile .radio-pill.correct{background:var(--ok-bg);border-color:var(--ok-line);}
-html.mobile .radio-pill.incorrect{background:var(--no-bg);border-color:var(--no-line);}
+html.mobile .cat-radios,
+html.mobile .m-tick,
+html.mobile #intro-modal,
+html.mobile #content-modal{display:none !important;}
 
-/* Hide scale on the mobile selection list (scale appears on the feedback slide & completion, matching original Hype mobile flow) */
+/* Hide scale on the mobile selection list (scale appears on the feedback slide & completion) */
 html.mobile .stage-view:not(.m-showing-feedback):not(.m-showing-complete) > .scale-stage-wrapper{display:none;}
 html.mobile .stage-view.m-showing-feedback .m-instructions,
 html.mobile .stage-view.m-showing-feedback .selection-board{display:none;}
 
-/* Mobile Feedback View (matched to image_ee2089.png & image_ee2070.png) */
+/* Mobile Feedback View (larger 136px flag + Hype swipe/fade-in animation) */
+@keyframes m-flag-swipe{
+  0%{opacity:0;transform:translateX(34px) scale(.92);}
+  100%{opacity:1;transform:translateX(0) scale(1);}
+}
+@keyframes m-fb-fade{
+  0%{opacity:0;transform:translateY(10px);}
+  100%{opacity:1;transform:translateY(0);}
+}
 html.mobile .m-feedback-view{display:flex;flex-direction:column;align-items:stretch;}
 html.mobile .m-feedback-view[hidden]{display:none !important;}
 html.mobile .m-feedback-view h2{
@@ -771,46 +752,65 @@ html.mobile .m-feedback-view h2{
   text-align:left;
 }
 html.mobile .m-fb-flag{
-  width:92px;
-  height:92px;
+  width:136px;
+  height:136px;
   border-radius:50%;
   overflow:hidden;
-  margin:0 auto 14px;
+  margin:0 auto 16px;
   display:flex;
   align-items:center;
   justify-content:center;
 }
+html.mobile .m-fb-flag.is-animating{animation:m-flag-swipe .48s cubic-bezier(.22,1,.36,1) both;}
 html.mobile .m-fb-flag img{width:100%;height:100%;object-fit:contain;display:block;}
 html.mobile .m-fb-flag img.flag-usa{transform:scale(1.22);}
 html.mobile .m-fb-flag img.flag-china{transform:scale(.7);}
 html.mobile .m-fb-scale-slot{display:flex;justify-content:center;margin:0 0 18px;}
 html.mobile .scale-stage-wrapper{transform:none;width:100%;}
-html.mobile .scale-assembly{width:min(100%,250px);}
+html.mobile .scale-assembly{width:min(100%,260px);}
 html.mobile .m-fb-body{
   font-size:15px;
   line-height:1.65;
   color:var(--ink);
   margin:0 0 24px;
 }
+html.mobile .m-fb-body.is-animating{animation:m-fb-fade .42s ease .12s both;}
 html.mobile .m-fb-actions{display:flex;justify-content:center;}
 html.mobile .m-fb-actions .action-btn{min-width:164px;}
 
-/* Mobile Completion State */
+/* Mobile Completion State: dark navy backdrop + centered white card (matched to image_5383cc.png) */
+html.mobile .stage-view.m-showing-complete{
+  background:var(--navy);
+  padding:24px 16px 32px;
+  min-height:540px;
+  justify-content:center;
+}
 html.mobile .stage-view.m-showing-complete .m-instructions,
 html.mobile .stage-view.m-showing-complete .selection-board{display:none;}
-html.mobile .stage-view.m-showing-complete > .scale-stage-wrapper{display:flex;order:1;margin-top:8px;}
 html.mobile .completion-panel{
   position:static;
   width:100%;
-  order:2;
-  padding-top:8px;
-  gap:12px;
+  max-width:340px;
+  margin:0 auto;
+  background:#fff;
+  padding:28px 20px 32px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:14px;
+  text-align:center;
+  box-shadow:0 12px 32px rgba(0,0,0,.28);
 }
-html.mobile .completion-panel .action-btn{width:100%;max-width:260px;}
-html.mobile .completion-panel #m-completion-exit-btn{order:1;}
-html.mobile .completion-panel #completion-biblio-btn{order:2;}
-.m-next-q{display:none;}
-html.mobile .m-next-q{display:inline;}
+html.mobile .completion-panel[hidden]{display:none;}
+html.mobile .m-comp-scale-slot{width:100%;display:flex;justify-content:center;margin-bottom:4px;}
+html.mobile .completion-panel p{font-size:16px;line-height:1.55;color:var(--ink);margin:0 0 6px;}
+html.mobile .completion-panel .action-btn{width:100%;max-width:190px;}
+html.mobile .completion-panel #m-completion-exit-btn{order:2;}
+html.mobile .completion-panel #completion-biblio-btn{order:3;}
+.m-next-q,.m-only-lbl{display:none;}
+html.mobile .m-next-q{display:block;margin-top:2px;}
+html.mobile .m-only-lbl{display:inline;}
+html.mobile .d-only-lbl{display:none;}
 html.mobile .m-comp-exit{display:inline-flex;}
 
 /* Mobile Bibliography Overlay (full-card scrollable view with Back to top button, matching M1/M2/M5) */
@@ -857,6 +857,7 @@ html.tablet .cat-title{min-height:3.75em;}
   .cv-scale{opacity:1 !important;}
   .view-cover.go .cv-scale,.view-cover.go .cv-beam,.view-cover.go .cv-grp{animation:none !important;}
   .scale-beam-wrapper,.basket-usa-group,.basket-china-group,.pan-dropped-icon,.dark-overlay,.biblio-overlay{transition:none !important;}
+  .m-fb-flag.is-animating,.m-fb-body.is-animating{animation:none !important;}
 }
 
 /* phone: the title may wrap (44px icons leave little room), and long category names no longer push the USA/China pills out of the card */
@@ -868,7 +869,7 @@ html.mobile .cat-radios{flex:0 0 100%;width:100%;flex-direction:row;gap:8px}
 html.mobile .cat-radios .radio-pill{flex:1 1 0;min-width:0;min-height:44px}
 
 /* mid-width desktop (Moodle with the course drawer open): the longest category name wraps to 3 lines, so every row reserves 3 lines and the USA/China buttons stay level */
-@media (min-width:760px) and (max-width:1149px){ .cat-title{min-height:3.75em} }
+@media (min-width:881px) and (max-width:1149px){ .cat-title{min-height:3.75em} }
 
 /* ===== Feedback layer: one layout for every category (correct or incorrect) ===== */
 .dialog-card{--flag:72px;width:min(860px,92%);max-height:none;padding:66px clamp(22px,5vw,52px) 22px;}
@@ -882,56 +883,87 @@ html.mobile .dialog-header-area{display:flex;gap:12px;min-height:0;}
 html.mobile .dialog-card h2{padding:0;}
 @media (max-width:380px){html.mobile .dialog-card h2{font-size:18px;}}
 html.mobile .dialog-divider{margin:0 0 14px;}
-/* Every feedback card hangs from the same top edge, so badge, flag and heading sit in the same place for all five categories */
 .dark-overlay .dialog-card{margin:0 auto auto;}
 html.mobile .dark-overlay .dialog-card{margin:0 auto;}
 
-/* ===== New storyboard layout: feedback card on the left over the selection board, scale stays visible, close (X) only ===== */
+/* ===== Desktop feedback card on the left over the selection board, scale stays completely stationary on the right ===== */
 .dialog-footer{display:none;}
 html:not(.mobile) #content-modal{top:60px;background:transparent;pointer-events:none;overflow:visible;justify-content:flex-start;align-items:flex-start;padding:56px 0 14px var(--pad);}
-html:not(.mobile) #content-modal .dialog-card{pointer-events:auto;--flag:70px;width:min(550px,calc(53% - var(--pad)));max-width:calc(100% - var(--pad));margin:0;padding:56px clamp(20px,2.2cqw,28px) 26px;}
+html:not(.mobile) #content-modal .dialog-card{pointer-events:auto;--flag:70px;width:min(550px,calc(53% - var(--pad)));max-width:calc(100% - var(--pad));margin:0;padding:56px clamp(20px,2.2cqw,28px) 24px;}
 html:not(.mobile) #content-modal .dialog-header-area{margin-bottom:10px;}
 html:not(.mobile) #content-modal .dialog-divider{margin-bottom:16px;}
 html:not(.mobile) #content-modal .modal-cat-badge{width:98px;height:98px;top:-49px;}
-/* type matches M2's card while fitting all 5 categories cleanly inside the fixed frame height */
 .dialog-card h2{font-size:clamp(19px,2cqw,22px);}
 #card-body{font-size:15px;line-height:1.55;margin-bottom:0;}
-html.mobile .dialog-card{--flag:60px;}
-html.mobile .flag-emblem{width:var(--flag);height:var(--flag);}
-html.mobile .dialog-card h2{font-size:20px;}
-html.mobile #card-body{font-size:15px;}
+#card-body.is-clamped{overflow:hidden;-webkit-mask-image:linear-gradient(#000 calc(100% - 2.6em),transparent);mask-image:linear-gradient(#000 calc(100% - 2.6em),transparent);}
+.card-more{display:inline-flex;align-items:center;align-self:flex-start;gap:10px;margin-top:10px;padding:0 16px;min-height:44px;background:#fff;border:1.5px solid var(--blue);border-radius:4px;color:var(--blue);font:inherit;font-size:14.5px;font-weight:700;cursor:pointer;transition:background .1s,border-color .1s;}
+.card-more[hidden]{display:none !important;}
+@media(hover:hover){.card-more:hover{background:#e6eaee;}}
+.card-more:focus-visible{background:#e6eaee;}
+.card-more:active{background:#fff;border-color:var(--teal);border-width:2px;padding:0 15.5px;}
+.card-more svg{width:12px;height:8px;transition:transform .15s;}
+.card-more[aria-expanded="true"] svg{transform:rotate(180deg);}
+
 html:not(.mobile) .fb-open .selection-board{opacity:0;visibility:hidden;}
-/* while a feedback card is open the picker is hidden, so the scale settles to the middle of the stage and the card centres on it */
-html:not(.mobile) .fb-open .scale-stage-wrapper{transform:none;}
-/* Category picker in a light panel (as in the original Hype layout), desktop only */
+/* Keep scale strictly stationary across normal, feedback, and completion states */
+html:not(.mobile) .fb-open .scale-stage-wrapper,
+html:not(.mobile) .complete .scale-stage-wrapper{transform:translateY(-28px);}
+
+/* Category picker in a light panel, desktop only */
 @container (min-width:1100px) and (min-height:455px){
   html:not(.mobile) .selection-board{border:1px solid #D9D9D9;padding-block:calc(20*var(--u));row-gap:calc(18*var(--u));background:#fff;}
 }
 @container (min-height:505px){
   html:not(.mobile) .selection-board{border:1px solid #D9D9D9;padding-block:calc(20*var(--u));row-gap:calc(18*var(--u));background:#fff;}
 }
-/* (the box only appears when the frame is tall enough to hold it comfortably) */
 @container (max-height:480px){
   html:not(.mobile) .selection-board{row-gap:8px;}
   html:not(.mobile) .cat-radios{gap:2px;}
   html:not(.mobile) .cat-title{margin-bottom:2px;}
 }
-/* picker box lines up with the header rule and the feedback card */
 html:not(.mobile) .stage-view{padding-left:var(--pad);padding-right:var(--pad);}
 .selection-board,.sub-title,.appbar-inner::after{transition:opacity .25s ease;}
 .pan-dropped-icon{transition:opacity .45s ease,transform .55s cubic-bezier(.175,.885,.32,1.275),left .45s ease,bottom .45s ease;}
-/* End slide: message + "View bibliography" under the scale, board stays visible on the left */
-.completion-panel{position:absolute;bottom:12px;left:60%;width:38%;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;z-index:6;}
+
+/* Desktop end slide: message + "View bibliography" under the stationary scale */
+.completion-panel{position:absolute;bottom:24px;left:60%;width:38%;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;z-index:6;}
 .completion-panel[hidden]{display:none;}
 .completion-panel p{font-size:16px;line-height:1.5;color:var(--ink);}
-.scale-stage-wrapper{transition:transform .5s ease;}
-html:not(.mobile) .complete .scale-stage-wrapper{transform:translateY(calc(-54*var(--u)));transform:translateY(round(to-zero,calc(-54*var(--u)),1px));}
-html.mobile .completion-panel{position:static;width:auto;order:3;}
-@media (prefers-reduced-motion:reduce){.selection-board,.sub-title,.appbar-inner::after,.scale-stage-wrapper,.pan-dropped-icon{transition:none;}}
-/* Picker spacing: equal-width items; outer padding is derived so the gap from the box edge to the first/last item equals the gap between items */
-html:not(.mobile) .selection-board{--w:max(120px,calc(160*var(--u)));padding-inline:max(8px,calc(100%/8 - 3*var(--w)/8));}
-html:not(.mobile) .cat-item{width:min(var(--w),100%);max-width:none;min-width:0;}
+.m-comp-scale-slot{display:none;}
+@media (prefers-reduced-motion:reduce){.selection-board,.sub-title,.appbar-inner::after,.pan-dropped-icon{transition:none;}}
+
+/* Picker spacing: equal-width columns with balanced outer & inner margins */
+html:not(.mobile) .selection-board{
+  column-gap:clamp(8px,1.4cqw,18px);
+  padding-inline:clamp(10px,1.8cqw,22px);
+}
+html:not(.mobile) .cat-item{width:100%;max-width:none;min-width:0;}
 html:not(.mobile) .cat-title{max-width:100%;text-wrap:balance;}
+
+/* Narrow desktop / tablet (both Moodle side menus open, 691px–880px): 2-2-1 grid, WCAG >=14px text, zero overlap with scale, Read more button */
+@container (max-width:880px){
+  html:not(.mobile) .stage-view{grid-template-columns:51fr 49fr;column-gap:14px;}
+  html:not(.mobile) .selection-board{
+    grid-template-columns:repeat(4,1fr);
+    row-gap:14px;
+    column-gap:10px;
+    padding:16px 14px;
+  }
+  html:not(.mobile) .cat-item[data-cat="ai"]{grid-column:1/3;grid-row:1;}
+  html:not(.mobile) .cat-item[data-cat="fiveG"]{grid-column:3/5;grid-row:1;}
+  html:not(.mobile) .cat-item[data-cat="quantum"]{grid-column:1/3;grid-row:2;}
+  html:not(.mobile) .cat-item[data-cat="cars"]{grid-column:3/5;grid-row:2;}
+  html:not(.mobile) .cat-item[data-cat="semiconductors"]{grid-column:2/4;grid-row:3;}
+  html:not(.mobile) .cat-badge{width:52px;height:52px;min-width:52px;min-height:52px;margin-bottom:4px;}
+  html:not(.mobile) .cat-title{font-size:14px;line-height:1.25;min-height:2.5em;margin-bottom:6px;}
+  html:not(.mobile) .cat-radios{flex-direction:column;align-items:center;gap:5px;}
+  html:not(.mobile) .radio-pill{width:118px;min-width:0;min-height:30px;font-size:14px;padding:3px 8px 3px 12px;gap:8px;}
+  html:not(.mobile) .scale-assembly{width:min(94%,calc(520*var(--u)));}
+  html:not(.mobile) #content-modal .dialog-card{width:calc(50% - var(--pad));padding:46px 16px 18px;--flag:48px;}
+  html:not(.mobile) #content-modal .modal-cat-badge{width:80px;height:80px;top:-40px;}
+  html:not(.mobile) #content-modal .dialog-card h2{font-size:18px;padding:0 calc(var(--flag) + 8px);}
+  html:not(.mobile) #content-modal #card-body{font-size:14.5px;line-height:1.5;}
+}
 /* ---- Phone: no multiple choice. One tap target per row; the slide shows who leads and the icon drops onto its pan ---- */
 .m-open,.m-tick{display:none;}
 html.mobile .cat-item{position:relative;}
@@ -1049,8 +1081,9 @@ html.mobile .m-tick svg{width:100%;height:100%;display:block;}
       </section>
 
       <section class="completion-panel" id="completion-panel" aria-label="Completed" hidden>
-        <p>You have completed this interactive infographic.<span class="m-next-q"> What would you like to do next?</span></p>
-        <button type="button" class="action-btn btn-outline" id="completion-biblio-btn">View bibliography</button>
+        <div class="m-comp-scale-slot" id="m-comp-scale-slot"></div>
+        <p>You have completed this interactive infographic.<span class="m-next-q">What would you like to do next?</span></p>
+        <button type="button" class="action-btn btn-outline" id="completion-biblio-btn"><span class="d-only-lbl">View bibliography</span><span class="m-only-lbl">Bibliography</span></button>
         <button type="button" class="action-btn m-comp-exit" id="m-completion-exit-btn">Exit</button>
       </section>
 
@@ -1107,6 +1140,7 @@ html.mobile .m-tick svg{width:100%;height:100%;display:block;}
         <hr class="dialog-divider" aria-hidden="true">
         <p class="sr-only" id="card-result"></p>
         <p id="card-body"></p>
+        <button type="button" class="card-more" id="cardMore" aria-expanded="false" aria-controls="card-body" hidden><span id="cardMoreLabel">Read more</span><svg viewBox="0 0 12 8" aria-hidden="true" focusable="false"><path d="M1 1.5l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
         <button class="icon-btn close-card-btn" id="close-dialog-btn" type="button" aria-label="Close and continue"><svg viewBox="0 0 32.83 32.83" aria-hidden="true" focusable="false"><path class="ring" d="M16.41,32.33A15.92,15.92,0,1,0,.5,16.41,15.92,15.92,0,0,0,16.41,32.33"/><path class="xglyph" d="M22.02,10.8L10.81,22.02M10.81,10.8L22.02,22.02"/></svg></button>
       </div>
     </div>
@@ -1176,7 +1210,7 @@ html.mobile .m-tick svg{width:100%;height:100%;display:block;}
 
     var DATA = techData, ORDER = ['ai', 'fiveG', 'quantum', 'cars', 'semiconductors'];
     var answered = {}, loads = { usa: 0, china: 0 }, modalTimer = null, lastOpener = null;
-    var mobileFeedbackCat = null;
+    var mobileFeedbackCat = null, cardExpanded = false;
 
     var $ = function (id) { return document.getElementById(id); };
     var container = $('interactive-app'), coverView = $('cover-view');
@@ -1192,36 +1226,26 @@ html.mobile .m-tick svg{width:100%;height:100%;display:block;}
     function signalTop() { if (!isMobile()) return; try { window.parent.postMessage({ type: 'ce-top', app: 'ce-interactive' }, '*'); } catch (e) {} }
     function openModalEl() { return MODALS.filter(function (m) { return m.classList.contains('active'); })[0]; }
 
-    /* Sequential unlocking on mobile (matched to original Hype mobile flow) & Back button state */
+    /* Mobile category rows: clean full-opacity buttons with no ticks or sequential locks */
     function syncMobileSequence() {
       var mob = isMobile();
-      var firstUnansweredIdx = ORDER.findIndex(function (k) { return !answered[k]; });
-      ORDER.forEach(function (k, idx) {
+      ORDER.forEach(function (k) {
         var item = document.querySelector('.cat-item[data-cat="' + k + '"]');
         if (!item) return;
-        var lockedSeq = mob && !answered[k] && firstUnansweredIdx !== -1 && idx > firstUnansweredIdx;
-        item.classList.toggle('m-locked', lockedSeq);
+        item.classList.remove('m-locked', 'm-done');
         item.querySelectorAll('.radio-pill').forEach(function (p) {
-          if (lockedSeq) {
-            p.disabled = true;
-            p.setAttribute('aria-disabled', 'true');
-          } else {
-            p.disabled = false;
-            if (!answered[k]) p.removeAttribute('aria-disabled');
-          }
+          p.disabled = false;
+          if (!answered[k]) p.removeAttribute('aria-disabled');
         });
         var tt = item.querySelector('.cat-title'), q = $('q-' + k), op = item.querySelector('.m-open');
-        if (mob) {   // phone: the row is one button (no USA/China question), so the group semantics are dropped
-          var done = !!answered[k];
+        if (mob) {
           item.removeAttribute('role'); item.removeAttribute('aria-labelledby');
           tt.setAttribute('aria-hidden', 'true'); if (q) q.setAttribute('aria-hidden', 'true');
-          item.classList.toggle('m-done', done);
-          if (lockedSeq) op.setAttribute('aria-disabled', 'true'); else op.removeAttribute('aria-disabled');
-          op.setAttribute('aria-label', DATA[k].title + (lockedSeq ? ' \u2013 locked until the category above has been viewed' : done ? ' \u2013 viewed, open again' : ' \u2013 see who is in the lead'));
+          op.removeAttribute('aria-disabled');
+          op.setAttribute('aria-label', DATA[k].title + ' \u2013 see who is in the lead');
         } else {
           item.setAttribute('role', 'group'); item.setAttribute('aria-labelledby', 't-' + k + ' q-' + k);
           tt.removeAttribute('aria-hidden'); if (q) q.removeAttribute('aria-hidden');
-          item.classList.remove('m-done');
         }
       });
     }
@@ -1276,23 +1300,58 @@ html.mobile .m-tick svg{width:100%;height:100%;display:block;}
       if (fit > h && h < 630) { h = Math.min(630, fit); set(h); }
       card.style.marginTop = keepMT; card.style.maxHeight = keepMax;
     }
+    function clearCardMore() {
+      var b = $('card-body'), btn = $('cardMore');
+      if (b) { b.style.maxHeight = ''; b.classList.remove('is-clamped'); }
+      if (btn) { btn.hidden = true; btn.setAttribute('aria-expanded', 'false'); }
+    }
     function fitModal(m) {
       var card = m.querySelector('.dialog-card,.center-modal,.biblio-card');
       var mob = isMobile();
+      container.style.height = '';
       container.style.minHeight = baseMin();
       if (!card) return;
-      if (m === contentModal) { card.style.marginTop = ''; card.style.maxHeight = ''; }
+      if (m === contentModal) {
+        card.style.marginTop = '';
+        card.style.maxHeight = '';
+        clearCardMore();
+      }
       if (mob) {
         if (m !== biblioOverlay) container.style.minHeight = (card.offsetHeight + 100) + 'px';
         return;
       }
       if (m === contentModal) {
-        /* centred on the scale; the frame never changes - if a card could not fit it scrolls inside instead */
         var cm = cardMetrics(), ch = container.offsetHeight;
+        var isNarrowDesktop = container.clientWidth <= 880;
+        var btn = $('cardMore'), lab = $('cardMoreLabel'), b = $('card-body'), t = $('card-title');
+        var maxCardH = ch - cm.minTop - 16;
         card.style.marginTop = '0px';
         var natural = card.getBoundingClientRect().top - container.getBoundingClientRect().top;
-        if (card.offsetHeight > ch - cm.minTop - 14) card.style.maxHeight = Math.max(220, ch - cm.minTop - 14) + 'px';
-        card.style.marginTop = Math.max(0, cm.topFor(card.offsetHeight) - natural) + 'px';
+
+        if (isNarrowDesktop && cardExpanded && btn) {
+          btn.hidden = false;
+          btn.setAttribute('aria-expanded', 'true');
+          if (lab) lab.textContent = 'Show less';
+          btn.setAttribute('aria-label', 'Show less: ' + t.textContent);
+          var neededH = natural + card.offsetHeight + 18;
+          if (neededH > ch) container.style.height = neededH + 'px';
+          card.style.marginTop = Math.max(0, cm.topFor(card.offsetHeight) - natural) + 'px';
+        } else if (isNarrowDesktop && card.offsetHeight > maxCardH + 0.5 && btn) {
+          btn.hidden = false;
+          btn.setAttribute('aria-expanded', 'false');
+          if (lab) lab.textContent = 'Read more';
+          btn.setAttribute('aria-label', 'Read more: ' + t.textContent);
+          var fixed = card.offsetHeight - b.offsetHeight;
+          var avail = Math.max(88, maxCardH - fixed);
+          var lh = parseFloat(getComputedStyle(b).lineHeight) || 21.75;
+          var lines = Math.max(3, Math.floor(avail / lh));
+          b.style.maxHeight = Math.round(lines * lh) + 'px';
+          b.classList.add('is-clamped');
+          card.style.marginTop = Math.max(0, cm.topFor(card.offsetHeight) - natural) + 'px';
+        } else {
+          if (card.offsetHeight > ch - cm.minTop - 14) card.style.maxHeight = Math.max(220, ch - cm.minTop - 14) + 'px';
+          card.style.marginTop = Math.max(0, cm.topFor(card.offsetHeight) - natural) + 'px';
+        }
       }
     }
     addEventListener('resize', function () { var o = openModalEl(); if (o) setTimeout(function () { fitModal(o); }, 150); });
@@ -1325,8 +1384,8 @@ html.mobile .m-tick svg{width:100%;height:100%;display:block;}
     function layoutPans() {
       ['usa', 'china'].forEach(function (side) {
         var items = Object.keys(answered).filter(function (k) { return DATA[k].leader === side; });
-        var wPct = items.length === 1 ? 50 : items.length === 2 ? 46 : 44;
-        var slots = items.length === 1 ? [[25, 58]] : items.length === 2 ? [[4, 60], [50, 60]] : [[4, 60], [52, 60], [28, 92]];
+        var wPct = items.length === 1 ? 56 : items.length === 2 ? 50 : 46;
+        var slots = items.length === 1 ? [[22, 56]] : items.length === 2 ? [[1, 58], [49, 58]] : [[2, 58], [52, 58], [27, 92]];
         items.forEach(function (k, i) {
           var el = $('pan-icon-' + k); if (!el) return;
           var fresh = !el.classList.contains('active');
@@ -1349,10 +1408,17 @@ html.mobile .m-tick svg{width:100%;height:100%;display:block;}
       fbView.hidden = false;
       $('m-fb-title').textContent = d.title;
       $('m-fb-result').textContent = resText || '';
-      $('m-fb-body').textContent = d.body;
-      $('m-fb-flag').innerHTML = d.leader === 'usa'
+      var fbBody = $('m-fb-body');
+      fbBody.textContent = d.body;
+      var fbFlag = $('m-fb-flag');
+      fbFlag.classList.remove('is-animating');
+      fbBody.classList.remove('is-animating');
+      fbFlag.innerHTML = d.leader === 'usa'
         ? '<img src="Resources/PastedVector-51.svg" class="flag-usa" alt="">'
         : '<img src="Resources/PastedVector-61.svg" class="flag-china" alt="">';
+      void fbFlag.offsetWidth;
+      fbFlag.classList.add('is-animating');
+      fbBody.classList.add('is-animating');
       $('m-fb-scale-slot').appendChild($('scale-wrap'));
       signalTop();
       $('m-fb-title').focus({ preventScroll: true });
@@ -1385,11 +1451,17 @@ html.mobile .m-tick svg{width:100%;height:100%;display:block;}
       hideMobileFeedback();
       var p = $('completion-panel'); p.hidden = false;
       container.classList.add('complete');
-      if (isMobile()) stageEl.classList.add('m-showing-complete');
+      if (isMobile()) {
+        stageEl.classList.add('m-showing-complete');
+        $('m-comp-scale-slot').appendChild($('scale-wrap'));
+        signalTop();
+      } else if ($('scale-wrap').parentNode !== stageEl) {
+        stageEl.appendChild($('scale-wrap'));
+      }
       container.style.minHeight = baseMin();
       placeCompletion();
       announce('You have completed this interactive infographic.');
-      setTimeout(function () { $('completion-biblio-btn').focus({ preventScroll: true }); }, 60);
+      setTimeout(function () { (isMobile() ? $('m-completion-exit-btn') : $('completion-biblio-btn')).focus({ preventScroll: true }); }, 60);
     }
     addEventListener('resize', function () { if (!$('completion-panel').hidden) placeCompletion(); });
 
@@ -1430,6 +1502,7 @@ html.mobile .m-tick svg{width:100%;height:100%;display:block;}
           showMobileFeedback(cat, res);
           return;
         }
+        cardExpanded = false;
         $('card-title').textContent = d.title;
         $('card-result').textContent = res;
         $('card-body').textContent = d.body;
@@ -1455,6 +1528,8 @@ html.mobile .m-tick svg{width:100%;height:100%;display:block;}
         }
         return;
       }
+      cardExpanded = false;
+      container.style.height = '';
       closeModal(contentModal, false);
       if (Object.keys(answered).length === ORDER.length) {
         setTimeout(function () {
@@ -1476,6 +1551,11 @@ html.mobile .m-tick svg{width:100%;height:100%;display:block;}
         if (answered[cat]) { showMobileFeedback(cat, d.title + ': ' + (d.leader === 'usa' ? 'the USA' : 'China') + ' is in the lead.'); return; }
         choose(cat, d.leader, b, true);
       });
+    });
+    $('cardMore').addEventListener('click', function () {
+      cardExpanded = !cardExpanded;
+      if (window.ceSettle) window.ceSettle();
+      fitModal(contentModal);
     });
     $('close-dialog-btn').addEventListener('click', closeFeedback);
     $('m-fb-next-btn').addEventListener('click', closeFeedback);
@@ -1506,6 +1586,7 @@ html.mobile .m-tick svg{width:100%;height:100%;display:block;}
       });
       document.querySelectorAll('.pan-dropped-icon').forEach(function (i) { i.classList.remove('active'); i.style.width = i.style.left = i.style.right = i.style.bottom = i.style.zIndex = ''; });
       $('completion-panel').hidden = true; container.classList.remove('complete');
+      if ($('scale-wrap').parentNode !== stageEl) stageEl.appendChild($('scale-wrap'));
       updateScale();
       syncMobileSequence();
       MODALS.forEach(function (m) { m.classList.remove('active'); }); container.style.minHeight = '';
@@ -1621,6 +1702,9 @@ html.mobile .m-tick svg{width:100%;height:100%;display:block;}
       }
       if (typeof hideMobileFeedback === 'function' && typeof mobileFeedbackCat !== 'undefined' && mobileFeedbackCat) {
         hideMobileFeedback();
+      }
+      if ($('scale-wrap') && stageEl && $('scale-wrap').parentNode !== stageEl) {
+        stageEl.appendChild($('scale-wrap'));
       }
       if (typeof syncMobileSequence === 'function') syncMobileSequence();
       var cap = Math.max(520, usableH() - 48), targetH = Math.min(660, cap);
