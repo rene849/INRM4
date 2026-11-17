@@ -499,7 +499,7 @@ html.cv-skip .cover-title,html.cv-skip .btn-start{animation:none !important;opac
 
 /* Stage: selection board (left) + balance scale (right). 1px = 1 design unit at 1112x560; --u scales it with the frame */
 .stage-view{position:relative;flex:1 1 auto;min-height:0;width:100%;background:#fff;overflow:hidden;container-type:size;
-  display:grid;grid-template-columns:50fr 50fr;align-items:center;column-gap:clamp(6px,1.5cqw,20px);padding:4px clamp(12px,2cqw,32px) 10px;}
+  display:grid;grid-template-columns:60fr 40fr;align-items:center;column-gap:clamp(24px,4cqw,56px);padding:4px clamp(12px,2cqw,32px) 10px;}
 .stage-view>*{--u:min(.0899cqw,.1786cqh);}
 .selection-board{display:grid;grid-template-columns:repeat(6,1fr);row-gap:calc(26*var(--u));column-gap:calc(4*var(--u));align-content:center;}
 .cat-item[data-cat="ai"]{grid-column:1/3;grid-row:1}
@@ -512,7 +512,7 @@ html.cv-skip .cover-title,html.cv-skip .btn-start{animation:none !important;opac
 .cat-badge img{width:100%;height:100%;object-fit:contain;display:block;}
 .cat-title{font-size:max(14px,calc(16*var(--u)));font-weight:700;line-height:1.25;min-height:2.5em;display:flex;align-items:center;justify-content:center;margin-bottom:calc(6*var(--u));}
 .cat-radios{display:flex;flex-direction:column;align-items:center;gap:4px;width:100%;}
-.radio-pill{position:relative;display:flex;align-items:center;justify-content:flex-start;gap:8px;font-size:max(14px,calc(16*var(--u)));font-weight:500;padding:3px 10px;width:118px;min-height:32px;border-radius:4px;border:1px solid transparent;color:var(--ink);transition:background-color .2s,border-color .2s;}
+.radio-pill{position:relative;display:flex;align-items:center;justify-content:flex-start;gap:8px;font-size:max(14px,calc(16*var(--u)));font-weight:500;padding:3px 6px 3px 36px;width:144px;min-height:32px;border-radius:4px;border:1px solid transparent;color:var(--ink);transition:background-color .2s,border-color .2s;}
 .radio-circle{width:17px;height:17px;border-radius:50%;border:1.5px solid var(--ink);background:#fff;display:flex;align-items:center;justify-content:center;flex:none;}
 .radio-circle-dot{width:8px;height:8px;border-radius:50%;background:var(--ink);opacity:0;}
 .rp-label{flex:none;text-align:left;}
@@ -884,22 +884,37 @@ html.mobile .dark-overlay .dialog-card{margin:0 auto;}
 /* ===== New storyboard layout: feedback card on the left over the selection board, scale stays visible, close (X) only ===== */
 .dialog-footer{display:none;}
 html:not(.mobile) #content-modal{top:60px;background:transparent;pointer-events:none;overflow:visible;justify-content:flex-start;align-items:flex-start;padding:56px 0 14px var(--pad);}
-html:not(.mobile) #content-modal .dialog-card{pointer-events:auto;--flag:70px;width:min(516px,48%);max-width:calc(100% - var(--pad));margin:0;padding:46px clamp(20px,2.2cqw,26px) 20px;}
+html:not(.mobile) #content-modal .dialog-card{pointer-events:auto;--flag:70px;width:min(640px,58%);max-width:calc(100% - var(--pad));margin:0;padding:46px clamp(20px,2.2cqw,26px) 20px;}
 html:not(.mobile) #content-modal .dialog-header-area{margin-bottom:6px;}
 html:not(.mobile) #content-modal .dialog-divider{margin-bottom:12px;}
 html:not(.mobile) #content-modal .modal-cat-badge{width:98px;height:98px;top:-49px;}
 /* type matches M2's card while fitting all 5 categories cleanly inside the fixed frame height */
 .dialog-card h2{font-size:clamp(19px,2cqw,22px);}
-#card-body{font-size:14.5px;line-height:1.54;margin-bottom:0;}
+#card-body{font-size:15px;line-height:1.5;margin-bottom:0;}
 html.mobile .dialog-card{--flag:60px;}
 html.mobile .flag-emblem{width:var(--flag);height:var(--flag);}
 html.mobile .dialog-card h2{font-size:20px;}
 html.mobile #card-body{font-size:15px;}
 html:not(.mobile) .fb-open .selection-board{opacity:0;visibility:hidden;}
+/* Category picker in a light panel (as in the original Hype layout), desktop only */
+@container (min-width:1100px) and (min-height:455px){
+  html:not(.mobile) .selection-board{border:1px solid #D9D9D9;padding:calc(10*var(--u)) calc(14*var(--u));row-gap:calc(14*var(--u));background:#fff;}
+}
+@container (min-height:505px){
+  html:not(.mobile) .selection-board{border:1px solid #D9D9D9;padding:calc(10*var(--u)) calc(14*var(--u));row-gap:calc(14*var(--u));background:#fff;}
+}
+/* (the box only appears when the frame is tall enough to hold it comfortably) */
+@container (max-height:480px){
+  html:not(.mobile) .selection-board{row-gap:8px;}
+  html:not(.mobile) .cat-radios{gap:2px;}
+  html:not(.mobile) .cat-title{margin-bottom:2px;}
+}
+/* picker box lines up with the header rule and the feedback card */
+html:not(.mobile) .stage-view{padding-left:var(--pad);padding-right:var(--pad);}
 .selection-board,.sub-title,.appbar-inner::after{transition:opacity .25s ease;}
 .pan-dropped-icon{transition:opacity .45s ease,transform .55s cubic-bezier(.175,.885,.32,1.275),left .45s ease,bottom .45s ease;}
 /* End slide: message + "View bibliography" under the scale, board stays visible on the left */
-.completion-panel{position:absolute;bottom:12px;left:50%;width:48%;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;z-index:6;}
+.completion-panel{position:absolute;bottom:12px;left:60%;width:38%;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;z-index:6;}
 .completion-panel[hidden]{display:none;}
 .completion-panel p{font-size:16px;line-height:1.5;color:var(--ink);}
 .scale-stage-wrapper{transition:transform .5s ease;}
@@ -1226,7 +1241,12 @@ html.mobile .completion-panel{position:static;width:auto;order:3;}
       if (m === contentModal) {
         var headerH = headerEl ? headerEl.offsetHeight : 60;
         var badgeOver = 49;
+        card.style.minHeight = '';
         var max = tallestCard(card);
+        card.style.minHeight = max + 'px';
+        // if the (equal-height) card would run past the bottom of the frame, let the frame grow to fit it
+        var need = Math.round(card.getBoundingClientRect().top - container.getBoundingClientRect().top) + max + 24;
+        if (need > container.offsetHeight) container.style.minHeight = need + 'px';
         var stageAvail = container.offsetHeight - headerH - badgeOver - 12;
         card.style.marginTop = Math.max(0, Math.round((stageAvail - max) / 2)) + 'px';
       }
