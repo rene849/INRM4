@@ -499,7 +499,7 @@ html.cv-skip .cover-title,html.cv-skip .btn-start{animation:none !important;opac
 
 /* Stage: selection board (left) + balance scale (right). 1px = 1 design unit at 1112x560; --u scales it with the frame */
 .stage-view{position:relative;flex:1 1 auto;min-height:0;width:100%;background:#fff;overflow:hidden;container-type:size;
-  display:grid;grid-template-columns:60fr 40fr;align-items:center;column-gap:clamp(24px,4cqw,56px);padding:4px clamp(12px,2cqw,32px) 10px;}
+  display:grid;grid-template-columns:58fr 42fr;align-items:center;column-gap:clamp(24px,4cqw,56px);padding:4px clamp(12px,2cqw,32px) 10px;}
 .stage-view>*{--u:min(.0899cqw,.1786cqh);}
 .selection-board{display:grid;grid-template-columns:repeat(6,1fr);row-gap:calc(26*var(--u));column-gap:calc(4*var(--u));align-content:center;}
 .cat-item[data-cat="ai"]{grid-column:1/3;grid-row:1}
@@ -529,7 +529,7 @@ html.cv-skip .cover-title,html.cv-skip .btn-start{animation:none !important;opac
 
 /* Balance scale (geometry from the approved rebuild; every length is a % of the assembly so it scales) */
 .scale-stage-wrapper{display:flex;align-items:center;justify-content:center;min-width:0;}
-.scale-assembly{position:relative;width:min(100%,calc(600*var(--u)));aspect-ratio:530/430;}
+.scale-assembly{position:relative;width:min(100%,calc(630*var(--u)));aspect-ratio:530/430;}
 .scale-grey-shadow{position:absolute;bottom:3%;left:50%;transform:translateX(-50%);width:90%;height:11%;background:#F5F4EF;border-radius:50%;z-index:1;}
 .scale-base-img{position:absolute;bottom:7%;left:50%;transform:translateX(-50%);width:58%;height:auto;z-index:4;pointer-events:none;}
 .scale-beam-wrapper{position:absolute;top:59.5%;left:50%;width:60%;height:7.7%;transform:translate(-50%,-50%) rotate(0deg);transform-origin:50% 50%;transition:transform .85s cubic-bezier(.34,1.3,.64,1);z-index:3;}
@@ -599,7 +599,7 @@ html.cv-skip .cover-title,html.cv-skip .btn-start{animation:none !important;opac
 #pan-icon-fiveG{bottom:58%;left:28%}
 #pan-icon-quantum{bottom:58%;right:auto;left:28%}
 /* 4. Scale lifted so its visual centre lines up with the selection board */
-.scale-stage-wrapper{transform:translateY(calc(-44*var(--u)));}
+.scale-stage-wrapper{transform:translateY(calc(-44*var(--u)));transform:translateY(round(to-zero,calc(-44*var(--u)),1px));}
 
 /* Desktop hides mobile-only elements */
 .mobile-only-btn,.m-instructions,.m-feedback-view,.m-comp-exit,.m-bib-top-btn{display:none;}
@@ -884,18 +884,20 @@ html.mobile .dark-overlay .dialog-card{margin:0 auto;}
 /* ===== New storyboard layout: feedback card on the left over the selection board, scale stays visible, close (X) only ===== */
 .dialog-footer{display:none;}
 html:not(.mobile) #content-modal{top:60px;background:transparent;pointer-events:none;overflow:visible;justify-content:flex-start;align-items:flex-start;padding:56px 0 14px var(--pad);}
-html:not(.mobile) #content-modal .dialog-card{pointer-events:auto;--flag:70px;width:min(640px,58%);max-width:calc(100% - var(--pad));margin:0;padding:46px clamp(20px,2.2cqw,26px) 20px;}
-html:not(.mobile) #content-modal .dialog-header-area{margin-bottom:6px;}
-html:not(.mobile) #content-modal .dialog-divider{margin-bottom:12px;}
+html:not(.mobile) #content-modal .dialog-card{pointer-events:auto;--flag:70px;width:min(600px,55%);max-width:calc(100% - var(--pad));margin:0;padding:60px clamp(22px,2.4cqw,30px) 30px;}
+html:not(.mobile) #content-modal .dialog-header-area{margin-bottom:10px;}
+html:not(.mobile) #content-modal .dialog-divider{margin-bottom:16px;}
 html:not(.mobile) #content-modal .modal-cat-badge{width:98px;height:98px;top:-49px;}
 /* type matches M2's card while fitting all 5 categories cleanly inside the fixed frame height */
 .dialog-card h2{font-size:clamp(19px,2cqw,22px);}
-#card-body{font-size:15px;line-height:1.5;margin-bottom:0;}
+#card-body{font-size:15px;line-height:1.55;margin-bottom:0;}
 html.mobile .dialog-card{--flag:60px;}
 html.mobile .flag-emblem{width:var(--flag);height:var(--flag);}
 html.mobile .dialog-card h2{font-size:20px;}
 html.mobile #card-body{font-size:15px;}
 html:not(.mobile) .fb-open .selection-board{opacity:0;visibility:hidden;}
+/* while a feedback card is open the picker is hidden, so the scale settles to the middle of the stage and the card centres on it */
+html:not(.mobile) .fb-open .scale-stage-wrapper{transform:none;}
 /* Category picker in a light panel (as in the original Hype layout), desktop only */
 @container (min-width:1100px) and (min-height:455px){
   html:not(.mobile) .selection-board{border:1px solid #D9D9D9;padding:calc(10*var(--u)) calc(14*var(--u));row-gap:calc(14*var(--u));background:#fff;}
@@ -918,7 +920,7 @@ html:not(.mobile) .stage-view{padding-left:var(--pad);padding-right:var(--pad);}
 .completion-panel[hidden]{display:none;}
 .completion-panel p{font-size:16px;line-height:1.5;color:var(--ink);}
 .scale-stage-wrapper{transition:transform .5s ease;}
-html:not(.mobile) .complete .scale-stage-wrapper{transform:translateY(calc(-54*var(--u)));}
+html:not(.mobile) .complete .scale-stage-wrapper{transform:translateY(calc(-54*var(--u)));transform:translateY(round(to-zero,calc(-54*var(--u)),1px));}
 html.mobile .completion-panel{position:static;width:auto;order:3;}
 @media (prefers-reduced-motion:reduce){.selection-board,.sub-title,.appbar-inner::after,.scale-stage-wrapper,.pan-dropped-icon{transition:none;}}
 </style>
@@ -1208,8 +1210,11 @@ html.mobile .completion-panel{position:static;width:auto;order:3;}
     /* Background regions are inert while the cover or any pop-up is open (keyboard + screen reader stay inside the active layer) */
     function syncInert() {
       var coverOpen = !coverView.classList.contains('hidden'), anyOpen = !!openModalEl();
+      var om = openModalEl(), fbOnly = om === contentModal && !isMobile();   // feedback card sits beside the scale: top-bar buttons stay live
       coverView.toggleAttribute('inert', anyOpen);
-      [headerEl, stageEl].forEach(function (el) { el.toggleAttribute('inert', coverOpen || anyOpen); });
+      headerEl.toggleAttribute('inert', coverOpen || (anyOpen && !fbOnly));
+      stageEl.toggleAttribute('inert', coverOpen || anyOpen);
+      contentModal.setAttribute('aria-modal', fbOnly ? 'false' : 'true');
       container.classList.toggle('cover-on', coverOpen);
       container.classList.toggle('fb-open', contentModal.classList.contains('active'));
     }
@@ -1239,16 +1244,24 @@ html.mobile .completion-panel{position:static;width:auto;order:3;}
         return;
       }
       if (m === contentModal) {
-        var headerH = headerEl ? headerEl.offsetHeight : 60;
-        var badgeOver = 49;
-        card.style.minHeight = '';
+        /* Card is exactly as tall as its content. It is centred on the scale; if the tallest of the five would
+           push the badge into the top bar (or past the bottom), it sits as close to centre as fits and the frame grows to suit. */
+        var wrap = $('scale-wrap');
+        card.style.minHeight = ''; card.style.marginTop = '0px';
         var max = tallestCard(card);
-        card.style.minHeight = max + 'px';
-        // if the (equal-height) card would run past the bottom of the frame, let the frame grow to fit it
-        var need = Math.round(card.getBoundingClientRect().top - container.getBoundingClientRect().top) + max + 24;
-        if (need > container.offsetHeight) container.style.minHeight = need + 'px';
-        var stageAvail = container.offsetHeight - headerH - badgeOver - 12;
-        card.style.marginTop = Math.max(0, Math.round((stageAvail - max) / 2)) + 'px';
+        function rel(el) { var r = el.getBoundingClientRect(), c = container.getBoundingClientRect(); return { top: r.top - c.top }; }
+        /* centre of the scale once it has settled (offset-based, so it ignores the running slide transition) */
+        function scaleMid() { return stageEl.getBoundingClientRect().top - container.getBoundingClientRect().top + wrap.offsetTop + wrap.offsetHeight / 2; }
+        var minTop = Math.round(headerEl.getBoundingClientRect().bottom - container.getBoundingClientRect().top) + 49 + 10;   // badge clears the top bar
+        function topFor(h) { return Math.max(minTop, Math.round(scaleMid() - h / 2)); }
+        for (var i = 0; i < 5; i++) {   // grow the frame until even the tallest card can be centred on the scale
+          var deficit = minTop + max / 2 - scaleMid();
+          if (deficit > 0.5 && container.offsetHeight < 630) container.style.minHeight = Math.min(630, container.offsetHeight + Math.ceil(deficit * 2)) + 'px'; else break;
+        }
+        var fit = topFor(max) + max + 24;   // never let the tallest card run off the bottom
+        if (fit > container.offsetHeight) container.style.minHeight = fit + 'px';
+        var natural = rel(card).top;
+        card.style.marginTop = Math.max(0, topFor(card.offsetHeight) - natural) + 'px';
       }
     }
     addEventListener('resize', function () { var o = openModalEl(); if (o) setTimeout(function () { fitModal(o); }, 150); });
@@ -1501,6 +1514,10 @@ html.mobile .completion-panel{position:static;width:auto;order:3;}
         closeModal(biblioOverlay);
         return;
       }
+      if (contentModal.classList.contains('active') && !isMobile()) {   // close the open feedback card first, keep the end slide on track
+        closeModal(contentModal, false);
+        if (Object.keys(answered).length === ORDER.length) showCompletion();
+      }
       openBiblio(this);
     });
     $('close-biblio-btn').addEventListener('click', function () { closeModal(biblioOverlay); });
@@ -1526,9 +1543,16 @@ html.mobile .completion-panel{position:static;width:auto;order:3;}
         return;
       }
       if (e.key === 'Tab') {
-        var f = Array.prototype.filter.call(m.querySelectorAll('button,[tabindex]:not([tabindex="-1"])'), function (el) { return el.offsetParent !== null; });
+        var sel = 'button:not([disabled]),[tabindex]:not([tabindex="-1"])';
+        var f = Array.prototype.filter.call(m.querySelectorAll(sel), function (el) { return el.offsetParent !== null; });
+        if (m === contentModal && !isMobile()) f = f.concat(Array.prototype.filter.call(headerEl.querySelectorAll(sel), function (el) { return el.offsetParent !== null; }));
         if (!f.length) return;
-        if (e.shiftKey && document.activeElement === f[0]) { e.preventDefault(); f[f.length - 1].focus(); }
+        var at = f.indexOf(document.activeElement);
+        if (m === contentModal && !isMobile()) {   // card first, then the top-bar buttons: step through the list ourselves (DOM order differs)
+          e.preventDefault();
+          f[(at < 0 ? (e.shiftKey ? f.length - 1 : 0) : (at + (e.shiftKey ? f.length - 1 : 1)) % f.length)].focus();
+        }
+        else if (e.shiftKey && document.activeElement === f[0]) { e.preventDefault(); f[f.length - 1].focus(); }
         else if (!e.shiftKey && document.activeElement === f[f.length - 1]) { e.preventDefault(); f[0].focus(); }
       }
     });
