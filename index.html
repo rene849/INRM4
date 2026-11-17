@@ -927,6 +927,10 @@ html:not(.mobile) .stage-view{padding-left:var(--pad);padding-right:var(--pad);}
 html:not(.mobile) .complete .scale-stage-wrapper{transform:translateY(calc(-54*var(--u)));transform:translateY(round(to-zero,calc(-54*var(--u)),1px));}
 html.mobile .completion-panel{position:static;width:auto;order:3;}
 @media (prefers-reduced-motion:reduce){.selection-board,.sub-title,.appbar-inner::after,.scale-stage-wrapper,.pan-dropped-icon{transition:none;}}
+/* Picker spacing: equal-width items; outer padding is derived so the gap from the box edge to the first/last item equals the gap between items */
+html:not(.mobile) .selection-board{--w:max(120px,calc(160*var(--u)));padding-inline:max(8px,calc(100%/8 - 3*var(--w)/8));}
+html:not(.mobile) .cat-item{width:min(var(--w),100%);max-width:none;min-width:0;}
+html:not(.mobile) .cat-title{max-width:100%;text-wrap:balance;}
 </style>
 
 </head>
@@ -1212,7 +1216,7 @@ html.mobile .completion-panel{position:static;width:auto;order:3;}
       lastOpener = opener || document.activeElement;
       m.classList.add('active'); syncInert(); fitModal(m);
       if (focusEl) focusEl.focus({ preventScroll: true });
-      signalTop();
+      if (!(m === contentModal && !isMobile())) signalTop();   // the desktop card opens in place: nothing to scroll back to
     }
     function tallestCard(card) {
       var t = $('card-title'), b = $('card-body'), keepT = t.textContent, keepB = b.textContent, max = 0;
@@ -1220,42 +1224,51 @@ html.mobile .completion-panel{position:static;width:auto;order:3;}
       t.textContent = keepT; b.textContent = keepB;
       return max;
     }
+    function cardMetrics() {
+      var wrap = $('scale-wrap');
+      var minTop = Math.round(headerEl.getBoundingClientRect().bottom - container.getBoundingClientRect().top) + 49 + 10;   // badge clears the top bar
+      function scaleMid() { return stageEl.getBoundingClientRect().top - container.getBoundingClientRect().top + wrap.offsetTop + wrap.offsetHeight / 2; }
+      return { minTop: minTop, scaleMid: scaleMid, topFor: function (h) { return Math.max(minTop, Math.round(scaleMid() - h / 2)); } };
+    }
+    /* The frame height depends only on the window (never on what is open), so nothing below it jumps:
+       it is made tall enough for the tallest card to centre on the scale, capped at 630px. */
+    function settleFrame() {
+      var root = document.documentElement, card = contentModal.querySelector('.dialog-card');
+      function set(v) { root.style.setProperty('--screen-min', v + 'px'); root.style.setProperty('--frame-h', v + 'px'); }
+      var h = Math.max(parseFloat(root.style.getPropertyValue('--frame-h')) || 0, 580);
+      set(h);
+      var keepMT = card.style.marginTop, keepMax = card.style.maxHeight;
+      card.style.marginTop = '0px'; card.style.maxHeight = '';
+      var max = tallestCard(card), cm = cardMetrics();
+      for (var i = 0; i < 6; i++) {
+        var deficit = cm.minTop + max / 2 - cm.scaleMid();
+        if (deficit > 0.5 && h < 630) { h = Math.min(630, h + Math.ceil(deficit * 2)); set(h); cm = cardMetrics(); } else break;
+      }
+      var fit = cm.topFor(max) + max + 24;
+      if (fit > h && h < 630) { h = Math.min(630, fit); set(h); }
+      card.style.marginTop = keepMT; card.style.maxHeight = keepMax;
+    }
     function fitModal(m) {
       var card = m.querySelector('.dialog-card,.center-modal,.biblio-card');
       var mob = isMobile();
       container.style.minHeight = baseMin();
       if (!card) return;
-      if (m === contentModal) card.style.marginTop = '';
+      if (m === contentModal) { card.style.marginTop = ''; card.style.maxHeight = ''; }
       if (mob) {
         if (m !== biblioOverlay) container.style.minHeight = (card.offsetHeight + 100) + 'px';
         return;
       }
       if (m === contentModal) {
-        /* Card is exactly as tall as its content. It is centred on the scale; if the tallest of the five would
-           push the badge into the top bar (or past the bottom), it sits as close to centre as fits and the frame grows to suit. */
-        var wrap = $('scale-wrap');
-        card.style.minHeight = ''; card.style.marginTop = '0px';
-        var max = tallestCard(card);
-        function rel(el) { var r = el.getBoundingClientRect(), c = container.getBoundingClientRect(); return { top: r.top - c.top }; }
-        /* centre of the scale once it has settled (offset-based, so it ignores the running slide transition) */
-        function scaleMid() { return stageEl.getBoundingClientRect().top - container.getBoundingClientRect().top + wrap.offsetTop + wrap.offsetHeight / 2; }
-        var minTop = Math.round(headerEl.getBoundingClientRect().bottom - container.getBoundingClientRect().top) + 49 + 10;   // badge clears the top bar
-        function topFor(h) { return Math.max(minTop, Math.round(scaleMid() - h / 2)); }
-        for (var i = 0; i < 5; i++) {   // grow the frame until even the tallest card can be centred on the scale
-          var deficit = minTop + max / 2 - scaleMid();
-          if (deficit > 0.5 && container.offsetHeight < 630) container.style.minHeight = Math.min(630, container.offsetHeight + Math.ceil(deficit * 2)) + 'px'; else break;
-        }
-        var fit = topFor(max) + max + 24;   // never let the tallest card run off the bottom
-        if (fit > container.offsetHeight) container.style.minHeight = fit + 'px';
-        var natural = rel(card).top;
-        card.style.marginTop = Math.max(0, topFor(card.offsetHeight) - natural) + 'px';
+        /* centred on the scale; the frame never changes - if a card could not fit it scrolls inside instead */
+        var cm = cardMetrics(), ch = container.offsetHeight;
+        card.style.marginTop = '0px';
+        var natural = card.getBoundingClientRect().top - container.getBoundingClientRect().top;
+        if (card.offsetHeight > ch - cm.minTop - 14) card.style.maxHeight = Math.max(220, ch - cm.minTop - 14) + 'px';
+        card.style.marginTop = Math.max(0, cm.topFor(card.offsetHeight) - natural) + 'px';
       }
     }
     addEventListener('resize', function () { var o = openModalEl(); if (o) setTimeout(function () { fitModal(o); }, 150); });
-    function baseMin() {
-      var cp = $('completion-panel');
-      return (cp && !cp.hidden && !isMobile()) ? '580px' : '';
-    }
+    function baseMin() { return ''; }   // frame height is fixed per window size (see settleFrame)
     function closeModal(m, restore) {
       m.classList.remove('active'); syncInert(); container.style.minHeight = baseMin();
       if (restore !== false && lastOpener && document.contains(lastOpener) && !lastOpener.closest('[inert]')) lastOpener.focus({ preventScroll: true });
@@ -1284,8 +1297,8 @@ html.mobile .completion-panel{position:static;width:auto;order:3;}
     function layoutPans() {
       ['usa', 'china'].forEach(function (side) {
         var items = Object.keys(answered).filter(function (k) { return DATA[k].leader === side; });
-        var wPct = items.length === 1 ? 44 : items.length === 2 ? 40 : 38;
-        var slots = items.length === 1 ? [[28, 58]] : items.length === 2 ? [[8, 60], [52, 60]] : [[9, 60], [53, 60], [31, 92]];
+        var wPct = items.length === 1 ? 50 : items.length === 2 ? 46 : 44;
+        var slots = items.length === 1 ? [[25, 58]] : items.length === 2 ? [[4, 60], [50, 60]] : [[4, 60], [52, 60], [28, 92]];
         items.forEach(function (k, i) {
           var el = $('pan-icon-' + k); if (!el) return;
           var fresh = !el.classList.contains('active');
@@ -1511,10 +1524,10 @@ html.mobile .completion-panel{position:static;width:auto;order:3;}
         var at = f.indexOf(document.activeElement);
         if (m === contentModal && !isMobile()) {   // card first, then the top-bar buttons: step through the list ourselves (DOM order differs)
           e.preventDefault();
-          f[(at < 0 ? (e.shiftKey ? f.length - 1 : 0) : (at + (e.shiftKey ? f.length - 1 : 1)) % f.length)].focus();
+          f[(at < 0 ? (e.shiftKey ? f.length - 1 : 0) : (at + (e.shiftKey ? f.length - 1 : 1)) % f.length)].focus({ preventScroll: true });
         }
-        else if (e.shiftKey && document.activeElement === f[0]) { e.preventDefault(); f[f.length - 1].focus(); }
-        else if (!e.shiftKey && document.activeElement === f[f.length - 1]) { e.preventDefault(); f[0].focus(); }
+        else if (e.shiftKey && document.activeElement === f[0]) { e.preventDefault(); f[f.length - 1].focus({ preventScroll: true }); }
+        else if (!e.shiftKey && document.activeElement === f[f.length - 1]) { e.preventDefault(); f[0].focus({ preventScroll: true }); }
       }
     });
 
@@ -1561,6 +1574,7 @@ html.mobile .completion-panel{position:static;width:auto;order:3;}
       var h = Math.max(Math.min(578, cap), Math.min(targetH, naturalH));
       root.style.setProperty('--screen-min', h + 'px');
       root.style.setProperty('--frame-h', h + 'px');
+      settleFrame();
     }
     var _ft;
     addEventListener('resize', function () { clearTimeout(_ft); _ft = setTimeout(fitScreens, 120); });
