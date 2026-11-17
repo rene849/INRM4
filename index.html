@@ -499,7 +499,7 @@ html.cv-skip .cover-title,html.cv-skip .btn-start{animation:none !important;opac
 
 /* Stage: selection board (left) + balance scale (right). 1px = 1 design unit at 1112x560; --u scales it with the frame */
 .stage-view{position:relative;flex:1 1 auto;min-height:0;width:100%;background:#fff;overflow:hidden;container-type:size;
-  display:grid;grid-template-columns:58fr 42fr;align-items:center;column-gap:clamp(14px,3.2cqw,48px);padding:4px clamp(12px,2cqw,32px) 10px;}
+  display:grid;grid-template-columns:56fr 44fr;align-items:center;column-gap:clamp(20px,3.2cqw,48px);padding:4px clamp(12px,2cqw,32px) 10px;}
 .stage-view>*{--u:min(.0899cqw,.1786cqh);}
 .selection-board{display:grid;grid-template-columns:repeat(6,1fr);row-gap:calc(26*var(--u));column-gap:calc(4*var(--u));align-content:center;}
 .cat-item[data-cat="ai"]{grid-column:1/3;grid-row:1}
@@ -535,7 +535,7 @@ html.cv-skip .cover-title,html.cv-skip .btn-start{animation:none !important;opac
 .scale-beam-wrapper{position:absolute;top:59.5%;left:50%;width:60%;height:7.7%;transform:translate(-50%,-50%) rotate(0deg);transform-origin:50% 50%;transition:transform .85s cubic-bezier(.34,1.3,.64,1);z-index:3;}
 .scale-arm-img{width:100%;height:100%;object-fit:contain;display:block;}
 .basket-usa-group,.basket-china-group{position:absolute;top:-212%;width:62%;transform-origin:50% 74%;transition:transform .85s cubic-bezier(.34,1.3,.64,1);z-index:5;}
-.basket-usa-group{left:-31%}.basket-china-group{right:-31%}
+.basket-usa-group{left:-26%}.basket-china-group{right:-26%}
 .basket-img{width:100%;height:auto;display:block;position:relative;z-index:3;}
 .pan-dropped-icon{position:absolute;width:32%;height:auto;opacity:0;transform:translateY(-20px) scale(.8);transition:opacity .45s ease,transform .55s cubic-bezier(.175,.885,.32,1.275);z-index:2;pointer-events:none;}
 .pan-dropped-icon.active{opacity:1;transform:none;}
@@ -867,7 +867,7 @@ html.mobile .cat-radios{flex:0 0 100%;width:100%;flex-direction:row;gap:8px}
 html.mobile .cat-radios .radio-pill{flex:1 1 0;min-width:0;min-height:44px}
 
 /* mid-width desktop (Moodle with the course drawer open): the longest category name wraps to 3 lines, so every row reserves 3 lines and the USA/China buttons stay level */
-@media (min-width:861px) and (max-width:1149px){ .cat-title{min-height:3.75em} }
+@media (min-width:881px) and (max-width:1149px){ .cat-title{min-height:3.75em} }
 
 /* ===== Feedback layer: one layout for every category (correct or incorrect) ===== */
 .dialog-card{--flag:72px;width:min(860px,92%);max-height:none;padding:66px clamp(22px,5vw,52px) 22px;}
@@ -888,7 +888,7 @@ html.mobile .dark-overlay .dialog-card{margin:0 auto;}
 /* ===== New storyboard layout: feedback card on the left over the selection board, scale stays visible, close (X) only ===== */
 .dialog-footer{display:none;}
 html:not(.mobile) #content-modal{top:60px;background:transparent;pointer-events:none;overflow:visible;justify-content:flex-start;align-items:flex-start;padding:56px 0 14px var(--pad);}
-html:not(.mobile) #content-modal .dialog-card{pointer-events:auto;--flag:70px;width:min(600px,55%);max-width:calc(100% - var(--pad));margin:0;padding:60px clamp(22px,2.4cqw,30px) 30px;}
+html:not(.mobile) #content-modal .dialog-card{pointer-events:auto;--flag:70px;width:min(560px,calc(53% - var(--pad)));max-width:calc(100% - var(--pad));margin:0;padding:56px clamp(20px,2.2cqw,28px) 26px;}
 html:not(.mobile) #content-modal .dialog-header-area{margin-bottom:10px;}
 html:not(.mobile) #content-modal .dialog-divider{margin-bottom:16px;}
 html:not(.mobile) #content-modal .modal-cat-badge{width:98px;height:98px;top:-49px;}
@@ -904,10 +904,10 @@ html:not(.mobile) .fb-open .selection-board{opacity:0;visibility:hidden;}
 html:not(.mobile) .fb-open .scale-stage-wrapper{transform:translateY(-24px);}
 /* Category picker in a light panel (as in the original Hype layout), desktop only */
 @container (min-width:1100px) and (min-height:455px){
-  html:not(.mobile) .selection-board{border:1px solid #D9D9D9;padding:calc(10*var(--u)) calc(14*var(--u));row-gap:calc(14*var(--u));background:#fff;}
+  html:not(.mobile) .selection-board{border:1px solid #D9D9D9;padding-block:calc(20*var(--u));row-gap:calc(18*var(--u));background:#fff;}
 }
 @container (min-height:505px){
-  html:not(.mobile) .selection-board{border:1px solid #D9D9D9;padding:calc(10*var(--u)) calc(14*var(--u));row-gap:calc(14*var(--u));background:#fff;}
+  html:not(.mobile) .selection-board{border:1px solid #D9D9D9;padding-block:calc(20*var(--u));row-gap:calc(18*var(--u));background:#fff;}
 }
 /* (the box only appears when the frame is tall enough to hold it comfortably) */
 @container (max-height:480px){
@@ -935,27 +935,29 @@ html:not(.mobile) .selection-board{
 html:not(.mobile) .cat-item{width:100%;max-width:none;min-width:0;}
 html:not(.mobile) .cat-title{max-width:100%;text-wrap:balance;}
 
-/* Narrow desktop / tablet (both Moodle side menus open, 691px–880px): 2-2-1 grid so options never overlap & feedback stays roomy */
-@container (max-width:860px){
-  html:not(.mobile) .stage-view{grid-template-columns:55fr 45fr;column-gap:16px;}
+/* Narrow desktop / tablet (both Moodle side menus open, 691px–880px): 2-2-1 grid with stacked USA/China pills & non-overlapping feedback card */
+@container (max-width:880px){
+  html:not(.mobile) .stage-view{grid-template-columns:51fr 49fr;column-gap:16px;}
   html:not(.mobile) .selection-board{
     grid-template-columns:repeat(4,1fr);
-    row-gap:10px;
-    column-gap:10px;
-    padding:12px 12px;
+    row-gap:8px;
+    column-gap:8px;
+    padding:12px 10px;
   }
   html:not(.mobile) .cat-item[data-cat="ai"]{grid-column:1/3;grid-row:1;}
   html:not(.mobile) .cat-item[data-cat="fiveG"]{grid-column:3/5;grid-row:1;}
   html:not(.mobile) .cat-item[data-cat="quantum"]{grid-column:1/3;grid-row:2;}
   html:not(.mobile) .cat-item[data-cat="cars"]{grid-column:3/5;grid-row:2;}
   html:not(.mobile) .cat-item[data-cat="semiconductors"]{grid-column:2/4;grid-row:3;}
-  html:not(.mobile) .cat-badge{width:64px;height:64px;min-width:64px;min-height:64px;margin-bottom:4px;}
-  html:not(.mobile) .cat-title{font-size:14.5px;min-height:2.5em;margin-bottom:4px;}
-  html:not(.mobile) .cat-radios{flex-direction:row;justify-content:center;gap:6px;}
-  html:not(.mobile) .radio-pill{width:auto;min-width:0;flex:1 1 0;max-width:104px;font-size:14.5px;padding:3px 6px 3px 8px;gap:5px;}
-  html:not(.mobile) #content-modal .dialog-card{width:min(540px,56%);padding:54px 18px 20px;--flag:56px;}
-  html:not(.mobile) #content-modal .modal-cat-badge{width:84px;height:84px;top:-42px;}
-  html:not(.mobile) #content-modal #card-body{font-size:14.5px;line-height:1.5;}
+  html:not(.mobile) .cat-badge{width:48px;height:48px;min-width:48px;min-height:48px;margin-bottom:3px;}
+  html:not(.mobile) .cat-title{font-size:13.5px;line-height:1.2;min-height:2.4em;margin-bottom:3px;}
+  html:not(.mobile) .cat-radios{flex-direction:column;align-items:center;gap:3px;}
+  html:not(.mobile) .radio-pill{width:112px;min-width:0;min-height:26px;font-size:13.5px;padding:2px 6px 2px 10px;gap:6px;}
+  html:not(.mobile) .scale-assembly{width:min(92%,calc(540*var(--u)));}
+  html:not(.mobile) #content-modal .dialog-card{width:calc(50% - var(--pad));padding:46px 16px 18px;--flag:48px;}
+  html:not(.mobile) #content-modal .modal-cat-badge{width:80px;height:80px;top:-40px;}
+  html:not(.mobile) #content-modal .dialog-card h2{font-size:18px;padding:0 calc(var(--flag) + 6px);}
+  html:not(.mobile) #content-modal #card-body{font-size:14px;line-height:1.48;}
 }
 /* ---- Phone: no multiple choice. One tap target per row; the slide shows who leads and the icon drops onto its pan ---- */
 .m-open,.m-tick{display:none;}
@@ -1214,7 +1216,7 @@ html.mobile .m-tick svg{width:100%;height:100%;display:block;}
       var r = $('srStatus'); if (!r) return;
       r.textContent = ''; setTimeout(function () { r.textContent = txt; }, 60);
     }
-    function signalTop() { try { window.parent.postMessage({ type: 'ce-top', app: 'ce-interactive' }, '*'); } catch (e) {} }
+    function signalTop() { if (!isMobile()) return; try { window.parent.postMessage({ type: 'ce-top', app: 'ce-interactive' }, '*'); } catch (e) {} }
     function openModalEl() { return MODALS.filter(function (m) { return m.classList.contains('active'); })[0]; }
 
     /* Sequential unlocking on mobile (matched to original Hype mobile flow) & Back button state */
@@ -1395,9 +1397,16 @@ html.mobile .m-tick svg{width:100%;height:100%;display:block;}
     }
 
     function placeCompletion() {
-      var p = $('completion-panel'), w = $('scale-wrap');
-      if (isMobile()) { p.style.left = p.style.width = ''; return; }
-      p.style.left = w.offsetLeft + 'px'; p.style.width = w.offsetWidth + 'px';
+      var p = $('completion-panel'), w = $('scale-wrap'), sb = document.querySelector('.selection-board');
+      if (isMobile()) { p.style.left = p.style.width = p.style.bottom = ''; return; }
+      p.style.left = w.offsetLeft + 'px';
+      p.style.width = w.offsetWidth + 'px';
+      if (sb && stageEl) {
+        var sbBottom = sb.offsetTop + sb.offsetHeight;
+        var stageH = stageEl.offsetHeight;
+        var alignBottom = Math.max(16, stageH - sbBottom);
+        p.style.bottom = alignBottom + 'px';
+      }
     }
     function showCompletion() {
       hideMobileFeedback();
