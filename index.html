@@ -210,7 +210,7 @@ html.cv-skip .cover-title,html.cv-skip .btn-start{animation:none !important;opac
 /* ========================================================= */
 .app-header{
   position:relative;
-  z-index:40;
+  z-index:60;
   flex:none;
   height:60px;
   background:#fff;
@@ -596,7 +596,7 @@ html.cv-skip .cover-title,html.cv-skip .btn-start{animation:none !important;opac
 .radio-pill.correct{border-color:var(--ok-line);}
 .radio-pill.incorrect{border-color:var(--no-line);}
 /* 2. Dropped icons sit INSIDE the weighing pan container (behind .basket-img z-index:3, crisp vector sizing) */
-.pan-dropped-icon{z-index:2;width:54%;transform:translateY(-28px);transition:opacity .45s ease,transform .55s cubic-bezier(.175,.885,.32,1.275),left .45s ease,bottom .45s ease,width .45s ease;}
+.pan-dropped-icon{z-index:2;width:58%;transform:translateY(-28px);transition:opacity .45s ease,transform .55s cubic-bezier(.175,.885,.32,1.275),left .45s ease,bottom .45s ease,width .45s ease;}
 .scale-assembly{will-change:transform;}
 #pan-icon-ai{bottom:56%;left:23%}
 #pan-icon-cars{bottom:56%;right:auto;left:23%}
@@ -782,7 +782,7 @@ html.mobile .m-fb-flag img.flag-usa{transform:scale(1.22);}
 html.mobile .m-fb-flag img.flag-china{transform:scale(.7);}
 html.mobile .m-fb-scale-slot{display:flex;justify-content:center;margin:0 0 18px;}
 html.mobile .scale-stage-wrapper{transform:none;width:100%;}
-html.mobile .scale-assembly{width:min(100%,260px);}
+html.mobile .scale-assembly{width:min(100%,310px);}
 html.mobile .m-fb-body{
   font-size:15px;
   line-height:1.65;
@@ -891,11 +891,11 @@ html.mobile .sub-title{white-space:normal;overflow:visible;text-overflow:clip;li
 /* mid-width desktop (Moodle with the course drawer open): the longest category name wraps to 3 lines, so every row reserves 3 lines and the USA/China buttons stay level */
 @media (min-width:881px) and (max-width:1149px){ .cat-title{min-height:3.75em} }
 
-/* ===== Feedback layer: flag matches Storyboard & previous build (straddling divider line with balanced spacing) ===== */
-.dialog-card{--flag:76px;width:min(860px,92%);max-height:none;padding:66px clamp(22px,5vw,52px) 24px;}
+/* ===== Feedback layer: flag bottom aligned with divider line + equal vertical spacing above & below ===== */
+.dialog-card{--flag:68px;width:min(860px,92%);max-height:none;padding:64px 28px 28px;}
 html.mobile .dialog-card{--flag:52px;width:min(780px,92%);padding:60px 18px 20px;}
-.dialog-header-area{position:relative;display:flex;align-items:center;justify-content:center;min-height:60px;padding-bottom:14px;margin:0;}
-.flag-emblem{position:absolute;left:0;top:0;width:var(--flag);height:var(--flag);}
+.dialog-header-area{position:relative;display:flex;align-items:center;justify-content:center;min-height:68px;padding-bottom:14px;margin:0;}
+.flag-emblem{position:absolute;left:0;bottom:0;top:auto;width:var(--flag);height:var(--flag);}
 .dialog-card h2{width:100%;text-align:center;padding:0 calc(var(--flag) + 14px);text-wrap:balance;}
 .dialog-divider{margin:0 0 16px calc(var(--flag) + 14px);}
 #card-body{flex:none;overflow:visible;line-height:1.6;padding-right:0;margin-bottom:16px;}
@@ -909,10 +909,11 @@ html.mobile .dark-overlay .dialog-card{margin:0 auto;}
 /* ===== Desktop feedback card on the left over the selection board, scale stays completely stationary on the right ===== */
 .dialog-footer{display:none;}
 html:not(.mobile) #content-modal{top:60px;background:transparent;pointer-events:none;overflow:visible;justify-content:flex-start;align-items:flex-start;padding:56px 0 14px var(--pad);}
-html:not(.mobile) #content-modal .dialog-card{pointer-events:auto;--flag:76px;width:min(550px,calc(53% - var(--pad)));max-width:calc(100% - var(--pad));margin:0;padding:56px clamp(20px,2.2cqw,28px) 26px;}
-html:not(.mobile) #content-modal .dialog-header-area{min-height:60px;padding-bottom:14px;margin-bottom:0;}
+html:not(.mobile) #content-modal .dialog-card{pointer-events:auto;--flag:68px;width:min(550px,calc(53% - var(--pad)));max-width:calc(100% - var(--pad));margin:0;padding:64px 28px 28px;}
+html:not(.mobile) #content-modal .dialog-card .close-card-btn{top:16px;right:28px;}
+html:not(.mobile) #content-modal .dialog-header-area{min-height:68px;padding-bottom:14px;margin-bottom:0;}
 html:not(.mobile) #content-modal .dialog-divider{margin:0 0 16px calc(var(--flag) + 14px);}
-html:not(.mobile) #content-modal .modal-cat-badge{width:98px;height:98px;top:-49px;}
+html:not(.mobile) #content-modal .modal-cat-badge{width:96px;height:96px;top:-48px;}
 .dialog-card h2{font-size:clamp(19px,2cqw,22px);}
 #card-body{font-size:15px;line-height:1.55;margin-bottom:0;overflow-y:auto;}
 #card-body.is-clamped{overflow:hidden;-webkit-mask-image:linear-gradient(#000 calc(100% - 2.6em),transparent);mask-image:linear-gradient(#000 calc(100% - 2.6em),transparent);}
@@ -980,8 +981,9 @@ html:not(.mobile) .cat-title{max-width:100%;text-wrap:balance;}
   html:not(.mobile) .cat-radios{flex-direction:column;align-items:center;gap:5px;}
   html:not(.mobile) .radio-pill{width:118px;min-width:0;min-height:30px;font-size:14px;padding:3px 8px 3px 12px;gap:8px;}
   html:not(.mobile) .scale-assembly{width:min(94%,calc(520*var(--u)));}
-  html:not(.mobile) #content-modal .dialog-card{width:calc(50% - var(--pad));padding:46px 16px 20px;--flag:54px;}
-  html:not(.mobile) #content-modal .dialog-header-area{min-height:42px;padding-bottom:12px;}
+  html:not(.mobile) #content-modal .dialog-card{width:calc(50% - var(--pad));padding:54px 18px 20px;--flag:52px;}
+  html:not(.mobile) #content-modal .dialog-card .close-card-btn{top:12px;right:18px;}
+  html:not(.mobile) #content-modal .dialog-header-area{min-height:52px;padding-bottom:12px;}
   html:not(.mobile) #content-modal .dialog-divider{margin:0 0 14px calc(var(--flag) + 12px);}
   html:not(.mobile) #content-modal .modal-cat-badge{width:80px;height:80px;top:-40px;}
   html:not(.mobile) #content-modal .dialog-card h2{font-size:18px;padding:0 calc(var(--flag) + 12px);}
@@ -1156,7 +1158,7 @@ html.mobile .m-tick svg{width:100%;height:100%;display:block;}
       </div>
     </div>
 
-      <section class="completion-panel" id="completion-panel" role="dialog" aria-modal="true" aria-label="Completed" hidden>
+      <section class="completion-panel" id="completion-panel" aria-label="Completed" hidden>
         <div class="m-comp-card">
           <div class="m-comp-scale-slot" id="m-comp-scale-slot"></div>
           <p>You have completed this interactive infographic.<span class="m-next-q">What would you like to do next?</span></p>
@@ -1269,13 +1271,10 @@ html.mobile .m-tick svg{width:100%;height:100%;display:block;}
 
     function syncMobileSequence() {
       var mob = isMobile();
-      var firstUnansweredIdx = ORDER.findIndex(function (k) { return !answered[k]; });
-      ORDER.forEach(function (k, idx) {
+      ORDER.forEach(function (k) {
         var item = document.querySelector('.cat-item[data-cat="' + k + '"]');
         if (!item) return;
-        var lockedSeq = mob && !answered[k] && firstUnansweredIdx !== -1 && idx > firstUnansweredIdx;
-        item.classList.toggle('m-locked', lockedSeq);
-        item.classList.remove('m-done');
+        item.classList.remove('m-locked', 'm-done');
         item.querySelectorAll('.radio-pill').forEach(function (p) {
           p.disabled = false;
           if (!answered[k]) p.removeAttribute('aria-disabled');
@@ -1285,9 +1284,8 @@ html.mobile .m-tick svg{width:100%;height:100%;display:block;}
           var done = !!answered[k];
           item.removeAttribute('role'); item.removeAttribute('aria-labelledby');
           tt.setAttribute('aria-hidden', 'true'); if (q) q.setAttribute('aria-hidden', 'true');
-          if (lockedSeq) op.setAttribute('aria-disabled', 'true'); else op.removeAttribute('aria-disabled');
-          var prevTitle = idx > 0 ? DATA[ORDER[idx - 1]].title : '';
-          op.setAttribute('aria-label', DATA[k].title + (lockedSeq ? ' \u2013 locked until ' + prevTitle + ' has been viewed' : done ? ' \u2013 viewed, open again' : ' \u2013 see who is in the lead'));
+          op.removeAttribute('aria-disabled');
+          op.setAttribute('aria-label', DATA[k].title + (done ? ' \u2013 viewed, open again' : ' \u2013 see who is in the lead'));
         } else {
           item.setAttribute('role', 'group'); item.setAttribute('aria-labelledby', 't-' + k + ' q-' + k);
           tt.removeAttribute('aria-hidden'); if (q) q.removeAttribute('aria-hidden');
@@ -1302,7 +1300,15 @@ html.mobile .m-tick svg{width:100%;height:100%;display:block;}
       var om = openModalEl(), mob = isMobile();
       var fbOnly = om === contentModal && !mob;
       var mobBibOnly = om === biblioOverlay && mob;
-      var mobCompOpen = mob && !$('completion-panel').hidden;
+      var compEl = $('completion-panel');
+      var mobCompOpen = mob && !compEl.hidden;
+      if (mobCompOpen) {
+        compEl.setAttribute('role', 'dialog');
+        compEl.setAttribute('aria-modal', 'true');
+      } else {
+        compEl.removeAttribute('role');
+        compEl.removeAttribute('aria-modal');
+      }
       coverView.toggleAttribute('inert', anyOpen || mobCompOpen);
       headerEl.toggleAttribute('inert', coverOpen || mobCompOpen || (anyOpen && !fbOnly && !mobBibOnly));
       stageEl.toggleAttribute('inert', coverOpen || anyOpen || mobCompOpen);
@@ -1436,8 +1442,8 @@ html.mobile .m-tick svg{width:100%;height:100%;display:block;}
     function layoutPans() {
       ['usa', 'china'].forEach(function (side) {
         var items = Object.keys(answered).filter(function (k) { return DATA[k].leader === side; });
-        var wPct = items.length === 1 ? 56 : items.length === 2 ? 50 : 46;
-        var slots = items.length === 1 ? [[22, 56]] : items.length === 2 ? [[1, 58], [49, 58]] : [[2, 58], [52, 58], [27, 92]];
+        var wPct = items.length === 1 ? 60 : items.length === 2 ? 54 : 50;
+        var slots = items.length === 1 ? [[20, 55]] : items.length === 2 ? [[-2, 57], [48, 57]] : [[-1, 57], [51, 57], [25, 91]];
         items.forEach(function (k, i) {
           var el = $('pan-icon-' + k); if (!el) return;
           var fresh = !el.classList.contains('active');
@@ -1503,10 +1509,10 @@ html.mobile .m-tick svg{width:100%;height:100%;display:block;}
       if (isMobile()) { p.style.left = p.style.width = p.style.bottom = ''; return; }
       p.style.left = w.offsetLeft + 'px';
       p.style.width = w.offsetWidth + 'px';
-      if (sb && stageEl) {
-        var sbBottom = sb.offsetTop + sb.offsetHeight;
-        var stageH = stageEl.offsetHeight;
-        var alignBottom = Math.max(16, stageH - sbBottom);
+      if (sb && stageEl && container) {
+        var sbBottomInContainer = stageEl.offsetTop + sb.offsetTop + sb.offsetHeight;
+        var containerH = container.offsetHeight;
+        var alignBottom = Math.max(16, containerH - sbBottomInContainer);
         p.style.bottom = alignBottom + 'px';
       }
     }
@@ -1621,13 +1627,26 @@ html.mobile .m-tick svg{width:100%;height:100%;display:block;}
         p.addEventListener('click', function () { choose(item.dataset.cat, p.dataset.choice, p); });
       });
     });
+    function openMobileCategory(cat, opener) {
+      var d = DATA[cat];
+      if (!d || !isMobile()) return;
+      if (answered[cat]) {
+        showMobileFeedback(cat, d.title + ': ' + (d.leader === 'usa' ? 'the USA' : 'China') + ' is in the lead.');
+        return;
+      }
+      choose(cat, d.leader, opener, true);
+    }
     document.querySelectorAll('.m-open').forEach(function (b) {
-      b.addEventListener('click', function () {
-        var cat = b.dataset.cat, d = DATA[cat];
+      b.addEventListener('click', function (e) {
+        e.stopPropagation();
+        openMobileCategory(b.dataset.cat, b);
+      });
+    });
+    document.querySelectorAll('.cat-item').forEach(function (item) {
+      item.addEventListener('click', function () {
         if (!isMobile()) return;
-        if (b.getAttribute('aria-disabled') === 'true') { announce('Locked. View the category above first.'); return; }
-        if (answered[cat]) { showMobileFeedback(cat, d.title + ': ' + (d.leader === 'usa' ? 'the USA' : 'China') + ' is in the lead.'); return; }
-        choose(cat, d.leader, b, true);
+        var op = item.querySelector('.m-open');
+        openMobileCategory(item.dataset.cat, op);
       });
     });
     $('cardMore').addEventListener('click', function () {
