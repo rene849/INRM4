@@ -931,6 +931,15 @@ html.mobile .completion-panel{position:static;width:auto;order:3;}
 html:not(.mobile) .selection-board{--w:max(120px,calc(160*var(--u)));padding-inline:max(8px,calc(100%/8 - 3*var(--w)/8));}
 html:not(.mobile) .cat-item{width:min(var(--w),100%);max-width:none;min-width:0;}
 html:not(.mobile) .cat-title{max-width:100%;text-wrap:balance;}
+/* ---- Phone: no multiple choice. One tap target per row; the slide shows who leads and the icon drops onto its pan ---- */
+.m-open,.m-tick{display:none;}
+html.mobile .cat-item{position:relative;}
+html.mobile .cat-radios{display:none;}
+html.mobile .m-open{display:block;position:absolute;inset:0;width:100%;height:100%;background:transparent;border:0;border-radius:0;cursor:pointer;z-index:2;}
+html.mobile .m-open:focus-visible{outline:3px solid var(--navy-deep);outline-offset:-4px;background:rgba(71,94,209,.08);}
+html.mobile .cat-item.m-locked .m-open{cursor:default;}
+html.mobile .m-done .m-tick{display:block;order:3;flex:none;width:26px;height:26px;color:var(--ok-ink);}
+html.mobile .m-tick svg{width:100%;height:100%;display:block;}
 </style>
 
 </head>
@@ -988,10 +997,11 @@ html:not(.mobile) .cat-title{max-width:100%;text-wrap:balance;}
       <h1 class="sr-only">Who carries more weight?</h1>
       <div class="m-instructions" id="m-instructions">
         <p>The US and China are going head-to-head in the realm of information technology: AI, 5G, quantum computing and communications, self-driving cars and semiconductors.</p>
-        <p>Take a guess as to who is in the lead in each of these categories.</p>
+        <p>To see who is in the lead in each of these categories, click on the respective icons and see onto which country’s weighing pan it drops.</p>
       </div>
       <section class="selection-board" aria-label="Technology categories">
         <div class="cat-item" data-cat="ai" role="group" aria-labelledby="t-ai q-ai">
+          <button type="button" class="m-open" data-cat="ai"></button><span class="m-tick" aria-hidden="true"><svg viewBox="0 0 20 20" focusable="false"><circle cx="10" cy="10" r="8.25" fill="none" stroke="currentColor" stroke-width="1.8"/><polyline points="6.3 10.3 8.9 12.9 13.9 7.6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
           <div class="cat-badge" aria-hidden="true"><img src="Resources/PastedVector-52.svg" alt=""></div>
           <span class="cat-title" id="t-ai">AI</span><span class="sr-only" id="q-ai">– who is in the lead?</span>
           <div class="cat-radios">
@@ -1000,6 +1010,7 @@ html:not(.mobile) .cat-title{max-width:100%;text-wrap:balance;}
           </div>
         </div>
         <div class="cat-item" data-cat="fiveG" role="group" aria-labelledby="t-fiveG q-fiveG">
+          <button type="button" class="m-open" data-cat="fiveG"></button><span class="m-tick" aria-hidden="true"><svg viewBox="0 0 20 20" focusable="false"><circle cx="10" cy="10" r="8.25" fill="none" stroke="currentColor" stroke-width="1.8"/><polyline points="6.3 10.3 8.9 12.9 13.9 7.6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
           <div class="cat-badge" aria-hidden="true"><img src="Resources/PastedVector-62.svg" alt=""></div>
           <span class="cat-title" id="t-fiveG">5G</span><span class="sr-only" id="q-fiveG">– who is in the lead?</span>
           <div class="cat-radios">
@@ -1008,6 +1019,7 @@ html:not(.mobile) .cat-title{max-width:100%;text-wrap:balance;}
           </div>
         </div>
         <div class="cat-item" data-cat="quantum" role="group" aria-labelledby="t-quantum q-quantum">
+          <button type="button" class="m-open" data-cat="quantum"></button><span class="m-tick" aria-hidden="true"><svg viewBox="0 0 20 20" focusable="false"><circle cx="10" cy="10" r="8.25" fill="none" stroke="currentColor" stroke-width="1.8"/><polyline points="6.3 10.3 8.9 12.9 13.9 7.6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
           <div class="cat-badge" aria-hidden="true"><img src="Resources/PastedVector-63.svg" alt=""></div>
           <span class="cat-title" id="t-quantum">Quantum computing and communications</span><span class="sr-only" id="q-quantum">– who is in the lead?</span>
           <div class="cat-radios">
@@ -1016,6 +1028,7 @@ html:not(.mobile) .cat-title{max-width:100%;text-wrap:balance;}
           </div>
         </div>
         <div class="cat-item" data-cat="cars" role="group" aria-labelledby="t-cars q-cars">
+          <button type="button" class="m-open" data-cat="cars"></button><span class="m-tick" aria-hidden="true"><svg viewBox="0 0 20 20" focusable="false"><circle cx="10" cy="10" r="8.25" fill="none" stroke="currentColor" stroke-width="1.8"/><polyline points="6.3 10.3 8.9 12.9 13.9 7.6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
           <div class="cat-badge" aria-hidden="true"><img src="Resources/PastedVector-64.svg" alt=""></div>
           <span class="cat-title" id="t-cars">Self-driving cars</span><span class="sr-only" id="q-cars">– who is in the lead?</span>
           <div class="cat-radios">
@@ -1024,6 +1037,7 @@ html:not(.mobile) .cat-title{max-width:100%;text-wrap:balance;}
           </div>
         </div>
         <div class="cat-item" data-cat="semiconductors" role="group" aria-labelledby="t-semiconductors q-semiconductors">
+          <button type="button" class="m-open" data-cat="semiconductors"></button><span class="m-tick" aria-hidden="true"><svg viewBox="0 0 20 20" focusable="false"><circle cx="10" cy="10" r="8.25" fill="none" stroke="currentColor" stroke-width="1.8"/><polyline points="6.3 10.3 8.9 12.9 13.9 7.6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
           <div class="cat-badge" aria-hidden="true"><img src="Resources/PastedVector-65.svg" alt=""></div>
           <span class="cat-title" id="t-semiconductors">Semiconductors</span><span class="sr-only" id="q-semiconductors">– who is in the lead?</span>
           <div class="cat-radios">
@@ -1195,6 +1209,19 @@ html:not(.mobile) .cat-title{max-width:100%;text-wrap:balance;}
             if (!answered[k]) p.removeAttribute('aria-disabled');
           }
         });
+        var tt = item.querySelector('.cat-title'), q = $('q-' + k), op = item.querySelector('.m-open');
+        if (mob) {   // phone: the row is one button (no USA/China question), so the group semantics are dropped
+          var done = !!answered[k];
+          item.removeAttribute('role'); item.removeAttribute('aria-labelledby');
+          tt.setAttribute('aria-hidden', 'true'); if (q) q.setAttribute('aria-hidden', 'true');
+          item.classList.toggle('m-done', done);
+          if (lockedSeq) op.setAttribute('aria-disabled', 'true'); else op.removeAttribute('aria-disabled');
+          op.setAttribute('aria-label', DATA[k].title + (lockedSeq ? ' \u2013 locked until the category above has been viewed' : done ? ' \u2013 viewed, open again' : ' \u2013 see who is in the lead'));
+        } else {
+          item.setAttribute('role', 'group'); item.setAttribute('aria-labelledby', 't-' + k + ' q-' + k);
+          tt.removeAttribute('aria-hidden'); if (q) q.removeAttribute('aria-hidden');
+          item.classList.remove('m-done');
+        }
       });
     }
 
@@ -1275,7 +1302,7 @@ html:not(.mobile) .cat-title{max-width:100%;text-wrap:balance;}
     }
     function focusNextCategory() {
       var next = ORDER.filter(function (k) { return !answered[k]; })[0] || ORDER[0];
-      var b = document.querySelector('.cat-item[data-cat="' + next + '"] .radio-pill');
+      var b = document.querySelector('.cat-item[data-cat="' + next + '"] ' + (isMobile() ? '.m-open' : '.radio-pill'));
       if (b && !b.disabled) b.focus({ preventScroll: true });
     }
 
@@ -1359,11 +1386,21 @@ html:not(.mobile) .cat-title{max-width:100%;text-wrap:balance;}
     addEventListener('resize', function () { if (!$('completion-panel').hidden) placeCompletion(); });
 
     /* ---------- answering ---------- */
-    function choose(cat, choice, btn) {
+    function choose(cat, choice, btn, view) {
       if (answered[cat] || modalTimer || openModalEl()) return;
       if (btn && btn.disabled) return;
-      var d = DATA[cat], ok = choice === d.leader, who = d.leader === 'usa' ? 'the USA' : 'China';
+      var d = DATA[cat], ok = view || choice === d.leader, who = d.leader === 'usa' ? 'the USA' : 'China';
       answered[cat] = choice; loads[d.leader]++;
+      if (view) {   // phone: nothing to mark - open the slide, then let the icon drop onto its pan so it is seen
+        syncMobileSequence();
+        var vres = d.title + ': ' + who + ' is in the lead.';
+        announce(vres);
+        showMobileFeedback(cat, vres);
+        setTimeout(function () {
+          layoutPans(); var ic = $('pan-icon-' + cat); if (ic) ic.classList.add('active'); updateScale();
+        }, 350);
+        return;
+      }
       document.querySelectorAll('.cat-item[data-cat="' + cat + '"] .radio-pill').forEach(function (p) {
         p.classList.add('locked'); p.setAttribute('aria-disabled', 'true');
         if (p.dataset.choice === choice) {
@@ -1421,6 +1458,15 @@ html:not(.mobile) .cat-title{max-width:100%;text-wrap:balance;}
     document.querySelectorAll('.cat-item').forEach(function (item) {
       item.querySelectorAll('.radio-pill').forEach(function (p) {
         p.addEventListener('click', function () { choose(item.dataset.cat, p.dataset.choice, p); });
+      });
+    });
+    document.querySelectorAll('.m-open').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var cat = b.dataset.cat, d = DATA[cat];
+        if (!isMobile()) return;
+        if (b.getAttribute('aria-disabled') === 'true') { announce('Locked. View the category above first.'); return; }
+        if (answered[cat]) { showMobileFeedback(cat, d.title + ': ' + (d.leader === 'usa' ? 'the USA' : 'China') + ' is in the lead.'); return; }
+        choose(cat, d.leader, b, true);
       });
     });
     $('close-dialog-btn').addEventListener('click', closeFeedback);
