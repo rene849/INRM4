@@ -579,6 +579,7 @@ html.cv-skip .cover-title,html.cv-skip .btn-start{animation:none !important;opac
 #intro-modal .center-modal .modal-copy+.modal-copy{margin-top:0;}
 #intro-modal .center-modal .modal-copy:last-of-type{margin-bottom:calc(var(--im-pad) * .8);}
 #intro-modal .center-modal .action-btn{display:flex;margin:0 auto;}
+#intro-copy:focus{outline:none;}
 
 /* ===== Activity slide polish ===== */
 /* 1. Text: 16px minimum (matches M2 body text) */
@@ -776,7 +777,7 @@ html.mobile .m-fb-flag{
   align-items:center;
   justify-content:center;
 }
-html.mobile .m-fb-flag.is-animating{animation:m-flag-swipe .48s cubic-bezier(.22,1,.36,1) both;}
+html.mobile .m-fb-flag.is-animating{animation:m-flag-swipe .6s cubic-bezier(.22,1,.36,1) var(--fd,.9s) both;}
 html.mobile .m-fb-flag img{width:100%;height:100%;object-fit:contain;display:block;}
 html.mobile .m-fb-flag img.flag-usa{transform:scale(1.22);}
 html.mobile .m-fb-flag img.flag-china{transform:scale(.7);}
@@ -1068,7 +1069,7 @@ html.mobile .cat-item.m-locked .m-open{cursor:not-allowed}
     </header>
 
     <!-- CATEGORY FEEDBACK -->
-    <div class="dark-overlay" id="content-modal" role="dialog" aria-modal="true" aria-labelledby="card-title">
+    <div class="dark-overlay" id="content-modal" role="dialog" aria-modal="true" aria-label="Result">
       <div class="dialog-card">
         <div class="modal-cat-badge" id="modal-cat-badge" aria-hidden="true"></div>
         <div class="dialog-header-area">
@@ -1094,7 +1095,7 @@ html.mobile .cat-item.m-locked .m-open{cursor:not-allowed}
         <div class="cat-item" data-cat="ai" role="group" aria-labelledby="t-ai q-ai">
           <button type="button" class="m-open" data-cat="ai"></button><span class="m-tick" aria-hidden="true"><svg viewBox="0 0 20 20" focusable="false"><circle cx="10" cy="10" r="8.25" fill="none" stroke="currentColor" stroke-width="1.8"/><polyline points="6.3 10.3 8.9 12.9 13.9 7.6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
           <div class="cat-badge" aria-hidden="true"><img src="Resources/PastedVector-52.svg" alt=""></div>
-          <span class="cat-title" id="t-ai">AI</span><span class="sr-only" id="q-ai">– who is in the lead?</span>
+          <span class="cat-title" id="t-ai">AI</span><span class="sr-only" id="q-ai">– who is in the lead? Choose USA or China.</span>
           <div class="cat-radios">
             <button type="button" class="radio-pill" data-choice="usa" aria-pressed="false"><span class="radio-circle" aria-hidden="true"><span class="radio-circle-dot"></span></span><span class="rp-label">USA</span><span class="rp-mark" aria-hidden="true"></span><span class="sr-only rp-res"></span></button>
             <button type="button" class="radio-pill" data-choice="china" aria-pressed="false"><span class="radio-circle" aria-hidden="true"><span class="radio-circle-dot"></span></span><span class="rp-label">China</span><span class="rp-mark" aria-hidden="true"></span><span class="sr-only rp-res"></span></button>
@@ -1103,7 +1104,7 @@ html.mobile .cat-item.m-locked .m-open{cursor:not-allowed}
         <div class="cat-item" data-cat="fiveG" role="group" aria-labelledby="t-fiveG q-fiveG">
           <button type="button" class="m-open" data-cat="fiveG"></button><span class="m-tick" aria-hidden="true"><svg viewBox="0 0 20 20" focusable="false"><circle cx="10" cy="10" r="8.25" fill="none" stroke="currentColor" stroke-width="1.8"/><polyline points="6.3 10.3 8.9 12.9 13.9 7.6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
           <div class="cat-badge" aria-hidden="true"><img src="Resources/PastedVector-62.svg" alt=""></div>
-          <span class="cat-title" id="t-fiveG">5G</span><span class="sr-only" id="q-fiveG">– who is in the lead?</span>
+          <span class="cat-title" id="t-fiveG">5G</span><span class="sr-only" id="q-fiveG">– who is in the lead? Choose USA or China.</span>
           <div class="cat-radios">
             <button type="button" class="radio-pill" data-choice="usa" aria-pressed="false"><span class="radio-circle" aria-hidden="true"><span class="radio-circle-dot"></span></span><span class="rp-label">USA</span><span class="rp-mark" aria-hidden="true"></span><span class="sr-only rp-res"></span></button>
             <button type="button" class="radio-pill" data-choice="china" aria-pressed="false"><span class="radio-circle" aria-hidden="true"><span class="radio-circle-dot"></span></span><span class="rp-label">China</span><span class="rp-mark" aria-hidden="true"></span><span class="sr-only rp-res"></span></button>
@@ -1112,7 +1113,7 @@ html.mobile .cat-item.m-locked .m-open{cursor:not-allowed}
         <div class="cat-item" data-cat="quantum" role="group" aria-labelledby="t-quantum q-quantum">
           <button type="button" class="m-open" data-cat="quantum"></button><span class="m-tick" aria-hidden="true"><svg viewBox="0 0 20 20" focusable="false"><circle cx="10" cy="10" r="8.25" fill="none" stroke="currentColor" stroke-width="1.8"/><polyline points="6.3 10.3 8.9 12.9 13.9 7.6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
           <div class="cat-badge" aria-hidden="true"><img src="Resources/PastedVector-63.svg" alt=""></div>
-          <span class="cat-title" id="t-quantum">Quantum computing and communications</span><span class="sr-only" id="q-quantum">– who is in the lead?</span>
+          <span class="cat-title" id="t-quantum">Quantum computing and communications</span><span class="sr-only" id="q-quantum">– who is in the lead? Choose USA or China.</span>
           <div class="cat-radios">
             <button type="button" class="radio-pill" data-choice="usa" aria-pressed="false"><span class="radio-circle" aria-hidden="true"><span class="radio-circle-dot"></span></span><span class="rp-label">USA</span><span class="rp-mark" aria-hidden="true"></span><span class="sr-only rp-res"></span></button>
             <button type="button" class="radio-pill" data-choice="china" aria-pressed="false"><span class="radio-circle" aria-hidden="true"><span class="radio-circle-dot"></span></span><span class="rp-label">China</span><span class="rp-mark" aria-hidden="true"></span><span class="sr-only rp-res"></span></button>
@@ -1121,7 +1122,7 @@ html.mobile .cat-item.m-locked .m-open{cursor:not-allowed}
         <div class="cat-item" data-cat="cars" role="group" aria-labelledby="t-cars q-cars">
           <button type="button" class="m-open" data-cat="cars"></button><span class="m-tick" aria-hidden="true"><svg viewBox="0 0 20 20" focusable="false"><circle cx="10" cy="10" r="8.25" fill="none" stroke="currentColor" stroke-width="1.8"/><polyline points="6.3 10.3 8.9 12.9 13.9 7.6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
           <div class="cat-badge" aria-hidden="true"><img src="Resources/PastedVector-64.svg" alt=""></div>
-          <span class="cat-title" id="t-cars">Self-driving cars</span><span class="sr-only" id="q-cars">– who is in the lead?</span>
+          <span class="cat-title" id="t-cars">Self-driving cars</span><span class="sr-only" id="q-cars">– who is in the lead? Choose USA or China.</span>
           <div class="cat-radios">
             <button type="button" class="radio-pill" data-choice="usa" aria-pressed="false"><span class="radio-circle" aria-hidden="true"><span class="radio-circle-dot"></span></span><span class="rp-label">USA</span><span class="rp-mark" aria-hidden="true"></span><span class="sr-only rp-res"></span></button>
             <button type="button" class="radio-pill" data-choice="china" aria-pressed="false"><span class="radio-circle" aria-hidden="true"><span class="radio-circle-dot"></span></span><span class="rp-label">China</span><span class="rp-mark" aria-hidden="true"></span><span class="sr-only rp-res"></span></button>
@@ -1130,7 +1131,7 @@ html.mobile .cat-item.m-locked .m-open{cursor:not-allowed}
         <div class="cat-item" data-cat="semiconductors" role="group" aria-labelledby="t-semiconductors q-semiconductors">
           <button type="button" class="m-open" data-cat="semiconductors"></button><span class="m-tick" aria-hidden="true"><svg viewBox="0 0 20 20" focusable="false"><circle cx="10" cy="10" r="8.25" fill="none" stroke="currentColor" stroke-width="1.8"/><polyline points="6.3 10.3 8.9 12.9 13.9 7.6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
           <div class="cat-badge" aria-hidden="true"><img src="Resources/PastedVector-65.svg" alt=""></div>
-          <span class="cat-title" id="t-semiconductors">Semiconductors</span><span class="sr-only" id="q-semiconductors">– who is in the lead?</span>
+          <span class="cat-title" id="t-semiconductors">Semiconductors</span><span class="sr-only" id="q-semiconductors">– who is in the lead? Choose USA or China.</span>
           <div class="cat-radios">
             <button type="button" class="radio-pill" data-choice="usa" aria-pressed="false"><span class="radio-circle" aria-hidden="true"><span class="radio-circle-dot"></span></span><span class="rp-label">USA</span><span class="rp-mark" aria-hidden="true"></span><span class="sr-only rp-res"></span></button>
             <button type="button" class="radio-pill" data-choice="china" aria-pressed="false"><span class="radio-circle" aria-hidden="true"><span class="radio-circle-dot"></span></span><span class="rp-label">China</span><span class="rp-mark" aria-hidden="true"></span><span class="sr-only rp-res"></span></button>
@@ -1175,16 +1176,16 @@ html.mobile .cat-item.m-locked .m-open{cursor:not-allowed}
         <div class="m-comp-card">
           <div class="m-comp-scale-slot" id="m-comp-scale-slot"></div>
           <p>You have completed this interactive infographic.<span class="m-next-q">What would you like to do next?</span></p>
-          <button type="button" class="action-btn btn-outline" id="completion-biblio-btn"><span class="d-only-lbl">View bibliography</span><span class="m-only-lbl">Bibliography</span></button>
           <button type="button" class="action-btn m-comp-exit" id="m-completion-exit-btn">Exit</button>
+          <button type="button" class="action-btn btn-outline" id="completion-biblio-btn"><span class="d-only-lbl">View bibliography</span><span class="m-only-lbl">Bibliography</span></button>
         </div>
       </section>
 
     <!-- INTRO -->
     <div class="dark-overlay" id="intro-modal" role="dialog" aria-modal="true" aria-label="Introduction">
       <div class="center-modal">
-        <p class="modal-copy">The US and China are going head-to-head in the realm of information technology: AI, 5G, quantum computing and communications, self-driving cars and semiconductors.</p>
-        <p class="modal-copy">Take a guess as to who is in the lead in each of these categories.</p>
+        <p class="modal-copy" id="intro-copy" tabindex="-1">The US and China are going head-to-head in the realm of information technology: AI, 5G, quantum computing and communications, self-driving cars and semiconductors.</p>
+        <p class="modal-copy">Take a guess as to who is in the lead in each of these categories. For each one, select USA or China.</p>
         <button class="action-btn" id="intro-continue-btn" type="button">Continue</button>
       </div>
     </div>
@@ -1263,6 +1264,7 @@ html.mobile .cat-item.m-locked .m-open{cursor:not-allowed}
     var headerEl = document.querySelector('.app-header'), stageEl = $('stage');
 
     function isMobile() { return document.documentElement.classList.contains('mobile'); }
+    function leadText(d) { return (d.leader === 'usa' ? 'The USA' : 'China') + ' is in the lead.'; }
     function announce(txt) {
       var r = $('srStatus'); if (!r) return;
       r.textContent = ''; setTimeout(function () { r.textContent = txt; }, 60);
@@ -1312,7 +1314,7 @@ html.mobile .cat-item.m-locked .m-open{cursor:not-allowed}
           op.setAttribute('aria-label', DATA[k].title + (done ? ' \u2013 viewed, open again' : locked ? ' \u2013 locked, finish ' + (prevT ? DATA[prevT].title : 'the previous category') + ' first' : ' \u2013 see who is in the lead'));
         } else {
           item.setAttribute('role', 'group'); item.setAttribute('aria-labelledby', 't-' + k + ' q-' + k);
-          tt.removeAttribute('aria-hidden'); if (q) q.removeAttribute('aria-hidden');
+          tt.setAttribute('aria-hidden', 'true'); if (q) q.setAttribute('aria-hidden', 'true');
         }
       });
       updateMobileBackBtn();
@@ -1531,11 +1533,13 @@ html.mobile .cat-item.m-locked .m-open{cursor:not-allowed}
       fbFlag.setAttribute('aria-label', d.leader === 'usa' ? 'The USA is in the lead' : 'China is in the lead');
       fbFlag.innerHTML = flagHTML(d.leader);
       void fbFlag.offsetWidth;
+      var dropped = $('pan-icon-' + cat);   /* first view: wait for the icon to land on its pan; a revisit has nothing to wait for */
+      fbFlag.style.setProperty('--fd', dropped && dropped.classList.contains('active') ? '.15s' : '.9s');
       fbFlag.classList.add('is-animating');
       fbBody.classList.add('is-animating');
       $('m-fb-scale-slot').appendChild($('scale-wrap'));
       updateMobileBackBtn();
-      var nb = $('m-fb-next-btn'); if (nb) nb.textContent = nextMobileCat(cat) ? 'Next' : 'Finish';
+      var nb = $('m-fb-next-btn'); if (nb) nb.textContent = 'Next';
       signalTop();
       $('m-fb-title').focus({ preventScroll: true });
     }
@@ -1601,8 +1605,7 @@ html.mobile .cat-item.m-locked .m-open{cursor:not-allowed}
       answered[cat] = choice; loads[d.leader]++;
       if (view) {   // phone: nothing to mark - open the slide, then let the icon drop onto its pan so it is seen
         syncMobileSequence();
-        var vres = d.title + ': ' + who + ' is in the lead.';
-        announce(vres);
+        var vres = leadText(d);
         showMobileFeedback(cat, vres);
         setTimeout(function () {
           layoutPans(); var ic = $('pan-icon-' + cat); if (ic) ic.classList.add('active'); updateScale();
@@ -1623,8 +1626,7 @@ html.mobile .cat-item.m-locked .m-open{cursor:not-allowed}
       var icon = $('pan-icon-' + cat); layoutPans(); if (icon) icon.classList.add('active');
       updateScale();
       syncMobileSequence();
-      var res = (ok ? 'Correct. ' : 'Not quite. ') + d.title + ': ' + who + ' is in the lead.';
-      announce(res);
+      var res = (ok ? 'Correct. ' : 'Not quite. ') + leadText(d);
       modalTimer = setTimeout(function () {
         modalTimer = null;
         if (isMobile()) {
@@ -1681,7 +1683,7 @@ html.mobile .cat-item.m-locked .m-open{cursor:not-allowed}
         return;
       }
       if (answered[cat]) {
-        showMobileFeedback(cat, d.title + ': ' + (d.leader === 'usa' ? 'the USA' : 'China') + ' is in the lead.');
+        showMobileFeedback(cat, leadText(d));
         return;
       }
       choose(cat, d.leader, opener, true);
@@ -1718,7 +1720,7 @@ html.mobile .cat-item.m-locked .m-open{cursor:not-allowed}
         if (instr) { instr.setAttribute('tabindex', '-1'); instr.focus({ preventScroll: true }); }
         return;
       }
-      setTimeout(function () { openModal(introModal, $('intro-continue-btn'), $('btn-reset')); }, 300);
+      setTimeout(function () { openModal(introModal, $('intro-copy'), $('btn-reset')); }, 300);
     });
     $('intro-continue-btn').addEventListener('click', function () { closeModal(introModal, false); focusNextCategory(); });
 
@@ -1764,7 +1766,7 @@ html.mobile .cat-item.m-locked .m-open{cursor:not-allowed}
         if (instr) { instr.setAttribute('tabindex', '-1'); instr.focus({ preventScroll: true }); }
         return;
       }
-      openModal(introModal, $('intro-continue-btn'), $('btn-reset'));
+      openModal(introModal, $('intro-copy'), $('btn-reset'));
     }
 
     function openBiblio(opener) { openModal(biblioOverlay, $('bib-heading'), opener); }
@@ -1779,7 +1781,7 @@ html.mobile .cat-item.m-locked .m-open{cursor:not-allowed}
       var prev = mobileHistory.pop();
       if (prev && prev.type === 'cat' && DATA[prev.cat]) {
         var d = DATA[prev.cat];
-        showMobileFeedback(prev.cat, d.title + ': ' + (d.leader === 'usa' ? 'the USA' : 'China') + ' is in the lead.', true);
+        showMobileFeedback(prev.cat, leadText(d), true);
         return;
       }
       if (prev && prev.type === 'complete') {
@@ -1861,6 +1863,7 @@ html.mobile .cat-item.m-locked .m-open{cursor:not-allowed}
           e.preventDefault();
           f[(at < 0 ? (e.shiftKey ? f.length - 1 : 0) : (at + (e.shiftKey ? f.length - 1 : 1)) % f.length)].focus({ preventScroll: true });
         }
+        else if (at < 0) { e.preventDefault(); f[e.shiftKey ? f.length - 1 : 0].focus({ preventScroll: true }); }   // focus is on the dialog's own text/heading
         else if (e.shiftKey && document.activeElement === f[0]) { e.preventDefault(); f[f.length - 1].focus({ preventScroll: true }); }
         else if (!e.shiftKey && document.activeElement === f[f.length - 1]) { e.preventDefault(); f[0].focus({ preventScroll: true }); }
       }
