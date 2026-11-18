@@ -206,7 +206,8 @@ html.cv-skip .cover-title,html.cv-skip .btn-start{animation:none !important;opac
 /* ========================================================= */
 /* 2. APPBAR & ICON BUTTONS (identical to M1 & M5)           */
 /* ========================================================= */
-.app-header{
+/* The top bar comes after the activity in reading and Tab order, but stays at the top of the frame */
+.app-header{order:-1;
   position:relative;
   z-index:60;
   flex:none;
@@ -746,7 +747,7 @@ html.mobile .stage-view.m-showing-feedback .selection-board{display:none;}
 
 /* Mobile Feedback View (larger 136px flag + Hype swipe/fade-in animation) */
 @keyframes m-flag-swipe{
-  0%{opacity:0;transform:translateX(34px) scale(.92);}
+  0%{opacity:0;transform:translateX(-34px) scale(.92);}
   100%{opacity:1;transform:translateX(0) scale(1);}
 }
 @keyframes m-fb-fade{
@@ -1044,43 +1045,6 @@ html.mobile .cat-item.m-locked .m-open{cursor:not-allowed}
       </div>
     </section>
 
-    <!-- APPBAR -->
-    <header class="app-header">
-      <div class="appbar-inner">
-        <div class="brand-section"><span class="sub-title">Who carries more weight?</span></div>
-        <nav class="header-buttons" aria-label="Interactive Navigation">
-          <button class="icon-btn mobile-only-btn" id="btn-back" type="button" aria-label="Back" disabled>
-            <svg viewBox="0 0 33 33" aria-hidden="true" focusable="false"><path class="ring" d="M16.5,32.5a16,16,0,1,0-16-16,16,16,0,0,0,16,16"/><polyline points="18.6 10.6 12.7 16.5 18.6 22.4" fill="none" stroke="var(--glyph)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
-          <button class="icon-btn" id="btn-reset" type="button" aria-label="Home: view instructions">
-            <svg viewBox="0 0 33 33" aria-hidden="true" focusable="false"><path class="ring" d="M16.5,32.5a16,16,0,1,0-16-16,16,16,0,0,0,16,16"/><polygon class="glyph" points="14.92 22.43 14.92 17.68 18.08 17.68 18.08 22.43 22.04 22.43 22.04 16.1 24.41 16.1 16.5 8.98 8.59 16.1 10.96 16.1 10.96 22.43 14.92 22.43"/></svg>
-          </button>
-          <button class="icon-btn" id="btn-biblio" type="button" aria-label="Open bibliography">
-            <svg viewBox="0 0 32.83 32.83" aria-hidden="true" focusable="false"><path class="ring" d="M16.41,32.33A15.92,15.92,0,1,0,.5,16.41,15.92,15.92,0,0,0,16.41,32.33"/><path class="glyph" d="M22.66,20.23a8.16,8.16,0,0,0-2.43-.35,8.38,8.38,0,0,0-3.82,1V13a8.38,8.38,0,0,1,3.82-1,8.16,8.16,0,0,1,2.43.34Zm0-9.37a8.3,8.3,0,0,0-2.43-.34,6.5,6.5,0,0,0-3.82,1,6.45,6.45,0,0,0-3.81-1,6.5,6.5,0,0,0-3.82,1V21.72a.38.38,0,0,0,.35.35c.07,0,.1,0,.17,0a8.5,8.5,0,0,1,3.3-.76,6.45,6.45,0,0,1,3.81,1,8.38,8.38,0,0,1,3.82-1,7.12,7.12,0,0,1,3.3.73.34.34,0,0,0,.17,0,.38.38,0,0,0,.35-.34V11.56a5,5,0,0,0-1.39-.7"/></svg>
-          </button>
-          <button class="icon-btn" id="btn-exit" type="button" aria-label="Close and return to the start">
-            <svg viewBox="0 0 32.83 32.83" aria-hidden="true" focusable="false"><path class="ring" d="M16.41,32.33A15.92,15.92,0,1,0,.5,16.41,15.92,15.92,0,0,0,16.41,32.33"/><path class="xglyph" d="M22.02,10.8L10.81,22.02M10.81,10.8L22.02,22.02"/></svg>
-          </button>
-        </nav>
-      </div>
-    </header>
-
-    <!-- CATEGORY FEEDBACK -->
-    <div class="dark-overlay" id="content-modal" role="dialog" aria-modal="true" aria-label="Result">
-      <div class="dialog-card">
-        <div class="modal-cat-badge" id="modal-cat-badge" aria-hidden="true"></div>
-        <div class="dialog-header-area">
-          <div id="modal-flag-emblem" class="flag-emblem" aria-hidden="true"></div>
-          <h2 id="card-title" tabindex="-1"></h2>
-        </div>
-        <hr class="dialog-divider" aria-hidden="true">
-        <p class="sr-only" id="card-result"></p>
-        <p id="card-body"></p>
-        <button type="button" class="card-more" id="cardMore" aria-expanded="false" aria-controls="card-body" hidden><span id="cardMoreLabel">Read more</span><svg viewBox="0 0 12 8" aria-hidden="true" focusable="false"><path d="M1 1.5l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-        <button class="icon-btn close-card-btn" id="close-dialog-btn" type="button" aria-label="Close and continue"><svg viewBox="0 0 32.83 32.83" aria-hidden="true" focusable="false"><path class="ring" d="M16.41,32.33A15.92,15.92,0,1,0,.5,16.41,15.92,15.92,0,0,0,16.41,32.33"/><path class="xglyph" d="M22.02,10.8L10.81,22.02M10.81,10.8L22.02,22.02"/></svg></button>
-      </div>
-    </div>
-
     <!-- STAGE -->
     <div class="stage-view" id="stage">
       <h1 class="sr-only">Who carries more weight?</h1>
@@ -1178,11 +1142,48 @@ html.mobile .cat-item.m-locked .m-open{cursor:not-allowed}
         </div>
       </section>
 
+    <!-- APPBAR -->
+    <header class="app-header">
+      <div class="appbar-inner">
+        <div class="brand-section"><span class="sub-title">Who carries more weight?</span></div>
+        <nav class="header-buttons" aria-label="Interactive Navigation">
+          <button class="icon-btn mobile-only-btn" id="btn-back" type="button" aria-label="Back" disabled>
+            <svg viewBox="0 0 33 33" aria-hidden="true" focusable="false"><path class="ring" d="M16.5,32.5a16,16,0,1,0-16-16,16,16,0,0,0,16,16"/><polyline points="18.6 10.6 12.7 16.5 18.6 22.4" fill="none" stroke="var(--glyph)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <button class="icon-btn" id="btn-reset" type="button" aria-label="Home: view instructions">
+            <svg viewBox="0 0 33 33" aria-hidden="true" focusable="false"><path class="ring" d="M16.5,32.5a16,16,0,1,0-16-16,16,16,0,0,0,16,16"/><polygon class="glyph" points="14.92 22.43 14.92 17.68 18.08 17.68 18.08 22.43 22.04 22.43 22.04 16.1 24.41 16.1 16.5 8.98 8.59 16.1 10.96 16.1 10.96 22.43 14.92 22.43"/></svg>
+          </button>
+          <button class="icon-btn" id="btn-biblio" type="button" aria-label="Open bibliography">
+            <svg viewBox="0 0 32.83 32.83" aria-hidden="true" focusable="false"><path class="ring" d="M16.41,32.33A15.92,15.92,0,1,0,.5,16.41,15.92,15.92,0,0,0,16.41,32.33"/><path class="glyph" d="M22.66,20.23a8.16,8.16,0,0,0-2.43-.35,8.38,8.38,0,0,0-3.82,1V13a8.38,8.38,0,0,1,3.82-1,8.16,8.16,0,0,1,2.43.34Zm0-9.37a8.3,8.3,0,0,0-2.43-.34,6.5,6.5,0,0,0-3.82,1,6.45,6.45,0,0,0-3.81-1,6.5,6.5,0,0,0-3.82,1V21.72a.38.38,0,0,0,.35.35c.07,0,.1,0,.17,0a8.5,8.5,0,0,1,3.3-.76,6.45,6.45,0,0,1,3.81,1,8.38,8.38,0,0,1,3.82-1,7.12,7.12,0,0,1,3.3.73.34.34,0,0,0,.17,0,.38.38,0,0,0,.35-.34V11.56a5,5,0,0,0-1.39-.7"/></svg>
+          </button>
+          <button class="icon-btn" id="btn-exit" type="button" aria-label="Close and return to the start">
+            <svg viewBox="0 0 32.83 32.83" aria-hidden="true" focusable="false"><path class="ring" d="M16.41,32.33A15.92,15.92,0,1,0,.5,16.41,15.92,15.92,0,0,0,16.41,32.33"/><path class="xglyph" d="M22.02,10.8L10.81,22.02M10.81,10.8L22.02,22.02"/></svg>
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <!-- CATEGORY FEEDBACK -->
+    <div class="dark-overlay" id="content-modal" role="dialog" aria-modal="true" aria-label="Result">
+      <div class="dialog-card">
+        <div class="modal-cat-badge" id="modal-cat-badge" aria-hidden="true"></div>
+        <div class="dialog-header-area">
+          <div id="modal-flag-emblem" class="flag-emblem" aria-hidden="true"></div>
+          <h2 id="card-title" tabindex="-1"></h2>
+        </div>
+        <hr class="dialog-divider" aria-hidden="true">
+        <p class="sr-only" id="card-result"></p>
+        <p id="card-body"></p>
+        <button type="button" class="card-more" id="cardMore" aria-expanded="false" aria-controls="card-body" hidden><span id="cardMoreLabel">Read more</span><svg viewBox="0 0 12 8" aria-hidden="true" focusable="false"><path d="M1 1.5l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <button class="icon-btn close-card-btn" id="close-dialog-btn" type="button" aria-label="Close and continue"><svg viewBox="0 0 32.83 32.83" aria-hidden="true" focusable="false"><path class="ring" d="M16.41,32.33A15.92,15.92,0,1,0,.5,16.41,15.92,15.92,0,0,0,16.41,32.33"/><path class="xglyph" d="M22.02,10.8L10.81,22.02M10.81,10.8L22.02,22.02"/></svg></button>
+      </div>
+    </div>
+
     <!-- INTRO -->
     <div class="dark-overlay" id="intro-modal" role="dialog" aria-modal="true" aria-label="Introduction">
       <div class="center-modal">
         <p class="modal-copy" id="intro-copy" tabindex="-1">The US and China are going head-to-head in the realm of information technology: AI, 5G, quantum computing and communications, self-driving cars and semiconductors.</p>
-        <p class="modal-copy">Take a guess as to who is in the lead in each of these categories. For each one, select USA or China.</p>
+        <p class="modal-copy">Take a guess as to who is in the lead in each of these categories. For each one, select USA or China.<span class="sr-only"> Use Tab to move between the choices and then the top navigation. You stay in this activity until you have answered all five categories or use the Close button.</span></p>
         <button class="action-btn" id="intro-continue-btn" type="button">Continue</button>
       </div>
     </div>
@@ -1856,6 +1857,19 @@ html.mobile .cat-item.m-locked .m-open{cursor:not-allowed}
         if (e.target !== ov) return;
         if (ov === contentModal) closeFeedback(); else closeModal(biblioOverlay);
       });
+    });
+    /* Until all five categories are answered (or the activity is closed back to the cover), Tab / Shift+Tab wrap inside the activity.
+       Close (top bar) is always reachable, so this is never a keyboard trap. */
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'Tab' || e.altKey || e.ctrlKey || e.metaKey || openModalEl()) return;
+      if (!coverView.classList.contains('hidden') || Object.keys(answered).length >= ORDER.length) return;
+      var f = Array.prototype.filter.call(container.querySelectorAll('button:not([disabled]),[href],[tabindex]:not([tabindex="-1"])'), function (el) {
+        return el.offsetParent !== null && !el.closest('[inert]') && !el.closest('[hidden]') && getComputedStyle(el).visibility !== 'hidden';
+      });
+      if (!f.length) return;
+      var at = f.indexOf(document.activeElement);
+      if (e.shiftKey && at <= 0) { e.preventDefault(); f[f.length - 1].focus({ preventScroll: true }); }
+      else if (!e.shiftKey && (at < 0 || at === f.length - 1)) { e.preventDefault(); f[0].focus({ preventScroll: true }); }
     });
     document.addEventListener('keydown', function (e) {
       var m = openModalEl(); if (!m) return;
