@@ -100,7 +100,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;touch-acti
   display:flex;
   align-items:center;
   justify-content:space-between;
-  --cv-pad:clamp(28px,6vw,96px);
+  --cv-pad:var(--pad);   /* title left edge = the shared page padding, as M1/M5 */
   padding:clamp(24px,4vw,64px) var(--cv-pad);
   z-index:500;
   transition:opacity .35s ease,visibility .35s ease;
@@ -633,7 +633,7 @@ html.mobile .cover-content{display:contents;}
 html.mobile .cover-title{
   order:1;
   font-size:clamp(32px,10.25vw,42px);
-  line-height:1.22;
+  line-height:1.35;
   white-space:normal;
   margin:0 0 clamp(24px,8.6vw,36px);
 }
@@ -999,6 +999,23 @@ html.mobile .m-open:focus-visible{outline:3px solid var(--red);outline-offset:-4
 html.mobile .cat-item.m-locked .m-open{cursor:default;}
 html.mobile .m-done .m-tick{display:block;order:3;flex:none;width:26px;height:26px;color:var(--ok-ink);}
 html.mobile .m-tick svg{width:100%;height:100%;display:block;}
+
+/* ===== Feedback card, matched to the storyboard ===================================================
+   Flag on the left, rule starting a flag-width in, the rule crossing the flag about 73% of the way
+   down (flag overhangs the rule by ~27% of its height), and the text starting clear of the flag. */
+.flag-emblem{bottom:calc(var(--flag) * -0.27)}
+html:not(.mobile) #content-modal .dialog-divider{margin:0 0 calc(var(--flag) * 0.63) calc(var(--flag) + 12px)}
+
+/* Phone feedback page: same arrangement at a flag size that suits the screen (was a 136px flag centred above the scale) */
+html.mobile .m-feedback-view{--mf:64px;display:grid;grid-template-columns:var(--mf) 1fr;column-gap:12px;align-items:end}
+html.mobile .m-feedback-view > *{grid-column:1 / -1}
+html.mobile .m-feedback-view h2{grid-column:2;grid-row:1;margin:0;padding:4px 0 12px;text-align:center}
+html.mobile .m-fb-flag{grid-column:1;grid-row:1;width:var(--mf);height:var(--mf);margin:0 0 calc(var(--mf) * -0.27);align-self:end;position:relative;z-index:1}
+html.mobile .m-fb-scale-slot{margin-top:calc(var(--mf) * 0.27 + 16px)}
+
+/* Phone sequence: categories not reached yet */
+html.mobile .cat-item.m-locked{opacity:.55}
+html.mobile .cat-item.m-locked .m-open{cursor:not-allowed}
 </style>
 
 </head>
@@ -1060,7 +1077,7 @@ html.mobile .m-tick svg{width:100%;height:100%;display:block;}
       <div class="dialog-card">
         <div class="modal-cat-badge" id="modal-cat-badge" aria-hidden="true"></div>
         <div class="dialog-header-area">
-          <div id="modal-flag-emblem" class="flag-emblem" role="img" aria-label=""></div>
+          <div id="modal-flag-emblem" class="flag-emblem" aria-hidden="true"></div>
           <h2 id="card-title" tabindex="-1"></h2>
         </div>
         <hr class="dialog-divider" aria-hidden="true">
@@ -1129,7 +1146,7 @@ html.mobile .m-tick svg{width:100%;height:100%;display:block;}
       <!-- MOBILE INLINE FEEDBACK SLIDE (matched to original Hype mobile layout: heading, winning flag, live scale, text, Next button) -->
       <section class="m-feedback-view" id="m-feedback-view" aria-labelledby="m-fb-title" hidden>
         <h2 id="m-fb-title" tabindex="-1"></h2>
-        <div class="m-fb-flag" id="m-fb-flag" role="img" aria-label=""></div>
+        <div class="m-fb-flag" id="m-fb-flag" aria-hidden="true"></div>
         <div class="m-fb-scale-slot" id="m-fb-scale-slot"></div>
         <p class="sr-only" id="m-fb-result"></p>
         <p class="m-fb-body" id="m-fb-body"></p>
@@ -1259,6 +1276,14 @@ html.mobile .m-tick svg{width:100%;height:100%;display:block;}
     function openModalEl() { return MODALS.filter(function (m) { return m.classList.contains('active'); })[0]; }
 
     /* Forced sequential unlocking on mobile (matched to original Hype mobile flow) & Back button state */
+    /* Phone sequence: true = categories open in order (later ones stay locked until the one before has been viewed).
+       Set to false to allow any order; Next still moves on in order. */
+    var M_SEQUENTIAL = true;
+    function nextMobileUp() { return ORDER.filter(function (k) { return !answered[k]; })[0] || null; }
+    function nextMobileCat(cur) {
+      var i = ORDER.indexOf(cur);
+      return ORDER.slice(i + 1).filter(function (k) { return !answered[k]; })[0] || nextMobileUp();
+    }
     function updateMobileBackBtn() {
       var backBtn = $('btn-back');
       if (!backBtn) return;
@@ -1285,8 +1310,11 @@ html.mobile .m-tick svg{width:100%;height:100%;display:block;}
           var done = !!answered[k];
           item.removeAttribute('role'); item.removeAttribute('aria-labelledby');
           tt.setAttribute('aria-hidden', 'true'); if (q) q.setAttribute('aria-hidden', 'true');
-          op.removeAttribute('aria-disabled');
-          op.setAttribute('aria-label', DATA[k].title + (done ? ' \u2013 viewed, open again' : ' \u2013 see who is in the lead'));
+          var locked = M_SEQUENTIAL && !done && k !== nextMobileUp();
+          item.classList.toggle('m-locked', locked); item.classList.toggle('m-done', done);
+          if (locked) op.setAttribute('aria-disabled', 'true'); else op.removeAttribute('aria-disabled');
+          var prevT = ORDER[ORDER.indexOf(k) - 1];
+          op.setAttribute('aria-label', DATA[k].title + (done ? ' \u2013 viewed, open again' : locked ? ' \u2013 locked, finish ' + (prevT ? DATA[prevT].title : 'the previous category') + ' first' : ' \u2013 see who is in the lead'));
         } else {
           item.setAttribute('role', 'group'); item.setAttribute('aria-labelledby', 't-' + k + ' q-' + k);
           tt.removeAttribute('aria-hidden'); if (q) q.removeAttribute('aria-hidden');
@@ -1490,6 +1518,7 @@ html.mobile .m-tick svg{width:100%;height:100%;display:block;}
       fbBody.classList.add('is-animating');
       $('m-fb-scale-slot').appendChild($('scale-wrap'));
       updateMobileBackBtn();
+      var nb = $('m-fb-next-btn'); if (nb) nb.textContent = nextMobileCat(cat) ? 'Next' : 'Finish';
       signalTop();
       $('m-fb-title').focus({ preventScroll: true });
     }
@@ -1604,6 +1633,9 @@ html.mobile .m-tick svg{width:100%;height:100%;display:block;}
 
     function closeFeedback() {
       if (isMobile()) {
+        /* phone: Next goes straight to the next category in order (as the original), then to the end screen */
+        var nxt = mobileFeedbackCat ? nextMobileCat(mobileFeedbackCat) : null;
+        if (nxt) { openMobileCategory(nxt, null); return; }
         hideMobileFeedback();
         if (Object.keys(answered).length === ORDER.length) {
           showCompletion();
@@ -1629,6 +1661,11 @@ html.mobile .m-tick svg{width:100%;height:100%;display:block;}
     function openMobileCategory(cat, opener) {
       var d = DATA[cat];
       if (!d || !isMobile()) return;
+      if (M_SEQUENTIAL && !answered[cat] && cat !== nextMobileUp()) {
+        var pk = ORDER[ORDER.indexOf(cat) - 1];
+        announce(d.title + ' is locked. Finish ' + (pk ? DATA[pk].title : 'the previous category') + ' first.');
+        return;
+      }
       if (answered[cat]) {
         showMobileFeedback(cat, d.title + ': ' + (d.leader === 'usa' ? 'the USA' : 'China') + ' is in the lead.');
         return;
