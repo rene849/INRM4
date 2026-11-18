@@ -625,7 +625,7 @@ html.mobile .view-cover{
   align-items:stretch;
   justify-content:flex-start;
   gap:0;
-  padding:28px 20px 36px;
+  padding:36px 20px 36px;
   text-align:left;
 }
 html.mobile .view-cover.hidden{display:none;}
@@ -635,12 +635,12 @@ html.mobile .cover-title{
   font-size:clamp(32px,10.25vw,42px);
   line-height:1.35;
   white-space:normal;
-  margin:0 0 clamp(20px,6.4vw,28px);
+  margin:0 0 clamp(24px,8.6vw,36px);
 }
 html.mobile .cover-illustration{
   order:2;
   width:100%;
-  max-width:440px;
+  max-width:320px;
   margin:0 auto;
 }
 html.mobile .cv-scale{width:100%;}
@@ -648,7 +648,7 @@ html.mobile .btn-start{
   order:3;
   align-self:stretch;
   width:100%;
-  margin-top:clamp(28px,10.3vw,40px);
+  margin-top:clamp(32px,13vw,52px);
 }
 html.mobile .interactive-container.cover-on>.app-header,
 html.mobile .interactive-container.cover-on>.stage-view{display:none;}
@@ -767,8 +767,8 @@ html.mobile .m-feedback-view h2{
   text-align:left;
 }
 html.mobile .m-fb-flag{
-  width:128px;
-  height:128px;
+  width:104px;
+  height:104px;
   border-radius:50%;
   overflow:hidden;
   margin:0 auto 16px;
@@ -892,7 +892,7 @@ html.mobile .sub-title{white-space:normal;overflow:visible;text-overflow:clip;li
 @media (min-width:881px) and (max-width:1149px){ .cat-title{min-height:3.75em} }
 
 /* ===== Feedback layer: flag straddles divider line at bottom-left with equal balanced spacing above & below ===== */
-.dialog-card{--flag:76px;--rule-x:calc(var(--flag) * 0.72 + 12px);width:min(860px,92%);max-height:none;padding:66px 28px 28px;}
+.dialog-card{--flag:76px;--rule-x:calc(var(--flag) + 14px);width:min(860px,92%);max-height:none;padding:66px 28px 28px;}
 html.mobile .dialog-card{--flag:52px;width:min(780px,92%);padding:60px 18px 20px;}
 .dialog-header-area{position:relative;display:flex;align-items:center;justify-content:center;min-height:46px;padding-bottom:16px;margin:0;}
 .flag-emblem{position:absolute;left:0;bottom:-10px;top:auto;width:var(--flag);height:var(--flag);}
@@ -1480,6 +1480,30 @@ html.mobile .cat-item.m-locked .m-open{cursor:not-allowed}
     }
 
     /* ---------- mobile feedback & completion views ---------- */
+    /* Flag artwork: the two SVGs carry different padding inside their canvas, so the discs sit off-centre and at different sizes.
+       Measure the drawn disc once, then scale/shift each image so the disc fills its round frame, centred. If the browser won't
+       read the pixels, the fixed CSS scales are used instead. */
+    var FLAG_SRC = { usa: 'Resources/PastedVector-51.svg', china: 'Resources/PastedVector-61.svg' }, FLAG_FIT = {};
+    function measureFlag(side) {
+      var im = new Image();
+      im.onload = function () {
+        try {
+          var N = 256, w = im.naturalWidth || N, h = im.naturalHeight || N, k = Math.min(N / w, N / h), c = document.createElement('canvas');
+          c.width = c.height = N;
+          var g = c.getContext('2d'); g.drawImage(im, (N - w * k) / 2, (N - h * k) / 2, w * k, h * k);
+          var px = g.getImageData(0, 0, N, N).data, x0 = N, x1 = -1, y0 = N, y1 = -1, x, y;
+          for (y = 0; y < N; y++) for (x = 0; x < N; x++) if (px[(y * N + x) * 4 + 3] > 10) { if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; }
+          if (x1 < 0) return;
+          var dia = Math.max(x1 - x0 + 1, y1 - y0 + 1), cx = (x0 + x1 + 1) / 2, cy = (y0 + y1 + 1) / 2, sc = N / dia;
+          FLAG_FIT[side] = 'translate(' + ((N / 2 - cx) * sc / N * 100).toFixed(2) + '%,' + ((N / 2 - cy) * sc / N * 100).toFixed(2) + '%) scale(' + sc.toFixed(3) + ')';
+          document.querySelectorAll('img.flag-' + side).forEach(function (el) { el.style.transform = FLAG_FIT[side]; });
+        } catch (e) { /* keep the CSS fallback */ }
+      };
+      im.src = FLAG_SRC[side];
+    }
+    function flagHTML(side) { return '<img src="' + FLAG_SRC[side] + '" class="flag-' + side + '" alt=""' + (FLAG_FIT[side] ? ' style="transform:' + FLAG_FIT[side] + '"' : '') + '>'; }
+    measureFlag('usa'); measureFlag('china');
+
     function showMobileFeedback(cat, resText, fromBack) {
       if (!fromBack) {
         if (stageEl.classList.contains('m-showing-complete')) {
@@ -1505,9 +1529,7 @@ html.mobile .cat-item.m-locked .m-open{cursor:not-allowed}
       fbFlag.classList.remove('is-animating');
       fbBody.classList.remove('is-animating');
       fbFlag.setAttribute('aria-label', d.leader === 'usa' ? 'The USA is in the lead' : 'China is in the lead');
-      fbFlag.innerHTML = d.leader === 'usa'
-        ? '<img src="Resources/PastedVector-51.svg" class="flag-usa" alt="">'
-        : '<img src="Resources/PastedVector-61.svg" class="flag-china" alt="">';
+      fbFlag.innerHTML = flagHTML(d.leader);
       void fbFlag.offsetWidth;
       fbFlag.classList.add('is-animating');
       fbBody.classList.add('is-animating');
@@ -1616,9 +1638,7 @@ html.mobile .cat-item.m-locked .m-open{cursor:not-allowed}
         $('modal-cat-badge').innerHTML = '<img src="' + d.icon + '" alt="">';
         var flagEl = $('modal-flag-emblem');
         flagEl.setAttribute('aria-label', d.leader === 'usa' ? 'The USA is in the lead' : 'China is in the lead');
-        flagEl.innerHTML = d.leader === 'usa'
-          ? '<img src="Resources/PastedVector-51.svg" class="flag-usa" alt="">'
-          : '<img src="Resources/PastedVector-61.svg" class="flag-china" alt="">';
+        flagEl.innerHTML = flagHTML(d.leader);
         openModal(contentModal, $('card-title'), btn);
         var body = $('card-body');
         if (body.scrollHeight > body.clientHeight + 1) { body.tabIndex = 0; body.setAttribute('role', 'region'); body.setAttribute('aria-label', d.title + ' details'); }
