@@ -625,7 +625,7 @@ html.mobile .view-cover{
   align-items:stretch;
   justify-content:flex-start;
   gap:0;
-  padding:36px 20px 36px;
+  padding:28px 20px 36px;
   text-align:left;
 }
 html.mobile .view-cover.hidden{display:none;}
@@ -635,12 +635,12 @@ html.mobile .cover-title{
   font-size:clamp(32px,10.25vw,42px);
   line-height:1.35;
   white-space:normal;
-  margin:0 0 clamp(24px,8.6vw,36px);
+  margin:0 0 clamp(20px,6.4vw,28px);
 }
 html.mobile .cover-illustration{
   order:2;
   width:100%;
-  max-width:320px;
+  max-width:440px;
   margin:0 auto;
 }
 html.mobile .cv-scale{width:100%;}
@@ -648,7 +648,7 @@ html.mobile .btn-start{
   order:3;
   align-self:stretch;
   width:100%;
-  margin-top:clamp(32px,13vw,52px);
+  margin-top:clamp(28px,10.3vw,40px);
 }
 html.mobile .interactive-container.cover-on>.app-header,
 html.mobile .interactive-container.cover-on>.stage-view{display:none;}
@@ -767,8 +767,8 @@ html.mobile .m-feedback-view h2{
   text-align:left;
 }
 html.mobile .m-fb-flag{
-  width:136px;
-  height:136px;
+  width:128px;
+  height:128px;
   border-radius:50%;
   overflow:hidden;
   margin:0 auto 16px;
@@ -892,7 +892,7 @@ html.mobile .sub-title{white-space:normal;overflow:visible;text-overflow:clip;li
 @media (min-width:881px) and (max-width:1149px){ .cat-title{min-height:3.75em} }
 
 /* ===== Feedback layer: flag straddles divider line at bottom-left with equal balanced spacing above & below ===== */
-.dialog-card{--flag:76px;width:min(860px,92%);max-height:none;padding:66px 28px 28px;}
+.dialog-card{--flag:76px;--rule-x:calc(var(--flag) * 0.72 + 12px);width:min(860px,92%);max-height:none;padding:66px 28px 28px;}
 html.mobile .dialog-card{--flag:52px;width:min(780px,92%);padding:60px 18px 20px;}
 .dialog-header-area{position:relative;display:flex;align-items:center;justify-content:center;min-height:46px;padding-bottom:16px;margin:0;}
 .flag-emblem{position:absolute;left:0;bottom:-10px;top:auto;width:var(--flag);height:var(--flag);}
@@ -909,7 +909,7 @@ html.mobile .dark-overlay .dialog-card{margin:0 auto;}
 /* ===== Desktop feedback card on the left over the selection board, scale stays completely stationary on the right ===== */
 .dialog-footer{display:none;}
 html:not(.mobile) #content-modal{top:60px;background:transparent;pointer-events:none;overflow:visible;justify-content:flex-start;align-items:flex-start;padding:56px 0 14px var(--pad);}
-html:not(.mobile) #content-modal .dialog-card{pointer-events:auto;--flag:76px;width:min(550px,calc(53% - var(--pad)));max-width:calc(100% - var(--pad));margin:0;padding:66px 28px 28px;}
+html:not(.mobile) #content-modal .dialog-card{pointer-events:auto;--flag:76px;width:min(600px,calc(56% - var(--pad)));max-width:calc(100% - var(--pad));margin:0;padding:66px 28px 28px;}
 html:not(.mobile) #content-modal .dialog-card .close-card-btn{top:16px;right:28px;}
 html:not(.mobile) #content-modal .dialog-header-area{min-height:46px;padding-bottom:16px;margin-bottom:0;}
 html:not(.mobile) #content-modal .dialog-divider{margin:0 0 18px calc(var(--flag) + 14px);}
@@ -982,10 +982,10 @@ html:not(.mobile) .cat-title{max-width:100%;text-wrap:balance;}
   html:not(.mobile) .cat-radios{flex-direction:column;align-items:center;gap:5px;}
   html:not(.mobile) .radio-pill{width:118px;min-width:0;min-height:30px;font-size:14px;padding:3px 8px 3px 12px;gap:8px;}
   html:not(.mobile) .scale-assembly{width:min(94%,calc(520*var(--u)));}
-  html:not(.mobile) #content-modal .dialog-card{width:calc(50% - var(--pad));padding:54px 18px 20px;--flag:56px;}
+  html:not(.mobile) #content-modal .dialog-card{width:calc(53% - var(--pad));padding:54px 18px 20px;--flag:56px;}
   html:not(.mobile) #content-modal .dialog-card .close-card-btn{top:12px;right:18px;}
   html:not(.mobile) #content-modal .dialog-header-area{min-height:38px;padding-bottom:12px;}
-  html:not(.mobile) #content-modal .dialog-divider{margin:0 0 14px calc(var(--flag) + 12px);}
+  html:not(.mobile) #content-modal .dialog-divider{margin:0 0 14px var(--rule-x);}
   html:not(.mobile) #content-modal .modal-cat-badge{width:80px;height:80px;top:-40px;}
   html:not(.mobile) #content-modal .dialog-card h2{font-size:18px;padding:0 calc(var(--flag) + 12px);}
   html:not(.mobile) #content-modal #card-body{font-size:14.5px;line-height:1.5;}
@@ -1003,15 +1003,10 @@ html.mobile .m-tick svg{width:100%;height:100%;display:block;}
 /* ===== Feedback card, matched to the storyboard ===================================================
    Flag on the left, rule starting a flag-width in, the rule crossing the flag about 73% of the way
    down (flag overhangs the rule by ~27% of its height), and the text starting clear of the flag. */
-.flag-emblem{bottom:calc(var(--flag) * -0.27)}
-html:not(.mobile) #content-modal .dialog-divider{margin:0 0 calc(var(--flag) * 0.63) calc(var(--flag) + 12px)}
+.flag-emblem{bottom:calc(var(--flag) * -0.27);z-index:1}
+html:not(.mobile) #content-modal .dialog-divider{margin:0 0 calc(var(--flag) * 0.63) var(--rule-x)}
 
-/* Phone feedback page: same arrangement at a flag size that suits the screen (was a 136px flag centred above the scale) */
-html.mobile .m-feedback-view{--mf:64px;display:grid;grid-template-columns:var(--mf) 1fr;column-gap:12px;align-items:end}
-html.mobile .m-feedback-view > *{grid-column:1 / -1}
-html.mobile .m-feedback-view h2{grid-column:2;grid-row:1;margin:0;padding:4px 0 12px;text-align:center}
-html.mobile .m-fb-flag{grid-column:1;grid-row:1;width:var(--mf);height:var(--mf);margin:0 0 calc(var(--mf) * -0.27);align-self:end;position:relative;z-index:1}
-html.mobile .m-fb-scale-slot{margin-top:calc(var(--mf) * 0.27 + 16px)}
+/* Phone feedback page: heading at the left between two rules, then the flag centred (swipes in) above the scale, as in the original */
 
 /* Phone sequence: categories not reached yet */
 html.mobile .cat-item.m-locked{opacity:.55}
@@ -1633,9 +1628,8 @@ html.mobile .cat-item.m-locked .m-open{cursor:not-allowed}
 
     function closeFeedback() {
       if (isMobile()) {
-        /* phone: Next goes straight to the next category in order (as the original), then to the end screen */
-        var nxt = mobileFeedbackCat ? nextMobileCat(mobileFeedbackCat) : null;
-        if (nxt) { openMobileCategory(nxt, null); return; }
+        /* phone: Next returns to the list so the learner picks the next item (or goes on to the end screen after the last one) */
+        mobileHistory.length = 0;
         hideMobileFeedback();
         if (Object.keys(answered).length === ORDER.length) {
           showCompletion();
