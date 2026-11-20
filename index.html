@@ -123,7 +123,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;touch-acti
   line-height:1.35;
   letter-spacing:0;
   white-space:nowrap;
-  margin:0 0 1em;
+  margin:0 0 24px;
   opacity:0;
   transform:translateY(80px);
 }
@@ -1381,20 +1381,21 @@ html.mobile .cat-item.m-locked .m-open{cursor:not-allowed}
     }
     /* The frame height depends only on the window (never on what is open), so nothing below it jumps:
        it is made tall enough for the tallest card to centre on the scale, capped at 630px. */
+    var FRAME_STD = 578;
     function settleFrame() {
       var root = document.documentElement, card = contentModal.querySelector('.dialog-card');
       function set(v) { root.style.setProperty('--screen-min', v + 'px'); root.style.setProperty('--frame-h', v + 'px'); }
-      var h = Math.max(parseFloat(root.style.getPropertyValue('--frame-h')) || 0, 580);
+      var h = parseFloat(root.style.getPropertyValue('--frame-h')) || FRAME_STD;
       set(h);
       var keepMT = card.style.marginTop, keepMax = card.style.maxHeight;
       card.style.marginTop = '0px'; card.style.maxHeight = '';
       var max = tallestCard(card), cm = cardMetrics();
       for (var i = 0; i < 6; i++) {
         var deficit = cm.minTop + max / 2 - cm.scaleMid();
-        if (deficit > 0.5 && h < 630) { h = Math.min(630, h + Math.ceil(deficit * 2)); set(h); cm = cardMetrics(); } else break;
+        if (deficit > 0.5 && h < FRAME_STD) { h = Math.min(FRAME_STD, h + Math.ceil(deficit * 2)); set(h); cm = cardMetrics(); } else break;
       }
       var fit = cm.topFor(max) + max + 24;
-      if (fit > h && h < 630) { h = Math.min(630, fit); set(h); }
+      if (fit > h && h < FRAME_STD) { h = Math.min(FRAME_STD, fit); set(h); }
       card.style.marginTop = keepMT; card.style.maxHeight = keepMax;
     }
     function clearCardMore() {
@@ -1936,9 +1937,10 @@ html.mobile .cat-item.m-locked .m-open{cursor:not-allowed}
         stageEl.appendChild($('scale-wrap'));
       }
       if (typeof syncMobileSequence === 'function') syncMobileSequence();
-      var cap = Math.max(520, usableH() - 48), targetH = Math.min(660, cap);
-      var cardW = Math.min(1120, Math.max(320, w - 16)), naturalH = Math.round(cardW * 9 / 16);
-      var h = Math.max(Math.min(578, cap), Math.min(targetH, naturalH));
+      // One frame height for all modules: 644px (660px iframe minus the 8px body margins) (1100px+), 614px (1000px+), otherwise 578px; never taller than the visible area
+      var cap = Math.max(480, usableH() - 48);
+      var h = Math.min(w >= 1100 ? 610 : 578, cap);
+      FRAME_STD = h;
       root.style.setProperty('--screen-min', h + 'px');
       root.style.setProperty('--frame-h', h + 'px');
       settleFrame();
