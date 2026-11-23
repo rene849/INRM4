@@ -1490,6 +1490,8 @@ html.mobile .cat-item.m-locked .m-open{cursor:not-allowed}
           if (fresh) el.style.transition = 'none';
           el.style.width = wPct + '%';
           el.style.right = 'auto'; el.style.left = slots[i][0] + '%'; el.style.bottom = slots[i][1] + '%'; el.style.zIndex = i === 2 ? 1 : 2;
+          /* the pan's grey disc must not show below the rim (it leaked past the bowl's curved corners); the 3rd icon sits above the rim, so it is not clipped */
+          el.style.clipPath = i === 2 ? 'none' : 'inset(0 0 32% 0)';
           if (fresh) { void el.offsetWidth; el.style.transition = ''; }
         });
       });
@@ -1738,7 +1740,8 @@ html.mobile .cat-item.m-locked .m-open{cursor:not-allowed}
     });
     $('intro-continue-btn').addEventListener('click', function () { closeModal(introModal, false); focusNextCategory(); });
 
-    function resetToCover() {
+    /* clears every answer, the scale and the flow; shared by Close (back to the cover) and Home (back to the instructions) */
+    function resetProgress() {
       clearTimeout(modalTimer); modalTimer = null;
       answered = {}; loads.usa = 0; loads.china = 0; mobileHistory = [];
       hideMobileFeedback();
@@ -1748,12 +1751,16 @@ html.mobile .cat-item.m-locked .m-open{cursor:not-allowed}
         p.setAttribute('aria-pressed', 'false');
         p.querySelector('.rp-mark').textContent = ''; p.querySelector('.rp-res').textContent = '';
       });
-      document.querySelectorAll('.pan-dropped-icon').forEach(function (i) { i.classList.remove('active'); i.style.width = i.style.left = i.style.right = i.style.bottom = i.style.zIndex = ''; });
+      document.querySelectorAll('.pan-dropped-icon').forEach(function (i) { i.classList.remove('active'); i.style.width = i.style.left = i.style.right = i.style.bottom = i.style.zIndex = i.style.clipPath = ''; });
       cardExpanded = false;
       $('completion-panel').hidden = true; container.classList.remove('complete');
       if ($('scale-wrap').parentNode !== stageEl) stageEl.appendChild($('scale-wrap'));
       updateScale();
       syncMobileSequence();
+    }
+
+    function resetToCover() {
+      resetProgress();
       MODALS.forEach(function (m) { m.classList.remove('active'); });
       container.style.height = ''; container.style.minHeight = '';
       coverView.classList.remove('hidden'); syncInert(); triggerCoverAnimation();
@@ -1762,6 +1769,7 @@ html.mobile .cat-item.m-locked .m-open{cursor:not-allowed}
     }
 
     function openInstructions() {
+      resetProgress();   /* Home = start again from the instructions: answers, scale and progress are cleared */
       clearTimeout(modalTimer); modalTimer = null;
       cardExpanded = false;
       container.style.height = ''; container.style.minHeight = '';
