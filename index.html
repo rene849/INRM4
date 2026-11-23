@@ -656,8 +656,10 @@ html.mobile .interactive-container.cover-on>.stage-view{display:none;}
 /* Mobile Header with 4 icons: Back (<), Home, Bibliography, Close (X) (matched to original Hype mobile & recording) */
 html.mobile .mobile-only-btn{display:block;}
 html.mobile .app-header{height:auto;min-height:60px;}
-html.mobile .appbar-inner{flex-direction:column;padding:14px 16px 0;}
-html.mobile .appbar-inner::after{left:16px;right:16px;}
+/* phone: every heading rule (under the title bar, the list intro and each feedback heading) is 1px --rule and runs between the same side margins */
+html.mobile{--m-side:16px;}
+html.mobile .appbar-inner{flex-direction:column;padding:14px var(--m-side) 0;}
+html.mobile .appbar-inner::after{left:var(--m-side);right:var(--m-side);height:1px;background:var(--rule);}
 html.mobile .header-buttons{
   order:1;
   width:100%;
@@ -688,7 +690,7 @@ html.mobile .stage-view{
   align-items:stretch;
   container-type:normal;
   overflow:visible;
-  padding:18px 16px 28px;
+  padding:18px var(--m-side) 28px;
   gap:16px;
 }
 html.mobile .stage-view>*{--u:1px;}
@@ -797,7 +799,7 @@ html.mobile .m-fb-actions .action-btn{min-width:164px;}
 html.mobile .completion-panel[hidden]{display:none !important;}
 html.mobile .completion-panel{
   position:absolute;
-  top:var(--mob-hdr-h,106px);
+  top:0;
   left:0;
   right:0;
   bottom:0;
@@ -1300,7 +1302,8 @@ html.mobile .cat-item.m-locked .m-open{cursor:not-allowed}
       var canGoBack = isMobile() && (
         !!mobileFeedbackCat ||
         stageEl.classList.contains('m-showing-complete') ||
-        biblioOverlay.classList.contains('active')
+        biblioOverlay.classList.contains('active') ||
+        Object.keys(answered).length > 0
       );
       backBtn.disabled = !canGoBack;
     }
@@ -1349,8 +1352,9 @@ html.mobile .cat-item.m-locked .m-open{cursor:not-allowed}
         compEl.removeAttribute('aria-modal');
       }
       coverView.toggleAttribute('inert', anyOpen || mobCompOpen);
-      headerEl.toggleAttribute('inert', coverOpen || (anyOpen && !fbOnly && !mobBibOnly && !mobCompOpen));
+      headerEl.toggleAttribute('inert', coverOpen || mobCompOpen || (anyOpen && !fbOnly && !mobBibOnly));
       stageEl.toggleAttribute('inert', coverOpen || anyOpen || mobCompOpen);
+      [coverView, headerEl, stageEl].forEach(function (el) { if (el.hasAttribute('inert')) el.setAttribute('aria-hidden', 'true'); else el.removeAttribute('aria-hidden'); });
       contentModal.setAttribute('aria-modal', fbOnly ? 'false' : 'true');
       biblioOverlay.setAttribute('aria-modal', mobBibOnly ? 'false' : 'true');
       container.classList.toggle('cover-on', coverOpen);
@@ -1668,6 +1672,11 @@ html.mobile .cat-item.m-locked .m-open{cursor:not-allowed}
       if (isMobile()) {
         /* phone: Next returns to the list so the learner picks the next item (or goes on to the end screen after the last one) */
         mobileHistory.length = 0;
+        var seen = Object.keys(answered), here = seen.indexOf(mobileFeedbackCat);
+        if (here > -1 && here < seen.length - 1) {   /* stepped back to an earlier layer: Next moves forward to the one after it */
+          showMobileFeedback(seen[here + 1], leadText(DATA[seen[here + 1]]), true);
+          return;
+        }
         hideMobileFeedback();
         if (Object.keys(answered).length === ORDER.length) {
           showCompletion();
@@ -1800,20 +1809,17 @@ html.mobile .cat-item.m-locked .m-open{cursor:not-allowed}
         if (!$('completion-panel').hidden) container.style.minHeight = '580px';
         return;
       }
-      var prev = mobileHistory.pop();
-      if (prev && prev.type === 'cat' && DATA[prev.cat]) {
-        var d = DATA[prev.cat];
-        showMobileFeedback(prev.cat, leadText(d), true);
-        return;
-      }
-      if (prev && prev.type === 'complete') {
-        showCompletion(true);
-        return;
-      }
+      /* Back steps to the previous layer in the order the items were answered (AI, then 5G, ...): from a feedback layer to the one before it
+         (the first one goes back to the list); from the completion layer to the last feedback layer; from the list to the last one answered. */
+      var order = Object.keys(answered);
       if (stageEl.classList.contains('m-showing-complete')) {
         stageEl.classList.remove('m-showing-complete');
         $('completion-panel').hidden = true;
         container.classList.remove('complete');
+        container.style.minHeight = '';
+        syncInert();
+        var last = order[order.length - 1];
+        if (last && DATA[last]) { showMobileFeedback(last, leadText(DATA[last]), true); return; }
         if ($('scale-wrap').parentNode !== stageEl) stageEl.appendChild($('scale-wrap'));
         syncMobileSequence();
         signalTop();
@@ -1821,12 +1827,17 @@ html.mobile .cat-item.m-locked .m-open{cursor:not-allowed}
         return;
       }
       if (mobileFeedbackCat) {
+        var at = order.indexOf(mobileFeedbackCat), before = at > 0 ? order[at - 1] : null;
+        if (before && DATA[before]) { showMobileFeedback(before, leadText(DATA[before]), true); return; }
         var prevCat = mobileFeedbackCat;
         hideMobileFeedback();
         signalTop();
         var btn = document.querySelector('.cat-item[data-cat="' + prevCat + '"] .m-open');
         if (btn) focusFinal(btn);
+        return;
       }
+      var lastAnswered = order[order.length - 1];
+      if (lastAnswered && DATA[lastAnswered]) showMobileFeedback(lastAnswered, leadText(DATA[lastAnswered]), true);
     });
     $('btn-reset').addEventListener('click', openInstructions);
     $('btn-exit').addEventListener('click', resetToCover);
