@@ -511,7 +511,7 @@ html.cv-skip .cover-title,html.cv-skip .btn-start{animation:none !important;opac
 .cat-item[data-cat="cars"]{grid-column:2/4;grid-row:2}
 .cat-item[data-cat="semiconductors"]{grid-column:4/6;grid-row:2}
 .cat-item{display:flex;flex-direction:column;align-items:center;text-align:center;justify-self:center;width:calc(172*var(--u));min-width:108px;}
-.cat-badge{width:calc(108*var(--u));height:calc(108*var(--u));min-width:56px;min-height:56px;margin-bottom:calc(6*var(--u));}
+.cat-badge{width:calc(98*var(--u));height:calc(98*var(--u));min-width:56px;min-height:56px;margin-bottom:calc(6*var(--u));}
 .cat-badge img{width:100%;height:100%;object-fit:contain;display:block;}
 .cat-title{font-size:max(14px,calc(16*var(--u)));font-weight:700;line-height:1.25;min-height:2.5em;display:flex;align-items:center;justify-content:center;margin-bottom:calc(6*var(--u));}
 .cat-radios{display:flex;flex-direction:column;align-items:center;gap:6px;width:100%;}
@@ -937,10 +937,10 @@ html:not(.mobile) .complete .scale-stage-wrapper{transform:translateY(-28px);}
 
 /* Category picker in a light panel, desktop only */
 @container (min-width:1100px) and (min-height:455px){
-  html:not(.mobile) .selection-board{border:1px solid #D9D9D9;padding-block:calc(20*var(--u));row-gap:calc(18*var(--u));background:#fff;}
+  html:not(.mobile) .selection-board{border:1px solid #D9D9D9;padding-block:max(22px,calc(24*var(--u)));row-gap:calc(18*var(--u));background:#fff;}
 }
 @container (min-height:505px){
-  html:not(.mobile) .selection-board{border:1px solid #D9D9D9;padding-block:calc(20*var(--u));row-gap:calc(18*var(--u));background:#fff;}
+  html:not(.mobile) .selection-board{border:1px solid #D9D9D9;padding-block:max(22px,calc(24*var(--u)));row-gap:calc(18*var(--u));background:#fff;}
 }
 @container (max-height:480px){
   html:not(.mobile) .selection-board{row-gap:8px;}
@@ -973,21 +973,22 @@ html:not(.mobile) .cat-title{max-width:100%;text-wrap:balance;}
   html:not(.mobile) .stage-view{grid-template-columns:51fr 49fr;column-gap:14px;}
   html:not(.mobile) .selection-board{
     grid-template-columns:repeat(4,1fr);
-    row-gap:14px;
+    row-gap:10px;
     column-gap:10px;
-    padding:16px 14px;
+    padding:18px 14px;
   }
   html:not(.mobile) .cat-item[data-cat="ai"]{grid-column:1/3;grid-row:1;}
   html:not(.mobile) .cat-item[data-cat="fiveG"]{grid-column:3/5;grid-row:1;}
   html:not(.mobile) .cat-item[data-cat="quantum"]{grid-column:1/3;grid-row:2;}
   html:not(.mobile) .cat-item[data-cat="cars"]{grid-column:3/5;grid-row:2;}
   html:not(.mobile) .cat-item[data-cat="semiconductors"]{grid-column:2/4;grid-row:3;}
-  html:not(.mobile) .cat-badge{width:52px;height:52px;min-width:52px;min-height:52px;margin-bottom:4px;}
+  html:not(.mobile) .cat-badge{width:46px;height:46px;min-width:46px;min-height:46px;margin-bottom:4px;}
+  @container (max-width:780px){ html:not(.mobile) .cat-badge{width:40px;height:40px;min-width:40px;min-height:40px;} html:not(.mobile) .selection-board{padding-block:16px;} }
   html:not(.mobile) .cat-title{font-size:14px;line-height:1.25;min-height:2.5em;margin-bottom:6px;}
   html:not(.mobile) .cat-radios{flex-direction:column;align-items:center;gap:5px;}
   html:not(.mobile) .radio-pill{width:118px;min-width:0;min-height:30px;font-size:14px;padding:3px 8px 3px 12px;gap:8px;}
   html:not(.mobile) .scale-assembly{width:min(94%,calc(520*var(--u)));}
-  html:not(.mobile) #content-modal .dialog-card{width:calc(53% - var(--pad));padding:54px 18px 20px;--flag:56px;}
+  html:not(.mobile) #content-modal .dialog-card{width:calc(55% - var(--pad));padding:54px 18px 20px;--flag:56px;}
   html:not(.mobile) #content-modal .dialog-card .close-card-btn{top:12px;right:18px;}
   html:not(.mobile) #content-modal .dialog-header-area{min-height:38px;padding-bottom:12px;}
   html:not(.mobile) #content-modal .dialog-divider{margin:0 0 14px var(--rule-x);}
@@ -1389,11 +1390,22 @@ html.mobile .cat-item.m-locked .m-open{cursor:not-allowed}
     /* The frame height depends only on the window (never on what is open), so nothing below it jumps:
        it is made tall enough for the tallest card to centre on the scale, capped at 630px. */
     var FRAME_STD = 578;
+    function pickerNeed() {
+      var sb = document.querySelector('.selection-board'), hd = document.querySelector('.app-header');
+      if (!sb || !hd || isMobile()) return 0;
+      var kids = sb.querySelectorAll('.cat-item'), top = 1e9, bot = -1e9, i, r, cs = getComputedStyle(sb);
+      for (i = 0; i < kids.length; i++) { r = kids[i].getBoundingClientRect(); top = Math.min(top, r.top); bot = Math.max(bot, r.bottom); }
+      if (bot < top) return 0;
+      /* header + stage top gap + panel padding/border + content + a clear gap under the panel */
+      return Math.ceil(hd.offsetHeight + 8 + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom) + 2 + (bot - top) + 14);
+    }
     function settleFrame() {
       var root = document.documentElement, card = contentModal.querySelector('.dialog-card');
       function set(v) { root.style.setProperty('--screen-min', v + 'px'); root.style.setProperty('--frame-h', v + 'px'); }
       var h = parseFloat(root.style.getPropertyValue('--frame-h')) || FRAME_STD;
       set(h);
+      /* the picker must never be clipped or touch the frame edge: the frame grows to hold it when the standard height is too short */
+      for (var pi = 0; pi < 3; pi++) { var need = pickerNeed(); if (need > h + 0.5) { h = need; set(h); } else break; }
       var keepMT = card.style.marginTop, keepMax = card.style.maxHeight;
       card.style.marginTop = '0px'; card.style.maxHeight = '';
       var max = tallestCard(card), cm = cardMetrics();
@@ -1961,7 +1973,7 @@ html.mobile .cat-item.m-locked .m-open{cursor:not-allowed}
       if (typeof syncMobileSequence === 'function') syncMobileSequence();
       // One frame height for all modules: 644px (660px iframe minus the 8px body margins) (1100px+), 614px (1000px+), otherwise 578px; never taller than the visible area
       var cap = Math.max(480, usableH() - 48);
-      var h = Math.min(w >= 1100 ? 610 : 578, cap);
+      var h = Math.min(610, cap);
       FRAME_STD = h;
       root.style.setProperty('--screen-min', h + 'px');
       root.style.setProperty('--frame-h', h + 'px');
