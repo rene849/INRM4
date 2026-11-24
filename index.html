@@ -916,9 +916,7 @@ html.mobile .dark-overlay .dialog-card{margin:0 auto;}
 .dialog-footer{display:none;}
 html:not(.mobile) #content-modal{top:60px;background:transparent;pointer-events:none;overflow:visible;justify-content:flex-start;align-items:flex-start;padding:56px 0 14px var(--pad);}
 html:not(.mobile) #content-modal .dialog-card{pointer-events:auto;--flag:76px;width:min(600px,calc(56% - var(--pad)));max-width:calc(100% - var(--pad));margin:0;padding:66px 28px 28px;}
-html:not(.mobile) #content-modal .dialog-card.is-tight{padding:58px 28px 24px;}
-html:not(.mobile) #content-modal .dialog-card.is-tight .dialog-header-area{padding-bottom:12px;}
-html:not(.mobile) #content-modal .dialog-card.is-tight .dialog-divider{margin-bottom:12px;}
+html:not(.mobile) #content-modal .dialog-card.is-tight{padding:62px 28px 26px;}
 html:not(.mobile) #content-modal .dialog-card.is-tight #card-body{line-height:1.5;}
 html:not(.mobile) #content-modal .dialog-card .close-card-btn{top:16px;right:28px;}
 html:not(.mobile) #content-modal .dialog-header-area{min-height:46px;padding-bottom:16px;margin-bottom:0;}
@@ -1445,6 +1443,7 @@ html.mobile .cat-item.m-locked .m-open{cursor:not-allowed}
       if (m === contentModal) {
         card.style.marginTop = '';
         card.style.maxHeight = '';
+        card.style.width = '';
         card.classList.remove('is-tight');
         clearCardMore();
       }
@@ -1460,7 +1459,7 @@ html.mobile .cat-item.m-locked .m-open{cursor:not-allowed}
         card.style.marginTop = '0px';
         var natural = card.getBoundingClientRect().top - container.getBoundingClientRect().top;
 
-        if (isNarrowDesktop && cardExpanded && btn) {
+        if (cardExpanded && btn) {
           btn.hidden = false;
           btn.setAttribute('aria-expanded', 'true');
           if (lab) lab.textContent = 'Show less';
@@ -1483,7 +1482,32 @@ html.mobile .cat-item.m-locked .m-open{cursor:not-allowed}
         } else {
           /* card taller than the space under the top bar (Moodle drawers open): use a roomier, tighter layout first */
           card.classList.remove('is-tight');
+          /* long text: first make the card a little wider (as far as a clear gap to the scale allows) so it needs fewer lines */
+          card.style.width = '';
+          if (card.offsetHeight > ch - cm.minTop - 14) {
+            var w0 = card.getBoundingClientRect().width, cr0 = container.getBoundingClientRect(), scaleLeft = 1e9;
+            [].forEach.call($('scale-wrap').querySelectorAll('img'), function (im) { var r = im.getBoundingClientRect(); if (r.width > 0) scaleLeft = Math.min(scaleLeft, r.left); });
+            var room = scaleLeft - card.getBoundingClientRect().right - 20;   /* keep 20px clear of the scale artwork */
+            for (var extra = Math.min(72, Math.floor(room)); extra >= 12; extra -= 12) {
+              card.style.width = (w0 + extra) + 'px';
+              if (card.offsetHeight <= ch - cm.minTop - 14) break;
+              if (extra - 12 < 12) break;
+            }
+            if (card.offsetHeight > ch - cm.minTop - 14 && room < 12) card.style.width = '';
+          }
+          natural = card.getBoundingClientRect().top - container.getBoundingClientRect().top;
           if (card.offsetHeight > ch - cm.minTop - 14) { card.classList.add('is-tight'); natural = card.getBoundingClientRect().top - container.getBoundingClientRect().top; }
+          if (card.offsetHeight > ch - cm.minTop - 14 && btn) {
+            /* still too tall: keep the spacing and show the first lines with "Read more" (never squash the card) */
+            card.classList.remove('is-tight');
+            btn.hidden = false; btn.setAttribute('aria-expanded', 'false');
+            if (lab) lab.textContent = 'Read more';
+            btn.setAttribute('aria-label', 'Read more: ' + t.textContent);
+            var lh2 = parseFloat(getComputedStyle(b).lineHeight) || 21.75, allowed2 = ch - cm.minTop - 14, n2 = 3;
+            b.classList.add('is-clamped'); cardSr(true);
+            b.style.maxHeight = Math.round(n2 * lh2) + 'px';
+            while (n2 < 40) { b.style.maxHeight = Math.round((n2 + 1) * lh2) + 'px'; if (card.offsetHeight > allowed2) { b.style.maxHeight = Math.round(n2 * lh2) + 'px'; break; } n2++; }
+          }
           if (card.offsetHeight > ch - cm.minTop - 14) card.style.maxHeight = Math.max(220, ch - cm.minTop - 14) + 'px';
           card.style.marginTop = Math.max(0, cm.topFor(card.offsetHeight) - natural) + 'px';
         }
