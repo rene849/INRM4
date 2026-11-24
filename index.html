@@ -175,7 +175,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;touch-acti
 
 /* Cover scale: original Hype artwork + timeline (M4 "Cover page" -> "Scale move").
    Original: title 0-1s, scale fades 0.2-1.2s, Start fades 1-2s, then the scale rocks (beam +/-10deg, pans +/-~28px) on an 8s loop from 2s. */
-:root{--cv-title-d:1s;--cv-scale-delay:.2s;--cv-scale-fade:1s;--cv-btn-delay:1s;--cv-btn-fade:1s;--cv-rock-delay:2s;--cv-rock-dur:8s;--cv-loops:infinite}
+:root{--cv-title-d:1s;--cv-scale-delay:.2s;--cv-scale-fade:1s;--cv-btn-delay:1s;--cv-btn-fade:1s;--cv-rock-delay:2s;--cv-rock-dur:8s;--cv-loops:1}
 .cover-illustration{overflow:visible;}
 .view-cover{container-type:inline-size;}
 .cover-illustration{width:auto;flex:none;}
@@ -921,7 +921,7 @@ html:not(.mobile) #content-modal .dialog-divider{margin:0 0 18px calc(var(--flag
 html:not(.mobile) #content-modal .modal-cat-badge{width:96px;height:96px;top:-48px;}
 .dialog-card h2{font-size:clamp(19px,2cqw,22px);}
 #card-body{font-size:15px;line-height:1.55;margin-bottom:0;overflow-y:auto;}
-#card-body.is-clamped{overflow:hidden;-webkit-mask-image:linear-gradient(#000 calc(100% - 2.6em),transparent);mask-image:linear-gradient(#000 calc(100% - 2.6em),transparent);}
+#card-body.is-clamped{overflow:hidden;overflow:clip;-webkit-mask-image:linear-gradient(#000 calc(100% - 2.6em),transparent);mask-image:linear-gradient(#000 calc(100% - 2.6em),transparent);}
 .card-more{display:inline-flex;align-items:center;align-self:flex-start;gap:10px;margin-top:10px;padding:0 16px;min-height:44px;background:#fff;border:1.5px solid var(--blue);border-radius:8px;color:var(--blue);font:inherit;font-size:14.5px;font-weight:700;cursor:pointer;transition:background .1s,border-color .1s;}
 .card-more[hidden]{display:none !important;}
 @media(hover:hover){.card-more:hover{background:#e6eaee;}}
@@ -1010,9 +1010,7 @@ html.mobile .m-tick svg{width:100%;height:100%;display:block;}
    Flag on the left, rule starting a flag-width in, the rule crossing the flag about 73% of the way
    down (flag overhangs the rule by ~27% of its height), and the text starting clear of the flag. */
 .flag-emblem{bottom:calc(var(--flag) * -0.27);z-index:1}
-html:not(.mobile) #content-modal .dialog-divider{margin:0 0 calc(var(--flag) * 0.42) var(--rule-x)}
-/* balance: less space between the rule and the text, more below the text */
-html:not(.mobile) #content-modal .dialog-card{padding-bottom:38px}
+html:not(.mobile) #content-modal .dialog-divider{margin:0 0 calc(var(--flag) * 0.63) var(--rule-x)}
 
 /* Phone feedback page: heading at the left between two rules, then the flag centred (swipes in) above the scale, as in the original */
 
@@ -1419,9 +1417,18 @@ html.mobile .cat-item.m-locked .m-open{cursor:not-allowed}
       if (fit > h && h < FRAME_STD) { h = Math.min(FRAME_STD, fit); set(h); }
       card.style.marginTop = keepMT; card.style.maxHeight = keepMax;
     }
+    /* Clamped card text: the cut-off copy is hidden from assistive tech and a full screen-reader-only copy stands in,
+       so a screen reader or keyboard never moves into the clipped lines (which would scroll the box). */
+    function cardSr(on) {
+      var b = $('card-body'), sr = $('card-body-sr');
+      if (!b) return;
+      if (!on) { if (sr) sr.remove(); b.removeAttribute('aria-hidden'); return; }
+      if (!sr) { sr = document.createElement('div'); sr.id = 'card-body-sr'; sr.className = 'sr-only'; b.insertAdjacentElement('afterend', sr); }
+      sr.innerHTML = b.innerHTML; b.setAttribute('aria-hidden', 'true');
+    }
     function clearCardMore() {
       var b = $('card-body'), btn = $('cardMore');
-      if (b) { b.style.maxHeight = ''; b.classList.remove('is-clamped'); }
+      if (b) { b.style.maxHeight = ''; b.classList.remove('is-clamped'); cardSr(false); }
       if (btn) { btn.hidden = true; btn.setAttribute('aria-expanded', 'false'); }
     }
     function fitModal(m) {
@@ -1465,7 +1472,7 @@ html.mobile .cat-item.m-locked .m-open{cursor:not-allowed}
           var lh = parseFloat(getComputedStyle(b).lineHeight) || 21.75;
           var lines = Math.max(3, Math.floor(avail / lh));
           b.style.maxHeight = Math.round(lines * lh) + 'px';
-          b.classList.add('is-clamped');
+          b.classList.add('is-clamped'); cardSr(true);
           card.style.marginTop = Math.max(0, cm.topFor(card.offsetHeight) - natural) + 'px';
         } else {
           if (card.offsetHeight > ch - cm.minTop - 14) card.style.maxHeight = Math.max(220, ch - cm.minTop - 14) + 'px';
