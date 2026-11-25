@@ -1710,19 +1710,24 @@ html.mobile .cat-item.m-locked .m-open{cursor:not-allowed}
           showMobileFeedback(cat, res);
           return;
         }
-        cardExpanded = false;
-        $('card-title').textContent = d.title;
-        $('card-result').textContent = res;
-        $('card-body').textContent = d.body;
-        $('modal-cat-badge').innerHTML = '<img src="' + d.icon + '" alt="">';
-        var flagEl = $('modal-flag-emblem');
-        flagEl.setAttribute('aria-label', d.leader === 'usa' ? 'The USA is in the lead' : 'China is in the lead');
-        flagEl.innerHTML = flagHTML(d.leader);
-        openModal(contentModal, $('card-title'), btn);
-        var body = $('card-body');
-        if (body.scrollHeight > body.clientHeight + 1) { body.tabIndex = 0; body.setAttribute('role', 'region'); body.setAttribute('aria-label', d.title + ' details'); }
-        else { body.removeAttribute('tabindex'); body.removeAttribute('role'); body.removeAttribute('aria-label'); }
+        openDesktopFeedback(cat, res, btn);
       }, 450);
+    }
+
+    function openDesktopFeedback(cat, res, btn) {
+      var d = DATA[cat];
+    cardExpanded = false;
+    $('card-title').textContent = d.title;
+    $('card-result').textContent = res;
+    $('card-body').textContent = d.body;
+    $('modal-cat-badge').innerHTML = '<img src="' + d.icon + '" alt="">';
+    var flagEl = $('modal-flag-emblem');
+    flagEl.setAttribute('aria-label', d.leader === 'usa' ? 'The USA is in the lead' : 'China is in the lead');
+    flagEl.innerHTML = flagHTML(d.leader);
+    openModal(contentModal, $('card-title'), btn);
+    var body = $('card-body');
+    if (body.scrollHeight > body.clientHeight + 1) { body.tabIndex = 0; body.setAttribute('role', 'region'); body.setAttribute('aria-label', d.title + ' details'); }
+    else { body.removeAttribute('tabindex'); body.removeAttribute('role'); body.removeAttribute('aria-label'); }
     }
 
     function closeFeedback() {
@@ -1997,12 +2002,22 @@ html.mobile .cat-item.m-locked .m-open{cursor:not-allowed}
 
     function fitScreens() {
       var root = document.documentElement, w = root.clientWidth || window.innerWidth, t = tierFor(w);
+      var wasMob = root.classList.contains('mobile'), fbCat = mobileFeedbackCat;
       root.classList.toggle('mobile', t === 'mobile');
       root.classList.toggle('tablet', t === 'tablet');
       root.style.setProperty('--vp', usableH() + 'px');
       if (t === 'mobile') {
         root.style.setProperty('--screen-min', 'auto');
         root.style.removeProperty('--frame-h');
+        if (!wasMob && coverView.classList.contains('hidden')) {   /* desktop -> phone: carry the open layer across instead of leaving the desktop pop-up on a phone */
+          if (contentModal.classList.contains('active')) {
+            var oc = ORDER.filter(function (k) { return DATA[k].title === $('card-title').textContent; })[0];
+            cardExpanded = false; container.style.height = ''; closeModal(contentModal, false);
+            if (oc) showMobileFeedback(oc, leadText(DATA[oc]));
+          } else if (introModal.classList.contains('active')) {
+            closeModal(introModal, false);
+          } else if (!$('completion-panel').hidden) showCompletion(true);
+        }
         if (typeof syncMobileSequence === 'function') syncMobileSequence();
         return;
       }
@@ -2020,6 +2035,10 @@ html.mobile .cat-item.m-locked .m-open{cursor:not-allowed}
       root.style.setProperty('--screen-min', h + 'px');
       root.style.setProperty('--frame-h', h + 'px');
       settleFrame();
+      if (wasMob && coverView.classList.contains('hidden')) {   /* phone -> desktop: the feedback layer becomes the desktop pop-up */
+        if (fbCat) openDesktopFeedback(fbCat, leadText(DATA[fbCat]), null);
+        else if (!$('completion-panel').hidden) showCompletion(true);
+      }
     }
     var _ft;
     addEventListener('resize', function () { clearTimeout(_ft); _ft = setTimeout(fitScreens, 120); });
